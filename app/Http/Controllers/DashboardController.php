@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\OpenAIService;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(OpenAIService $AiService)
     {
-        return Inertia::render('Dashboard');
+        $response = $AiService->sendMessage('Romantic holidays in ');
+
+        return Inertia::render('Dashboard', [
+            'msg' => $response,
+        ]);
     }
 }
