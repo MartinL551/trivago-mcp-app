@@ -47,11 +47,33 @@ class OpenAIService
                 'schema' => [
                     'type' => 'object',
                     'properties' => [
+                        'arrival' => [
+                            'type' => 'string',
+                            'format' => 'date'
+                        ],
+                        'departure' => [
+                            'type' => 'string',
+                            'format' => 'date'
+                        ],
+                        'adults' => ['type' => 'number'],
+                        'children' => ['type' => 'number'],
+                        'rooms' => ['type' => 'number'],
+                        'children_ages' => [
+                            'type' => 'array',
+                            'items' => ['type' => 'number'],
+                        ],
                         'destination' => ['type' => 'string'],
-                        'holiday_type' => ['type' => 'string'],
+                        'holiday_type' => [
+                            'type' => 'array',
+                            'items' => ['type' => 'string']
+                        ],
                         'budget' => ['type' => ['number', 'null']],
+                        'amenities' => [
+                            'type' => 'array',
+                            'items' => ['type' => 'string']
+                        ],
                     ],
-                    'required' => ['destination', 'holiday_type', 'budget'],
+                    'required' => ['arrival', 'departure', 'adults', 'children', 'rooms', 'children_ages', 'destination', 'holiday_type', 'budget', 'amenities'],
                     'additionalProperties' => false,
                 ],
             ],
