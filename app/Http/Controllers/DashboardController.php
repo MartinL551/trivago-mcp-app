@@ -9,10 +9,12 @@ class DashboardController extends Controller
 {
     public function index(OpenAIService $AiService)
     {
-        $response = $AiService->sendMessage('Romantic holidays in ');
+        $response = $AiService->extractSearchIntent('Romantic adventures in europe');
+
+        dd($response);
 
         return Inertia::render('Dashboard', [
-            'msg' => $response,
+            'res' => $response,
         ]);
     }
 }

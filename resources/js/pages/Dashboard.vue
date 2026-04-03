@@ -1,11 +1,11 @@
 <script setup lang="ts">
     defineProps<{
-        msg: string;
+        res: array;
     }>();
 
 </script>
 
 
 <template> 
-    <div> {{ msg }} </div>
+    <div>  </div>
 </template>
