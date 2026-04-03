@@ -1,9 +1,6 @@
 <script setup lang="ts">
-
-
 </script>
 
-
-<template> 
-    <div> test </div>
+<template>
+    <div></div>
 </template>
