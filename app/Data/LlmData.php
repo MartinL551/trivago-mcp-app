@@ -16,17 +16,20 @@ class LlmData {
     public float $budget;
     public array $amenities;
 
-    public function __construct(array $rawLlmValues)
+    /**
+     * @param array $llmResponse Raw structured output from LLM
+     */
+    public function __construct(array $llmResponse)
     {
-        $this->arrival = $rawLlmValues['arrival'] ? Carbon::createFromTimeString($rawLlmValues['arrival']) : Carbon::now();
-        $this->departure = $rawLlmValues['departure'] ? Carbon::createFromTimeString($rawLlmValues['departure']) : Carbon::now();
-        $this->adults = $rawLlmValues['adults'] ?? 0;
-        $this->children = $rawLlmValues['children'] ?? 0;
-        $this->rooms = $rawLlmValues['rooms'] ?? 0;
-        $this->childAges = $rawLlmValues['children_ages'] ?? [];
-        $this->destination = $rawLlmValues['destination'] ?? [];
-        $this->holidayType = $rawLlmValues['holiday_type'] ?? [];
-        $this->budget = $rawLlmValues['budget'] ?? 0;
-        $this->amenities = $rawLlmValues['amenities'] ?? [];
+        $this->arrival = $llmResponse['arrival'] ?? null ? Carbon::parse($llmResponse['arrival']) : null;
+        $this->departure = $llmResponse['departure'] ?? null ? Carbon::parse($llmResponse['departure']) : null;
+        $this->adults = $llmResponse['adults'] ?? 2;
+        $this->children = $llmResponse['children'] ?? 1;
+        $this->rooms = $llmResponse['rooms'] ?? 0;
+        $this->childAges = $llmResponse['children_ages'] ?? [];
+        $this->destination = $llmResponse['destination'] ?? '';
+        $this->holidayType = $llmResponse['holiday_type'] ?? [];
+        $this->budget = (float) $llmResponse['budget'] ?? 0;
+        $this->amenities = $llmResponse['amenities'] ?? [];
     }
 }

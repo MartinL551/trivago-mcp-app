@@ -2,15 +2,23 @@
 
 namespace App\Services;
 
+use App\Data\LlmData;
+use App\Data\McpSearchMapper;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class TrivagoMcpService
 {
     private const BASE_URL = 'https://mcp.trivago.com/mcp';
     private const CACHE_KEY = 'trivago_mcp_session_id';
+    private const SUGGEST = 'trivago-search-suggestions';
+    private const ACCOMMODATION_SEARCH = 'trivago-accommodation-search';
+    private const RADIUS_SEARCH = 'trivago-accommodation-radius-search';
 
-    public function __construct() {
+    public function __construct(
+        private McpSearchMapper $mcpSearchMapper
+    ) {
     }
 
     private function getSessionId(): string {
@@ -46,19 +54,21 @@ class TrivagoMcpService
 
         $response = $this->sendJson($headers, $jsonBody);
 
+        $response->throw();
+
         $sessionId = $response->header('Mcp-Session-Id');
 
         if(! $sessionId){
             throw new \RuntimeException('No MCP Session ID');
         }
 
-        Cache::put($this::CACHE_KEY);
+        Cache::put($this::CACHE_KEY, $sessionId, now()->addMinutes(30));
 
         return $sessionId;
     }
     
 
-    public function getResultsFromMcp(array $llmIntent): array {
+    private function getResultsFromMcp(LlmData $llmData, string $tool, ?int $id = null, ?int $ns = null): array {
         $sessionId = $this->getSessionId();
 
         $headers = [
@@ -67,19 +77,58 @@ class TrivagoMcpService
             'Mcp-Session-Id' => $sessionId,
         ];
 
-        $jsonBody = [
-    
+
+       $params = match($tool) {
+            TrivagoMcpService::SUGGEST => $this->mcpSearchMapper->toSuggestionsPayload($llmData),
+            TrivagoMcpService::ACCOMMODATION_SEARCH  => $this->mcpSearchMapper->toAccommodationPayload($llmData, $id, $ns),
+            // TrivagoMcpService::RADIUS_SEARCH => TrivagoMcpService::RADIUS_SEARCH
+        };
+
+        $request = [
+            'jsonrpc' => '2.0',
+            'id' => (string) Str::uuid(),
+            'method' => 'tools/call',
+            'params' => [
+                'name' => $tool,
+                'arguments' => $params,
+            ],
         ];
 
+        $response = $this->sendJson($headers, $request) ?? null;
+
+        $response->throw();
+
+        return $response->json() ?? [];
     }
 
-    private function getMcpArgsFromIntent(array $llmIntent): array{
-        foreach($llmIntent as $key => $intent) {
-            
+    public function getSuggestions(LlmData $llmData): array {
+        return $this->getResultsFromMcp($llmData, TrivagoMcpService::SUGGEST)['result']['structuredContent']['suggestions'];
+    }
+
+    public function getAccomindationsSearch(LlmData $llmData): array {
+        $suggestions = $this->getSuggestions($llmData);
+
+        dd($suggestions);
+        $accommodations = [];
+
+        foreach($suggestions as $suggestion) {
+            $ns = $suggestion['ns'];
+            $id = $suggestion['id'];
+
+            $accommodation = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns);
+
+            dd($accommodation);
+            $accommodations[$id] = $accommodation; 
         }
+
+        dd($accommodations);
+
+        return $accommodation;
+
     }
 
-    private function sendJson(array $headers, array $body): \Illuminate\Http\Client\Response | \GuzzleHttp\Promise\PromiseInterface{
+    private function sendJson(array $headers, array $body): \Illuminate\Http\Client\Response
+    {
         return Http::withHeaders($headers)->post($this::BASE_URL, $body);
     }
 }
