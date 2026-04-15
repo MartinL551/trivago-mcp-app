@@ -68,7 +68,7 @@ class TrivagoMcpService
         ];
 
         $jsonBody = [
-
+    
         ];
 
     }
