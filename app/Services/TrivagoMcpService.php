@@ -5,7 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
-class OpenAIService
+class TrivagoMcpService
 {
     private const BASE_URL = 'https://mcp.trivago.com/mcp';
     private const CACHE_KEY = 'trivago_mcp_session_id';
