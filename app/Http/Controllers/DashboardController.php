@@ -10,10 +10,11 @@ class DashboardController extends Controller
 {
     public function index(OpenAIService $aiService, TrivagoMcpService $trivagoMcpService)
     {
-        $llmData = $aiService->extractSearchIntent('Romantic adventures in europe with young kids. I want a good restuarnt as part of the hotel with an included breakfast. I am going on holiday next august');
+        $llmData = $aiService->extractSearchIntent('Area with lots of hikes in Germany. Only two adults are going. I am on budget of £2000. I want somewhere with mountains');
 
 
         $mcpData = $trivagoMcpService->getAccomindationsSearch($llmData);
+        // $mcpData = $trivagoMcpService->getSuggestions($llmData);
 
         dd($mcpData);
 

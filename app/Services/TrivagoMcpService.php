@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Data\LlmData;
 use App\Data\McpSearchMapper;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -80,7 +81,7 @@ class TrivagoMcpService
 
        $params = match($tool) {
             TrivagoMcpService::SUGGEST => $this->mcpSearchMapper->toSuggestionsPayload($llmData),
-            TrivagoMcpService::ACCOMMODATION_SEARCH  => $this->mcpSearchMapper->toAccommodationPayload($llmData, $id, $ns),
+            TrivagoMcpService::ACCOMMODATION_SEARCH  => $this->mcpSearchMapper->toAccommodationPayload($llmData, $ns, $id),
             // TrivagoMcpService::RADIUS_SEARCH => TrivagoMcpService::RADIUS_SEARCH
         };
 
@@ -108,12 +109,12 @@ class TrivagoMcpService
     public function getAccomindationsSearch(LlmData $llmData): array {
         $suggestions = $this->getSuggestions($llmData);
 
-        dd($suggestions);
         $accommodations = [];
 
         foreach($suggestions as $suggestion) {
             $ns = $suggestion['ns'];
             $id = $suggestion['id'];
+
 
             $accommodation = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns);
 
@@ -121,9 +122,7 @@ class TrivagoMcpService
             $accommodations[$id] = $accommodation; 
         }
 
-        dd($accommodations);
-
-        return $accommodation;
+        return $accommodations;
 
     }
 
