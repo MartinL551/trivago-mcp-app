@@ -13,6 +13,24 @@ return new class extends Migration
     {
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
+            $table->string('trivago_id')->unique();
+            $table->string('name');
+            $table->string('postcode');
+            $table->string('address');
+            $table->string('currenty');
+            $table->string('price_per_stay');
+            $table->string('price_per_day');
+            $table->integer('rating');
+            $table->string('city');
+            $table->string('review_rating');
+            $table->string('review_count');
+            $table->string('amenites');
+            $table->string('trivago_url');
+            $table->string('trivago_image_url');
+            $table->string('distance_string');
+            $table->float('distance_to_center');
+            $table->string('distance_units');
+            $table->string('desc');
             $table->timestamps();
         });
     }
