@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $data = $trivagoMcpService->getAccommodationSearch($llmData);
         
         foreach($data as $accom) {
-            Accommodation::updateOrCreate([
+            Accommodation::updateOrCreate(
                 [
                     'trivago_id' => $accom['accommodation_id'],
                 ],
@@ -41,7 +41,7 @@ class DashboardController extends Controller
                     'distance_units' => $accom['distance_to_city_center']['unit'] ?? null,
                     'desc' => $accom['description'],
                 ]
-            ]);
+            );
         }
 
 
