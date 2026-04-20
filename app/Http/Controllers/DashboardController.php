@@ -39,7 +39,7 @@ class DashboardController extends Controller
                     'distance_string' => $accom['distance'],
                     'distance_to_center' => $accom['distance_to_city_center']['value'] ?? null,
                     'distance_units' => $accom['distance_to_city_center']['unit'] ?? null,
-                    'desc' => $accom['description'],
+                    'desc' => $accom['description'] ?? '',
                 ]
             );
         }

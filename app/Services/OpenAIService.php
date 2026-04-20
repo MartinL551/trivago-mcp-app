@@ -12,7 +12,7 @@ class OpenAIService
     private OpenAI\Client $client;
     private string $model;
     private const ROLE_CONTENT_INTENT = 'Extract travel search parameters. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
-    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The signals to check will be the JSON keys and be a value of 0 to 1. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
+    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
 
     public function __construct() {
         $key = config('services.openai.key');
@@ -37,24 +37,24 @@ class OpenAIService
             'input' => [
                 [
                     'role' => 'system',
-                    'content' => $this::ROLE_CONTENT_INTENT . ' Todays Date is: ' . now()->toString(),
+                    'content' => $this::ROLE_CONTENT_SCORE . ' Todays Date is: ' . now()->toString(),
                 ],
                 [
                     'role' => 'user',
                     'content' => [
                         [
-                            'type' => 'text',
+                            'type' => 'input_text',
                             'text' => 'Score this accommodation.'
                         ],
                         [
-                            'type' => 'input_json',
-                            'json' => [
+                            'type' => 'input_text',
+                            'text' => json_encode([
                                 'name' => $accommodation->name,
                                 'location' => $accommodation->city,
                                 'price_per_night' => $accommodation->price_per_night,
                                 'amenities' => $accommodation->amenites,
                                 'description' => $accommodation->description,
-                            ]
+                            ])
                         ]
                     ],
                 ]
