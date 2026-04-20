@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
             $table->string('trivago_id')->unique();
+            $table->integer('accommodationscore_id')->unique();
             $table->string('name');
             $table->string('postcode');
             $table->string('address');

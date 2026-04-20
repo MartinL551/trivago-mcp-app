@@ -3,8 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Accommodation extends Model
 {
-    //
+    public function score(): HasOne
+    {
+        return $this->hasOne(AccommodationScore::class);
+    }
 }
