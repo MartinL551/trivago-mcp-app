@@ -70,7 +70,7 @@ class OpenAIService
                                 'adventure' => ['type' => 'number'],
                                 'budget' => ['type' => 'number'],
                             ],
-                            'required' => [],
+                            'required' => ['romance', 'adventure', 'budget'],
                             'additionalProperties' => false,
                         ],
                     ],

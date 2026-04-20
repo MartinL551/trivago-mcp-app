@@ -106,7 +106,7 @@ class TrivagoMcpService
         return $this->getResultsFromMcp($llmData, TrivagoMcpService::SUGGEST)['result']['structuredContent']['suggestions'];
     }
 
-    public function getAccomindationsSearch(LlmData $llmData): array {
+    public function getAccommodationSearch(LlmData $llmData): array {
         $suggestions = $this->getSuggestions($llmData);
 
         $accommodations = [];
@@ -116,14 +116,15 @@ class TrivagoMcpService
             $id = $suggestion['id'];
 
 
-            $accommodation = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns);
+            $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns)['result']['structuredContent']['accommodations'];
 
-            dd($accommodation);
-            $accommodations[$id] = $accommodation; 
+        
+            foreach($accommodationsForSuggestion as $accommodation){
+                $accommodations[$accommodation['accommodation_id']] = $accommodation;
+            }
         }
 
         return $accommodations;
-
     }
 
     private function sendJson(array $headers, array $body): \Illuminate\Http\Client\Response
