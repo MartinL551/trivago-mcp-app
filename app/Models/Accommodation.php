@@ -7,8 +7,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Accommodation extends Model
 {
-    public function score(): HasOne
+    private function score(): HasOne
     {
         return $this->hasOne(AccommodationScore::class);
     }
+
+    public function getOrFetchScore(): HasOne
+    {
+        if(!($score = $this->score())) {
+
+        }
+
+        return $score;
+    }
+
 }
