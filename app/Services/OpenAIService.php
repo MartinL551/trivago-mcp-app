@@ -5,14 +5,16 @@ namespace App\Services;
 use App\Data\LlmData;
 use App\Data\LlmScore;
 use App\Models\Accommodation;
+use Illuminate\Database\Eloquent\Collection;
 use OpenAI;
+
 
 class OpenAIService
 {
     private OpenAI\Client $client;
     private string $model;
     private const ROLE_CONTENT_INTENT = 'Extract travel search parameters. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
-    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
+    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The Trivago_Id MUST be listed for each entry int the scoring.The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
 
     public function __construct() {
         $key = config('services.openai.key');
@@ -82,8 +84,85 @@ class OpenAIService
 
         return new LlmScore($decodedResponse);
     }
-    
 
+
+      public function getScoreForAccommidations(Collection $accommodations): LlmScore
+    {
+        $payload = $accommodations->take(25)
+            ->map(fn ($accommodation) => [
+                    'trivago_id' => $accommodation->trivago_id,
+                    'name' => $accommodation->name,
+                    'location' => $accommodation->city,
+                    'price_per_night' => $accommodation->price_per_night,
+                    'amenities' => $accommodation->amenites,
+                    'description' => $accommodation->description,
+            ])
+            ->values()
+            ->all();
+
+        $response = $this->client->responses()->create([
+            'model' => $this->model,
+            'input' => [
+                [
+                    'role' => 'system',
+                    'content' => $this::ROLE_CONTENT_SCORE . ' Todays Date is: ' . now()->toString(),
+                ],
+                [
+                    'role' => 'user',
+                    'content' => [
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Score this accommodation.'
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => json_encode($payload)
+                        ]
+                    ],
+                ]
+            ],
+        'text' => [
+                'format' => [
+                    'type' => 'json_schema',
+                    'name' => 'accommodation_scores',
+                    'schema' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'scores' => [
+                                'type' => 'array',
+                                'items' => [
+                                    'type' => 'object',
+                                    'properties' => [
+                                        'trivago_id' => ['type' => 'string'],
+                                        'romance' => ['type' => 'number'],
+                                        'adventure' => ['type' => 'number'],
+                                        'budget' => ['type' => 'number'],
+                                    ],
+                                    'required' => [
+                                        'trivago_id',
+                                        'romance',
+                                        'adventure',
+                                        'budget',
+                                    ],
+                                    'additionalProperties' => false,
+                                ],
+                            ],
+                        ],
+                        'required' => ['scores'],
+                        'additionalProperties' => false,
+                    ],
+                ],
+            ],
+        ]);
+
+
+        $decodedResponse = json_decode($response->outputText, true) ?? [];
+
+        dd($decodedResponse);
+
+        return new LlmScore($decodedResponse);
+    }
+    
     public function extractSearchIntent(string $msg): LlmData
     {
         $response = $this->client->responses()->create([

@@ -20,9 +20,6 @@ class Accommodation extends Model
     {
         if(!($score = $this->score())) {
             $fetchedScore = $this->AiService->getScoreForAccommidation($this);
-
-
-
         }
 
         return $score;

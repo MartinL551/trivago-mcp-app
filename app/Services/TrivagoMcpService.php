@@ -53,7 +53,16 @@ class TrivagoMcpService
             ],
         ];
 
+        
+        $start = microtime(true);
+
         $response = $this->sendJson($headers, $jsonBody);
+
+        logger()->info('MCP request finished get session', [
+            'duration_ms' => round((microtime(true) - $start) * 1000),
+            'status' => $response->status(),
+        ]);
+
 
         $response->throw();
 
@@ -95,7 +104,14 @@ class TrivagoMcpService
             ],
         ];
 
+        $start = microtime(true);
+
         $response = $this->sendJson($headers, $request) ?? null;
+
+        logger()->info('MCP request finished get results:' . $tool, [
+            'duration_ms' => round((microtime(true) - $start) * 1000),
+            'status' => $response->status(),
+        ]);
 
         $response->throw();
 
@@ -111,17 +127,15 @@ class TrivagoMcpService
 
         $accommodations = [];
 
-        foreach($suggestions as $suggestion) {
-            $ns = $suggestion['ns'];
-            $id = $suggestion['id'];
+        $collection = collect($suggestions)->first();
 
+        $ns = $collection['ns'];
+        $id = $collection['id'];
 
-            $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns)['result']['structuredContent']['accommodations'];
-
-        
-            foreach($accommodationsForSuggestion as $accommodation){
-                $accommodations[$accommodation['accommodation_id']] = $accommodation;
-            }
+        $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns)['result']['structuredContent']['accommodations'];
+       
+        foreach($accommodationsForSuggestion as $accommodation){
+            $accommodations[$accommodation['accommodation_id']] = $accommodation;
         }
 
         return $accommodations;
