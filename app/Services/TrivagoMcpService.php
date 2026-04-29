@@ -143,7 +143,7 @@ class TrivagoMcpService
 
     private function sendJson(array $headers, array $body): \Illuminate\Http\Client\Response
     {
-        return Http::withHeaders($headers)->post($this::BASE_URL, $body);
+        return Http::connectTimeout(5)->timeout(20)->withHeaders($headers)->post($this::BASE_URL, $body);
     }
 }
 

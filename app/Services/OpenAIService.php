@@ -100,6 +100,8 @@ class OpenAIService
             ->values()
             ->all();
 
+            $start = microtime(true);
+
         $response = $this->client->responses()->create([
             'model' => $this->model,
             'input' => [
@@ -153,6 +155,13 @@ class OpenAIService
                     ],
                 ],
             ],
+        ]);
+
+        
+
+        logger()->info('LLM Request, get score', [
+            'duration_ms' => round((microtime(true) - $start) * 1000),
+            'status' => $response->status,
         ]);
 
 

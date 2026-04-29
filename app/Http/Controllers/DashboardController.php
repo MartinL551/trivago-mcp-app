@@ -13,7 +13,7 @@ class DashboardController extends Controller
     public function index(OpenAIService $aiService, TrivagoMcpService $trivagoMcpService)
     {
         
-        $llmData = $aiService->extractSearchIntent('Area with lots of hikes in Germany. Only two adults are going. I am on budget of £2000. I want somewhere with mountains');
+        $llmData = $aiService->extractSearchIntent('This is for a kids birthday. I want a hotel near Paris, I have a budger of £150 a night. I want to visit Disneyland also');
 
 
         $data = $trivagoMcpService->getAccommodationSearch($llmData);
@@ -39,7 +39,9 @@ class DashboardController extends Controller
             'desc' => $accom['description'] ?? '',
         ])->all();
 
-        Accommodation::upsert(
+        $start = microtime(true);
+
+        $inserted = Accommodation::upsert(
             $rows,
             ['trivago_id'],
             [
@@ -63,8 +65,12 @@ class DashboardController extends Controller
             ]
         );
 
+        logger()->info('inserted Values:', [
+            'duration_ms' => round((microtime(true) - $start) * 1000),
+            'status' => $inserted,
+        ]);
+
         $insertedIds = collect($rows)->pluck('trivago_id');
-        
   
         $testAccom =  Accommodation::whereIn('trivago_id', $insertedIds)->get();
 
