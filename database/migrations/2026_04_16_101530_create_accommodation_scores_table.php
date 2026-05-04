@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('accommodation_scores', function (Blueprint $table) {
             $table->id();
-            $table->integer('accom_id')->unique();
+            $table->integer('accommodations_id')->unique();
             $table->integer('Romance');
             $table->integer('Adventure');
             $table->integer('Budget');

@@ -6,6 +6,9 @@ use App\Data\LlmData;
 use App\Models\SearchRequest;
 use App\Services\OpenAIService;
 use App\Enums\SearchRequestStatus;
+use App\Models\Accommodation;
+use App\Models\AccommodationScore;
+use Illuminate\Database\Eloquent\Collection;
 
 class ScoreAccommodationTask
 {
@@ -14,17 +17,8 @@ class ScoreAccommodationTask
     ) {}
 
 
-    public function handle(SearchRequest $searchRequest): LlmData
+    public function handle(SearchRequest $searchRequest, Collection $accommodations): ?Collection
     {
-        $prompt = $searchRequest->prompt;
-
-        $intent = $this->openAiService->extractSearchIntent($prompt);
-
-        if($intent->status === "success"){
-            $searchRequest->setStatus(SearchRequestStatus::Interpreting);
-        }
-      
-
-        return $intent;
+        $scores = $this->openAiService->getScoreForAccommidations($accommodations);
     }
 }

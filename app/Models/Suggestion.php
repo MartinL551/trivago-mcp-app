@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Suggestion extends Model
 {
-    public function suggestions()
+    public function searchRequest()
     {
         return $this->belongsToMany(SearchRequest::class)
             ->withTimestamps();

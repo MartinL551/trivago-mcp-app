@@ -17,7 +17,7 @@ class FetchSuggestionsTask
     ) {}
 
 
-    public function handle(LlmData $intent, SearchRequest $searchRequest): ?SearchRequest
+    public function handle(LlmData $intent, SearchRequest $searchRequest): ?Collection
     {
         $suggestions = $this->mcpSerivce->getSuggestions($intent);
 
@@ -42,13 +42,14 @@ class FetchSuggestionsTask
             ]
         );
 
-        $insertedIds = Suggestion::whereIn('id_ns', collect($rows)->pluck('id_ns'))->get();
+        $insertedSuggesitons = Suggestion::whereIn('id_ns', collect($rows)->pluck('id_ns'))->get();
 
-        if(count($insertedIds) > 0){
-            $searchRequest->suggestions()->syncWithoutDetaching($insertedIds);
+        if(count($insertedSuggesitons) > 0){
+            $searchRequest->suggestions()->syncWithoutDetaching($insertedSuggesitons);
+        } else {
+            return null;
         }
    
-
-        return $searchRequest;
+        return $insertedSuggesitons;
     }
 }

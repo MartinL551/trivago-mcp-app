@@ -26,4 +26,10 @@ class Accommodation extends Model
         return $score;
     }
 
+    public function searchRequest()
+    {
+        return $this->belongsToMany(SearchRequest::class)
+            ->withTimestamps();
+    }
+
 }

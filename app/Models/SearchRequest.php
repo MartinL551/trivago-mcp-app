@@ -23,4 +23,10 @@ class SearchRequest extends Model
         return $this->belongsToMany(Suggestion::class)
             ->withTimestamps();
     }
+
+    public function accommodations()
+    {
+        return $this->belongsToMany(Accommodation::class)
+            ->withTimestamps();
+    }
 }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('accommodation_search_request', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('search_request_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('accommodation_id')->constrained()->cascadeOnDelete();
+            $table->unique(['search_request_id', 'accommodation_id']);
             $table->timestamps();
         });
     }

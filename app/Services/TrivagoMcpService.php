@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Data\LlmData;
 use App\Data\McpSearchMapper;
+use App\Models\Suggestion;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
@@ -131,6 +132,21 @@ class TrivagoMcpService
 
         $ns = $collection['ns'];
         $id = $collection['id'];
+
+        $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns)['result']['structuredContent']['accommodations'];
+       
+        foreach($accommodationsForSuggestion as $accommodation){
+            $accommodations[$accommodation['accommodation_id']] = $accommodation;
+        }
+
+        return $accommodations;
+    }
+
+     public function getAccommodationSearchForSuggestion(LlmData $llmData, Suggestion $suggestion): array {
+        $accommodations = [];
+
+        $ns = $suggestion->trivago_ns;
+        $id = $suggestion->trivago_id;
 
         $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns)['result']['structuredContent']['accommodations'];
        
