@@ -19,7 +19,7 @@ class FetchAccommodationTask
     {
         $prompt = $searchRequest->prompt;
 
-      
+        
 
         return $intent;
     }

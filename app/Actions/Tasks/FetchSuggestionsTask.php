@@ -6,21 +6,23 @@ use App\Data\LlmData;
 use App\Models\SearchRequest;
 use App\Services\OpenAIService;
 use App\Enums\SearchRequestStatus;
+use App\Models\Suggestion;
 use App\Services\TrivagoMcpService;
 
-class FetchAccommodationTask
+class FetchSuggestionsTask
 {
     public function __construct(
         private TrivagoMcpService $mcpSerivce,
+        private Suggestion $suggestion,
     ) {}
 
 
-    public function handle(SearchRequest $searchRequest)
+    public function handle(LlmData $intent, SearchRequest $searchRequest)
     {
-        $prompt = $searchRequest->prompt;
+       $suggestions = $this->mcpSerivce->getSuggestions($intent);
 
-      
+       dd($suggestions);
 
-        return $intent;
+
     }
 }

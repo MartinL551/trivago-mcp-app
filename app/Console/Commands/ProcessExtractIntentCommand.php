@@ -10,7 +10,7 @@ use App\Actions\Tasks\ExtractIntentTask;
 
 #[Signature('search:process {prompt}')]
 #[Description('Send a prompt to the LLM')]
-class ProcessSearchRequestCommand extends Command
+class ProcessExtractIntentCommand extends Command
 {
     public function handle(): int
     {
