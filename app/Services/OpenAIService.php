@@ -86,7 +86,7 @@ class OpenAIService
     }
 
 
-      public function getScoreForAccommidations(Collection $accommodations): LlmScore
+    public function getScoreForAccommidations(Collection $accommodations): array
     {
         $payload = $accommodations->take(25)
             ->map(fn ($accommodation) => [
@@ -99,8 +99,6 @@ class OpenAIService
             ])
             ->values()
             ->all();
-
-            $start = microtime(true);
 
         $response = $this->client->responses()->create([
             'model' => $this->model,
@@ -157,19 +155,14 @@ class OpenAIService
             ],
         ]);
 
-        
-
-        logger()->info('LLM Request, get score', [
-            'duration_ms' => round((microtime(true) - $start) * 1000),
-            'status' => $response->status,
-        ]);
-
-
         $decodedResponse = json_decode($response->outputText, true) ?? [];
+        $scores = [];
 
-        dd($decodedResponse);
-
-        return new LlmScore($decodedResponse);
+        foreach($decodedResponse['scores'] as $data) {
+            $scores[] = new LlmScore($data);
+        }
+        
+        return $scores;
     }
     
     public function extractSearchIntent(string $msg): LlmData

@@ -8,12 +8,12 @@ use Illuminate\Console\Command;
 use App\Models\SearchRequest;
 use App\Actions\Tasks\ExtractIntentTask;
 use App\Actions\Tasks\FetchSuggestionsTask;
-use App\Actions\Tasks\ScoreAccommodationsTask;
 use App\Actions\Tasks\FetchAccommodationTask;
+use app\Actions\Tasks\ScoreAccommodationsTask;
 
-#[Signature('search:score {prompt}')]
-#[Description('Send a prompt to the LLM and Get Suggestions from MCP and Score with LLM')]
-class ProcessFetchSuggestionsCommand extends Command
+#[Signature('search:fetchaccom {prompt}')]
+#[Description('Send a prompt to the LLM and Get Accommodations from MCP')]
+class ProcessFetchAccommodationCommand extends Command
 {
     public function handle(): int
     {
@@ -35,7 +35,6 @@ class ProcessFetchSuggestionsCommand extends Command
 
         $suggestions = app(FetchSuggestionsTask::class)->handle($intent, $searchRequest);
 
-        
         $firstSuggestion = $suggestions->first();
 
         $accomidations = app(FetchAccommodationTask::class)->handle($searchRequest, $firstSuggestion, $intent);
