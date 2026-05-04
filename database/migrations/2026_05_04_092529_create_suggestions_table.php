@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('suggestions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('trivago_ns');
+            $table->string('trivago_id');
+            $table->string('id_ns')->unique();
+            $table->string('location');
+            $table->string('location_label');
+            $table->string('location_type');
         });
     }
 

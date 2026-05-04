@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suggestion_search_request', function (Blueprint $table) {
+        Schema::create('search_request_suggestion', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('search_request_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('suggestion_id')->constrained()->cascadeOnDelete();
+            $table->unique(['search_request_id', 'suggestion_id']);
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suggestion_search_request');
+        Schema::dropIfExists('search_request_suggestion');
     }
 };
