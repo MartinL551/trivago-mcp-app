@@ -5,8 +5,9 @@ namespace app\Actions\Tasks;
 use App\Data\LlmData;
 use App\Models\SearchRequest;
 use App\Services\OpenAIService;
+use App\Enums\SearchRequestStatus;
 
-class ProcessSearchRequestTask
+class ScoreAccommodationTask
 {
     public function __construct(
         private OpenAiService $openAiService,
@@ -18,6 +19,11 @@ class ProcessSearchRequestTask
         $prompt = $searchRequest->prompt;
 
         $intent = $this->openAiService->extractSearchIntent($prompt);
+
+        if($intent->status === "success"){
+            $searchRequest->setStatus(SearchRequestStatus::Interpreting);
+        }
+      
 
         return $intent;
     }

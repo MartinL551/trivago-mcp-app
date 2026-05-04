@@ -15,6 +15,7 @@ class LlmData {
     public array $holidayType;
     public float $budget;
     public array $amenities;
+    public string $status;
 
     /**
      * @param array $llmResponse Raw structured output from LLM
@@ -31,5 +32,6 @@ class LlmData {
         $this->holidayType = $llmResponse['holiday_type'] ?? [];
         $this->budget = (float) $llmResponse['budget'] ?? 0;
         $this->amenities = $llmResponse['amenities'] ?? [];
+        $this->status = count($llmResponse) === 0 ? "failed" : "success";
     }
 }

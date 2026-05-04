@@ -6,7 +6,7 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use App\Models\SearchRequest;
-use App\Actions\Tasks\ProcessSearchRequestTask;
+use App\Actions\Tasks\ExtractIntentTask;
 
 #[Signature('search:process {prompt}')]
 #[Description('Send a prompt to the LLM')]
@@ -21,9 +21,22 @@ class ProcessSearchRequestCommand extends Command
             'status' => 'pending',
         ]);
 
-        app(ProcessSearchRequestTask::class)->handle($searchRequest);
+         $this->info("Search for Request {$searchRequest->id}");
 
-        $this->info("Search created: {$searchRequest->id}");
+        $intent = app(ExtractIntentTask::class)->handle($searchRequest);
+
+        $this->info("Intent From LLM");
+        foreach ($intent as $key => $value) {
+            if(gettype($value) != "array"){
+                $this->info("{$key}: {$value}");
+            } else {
+                $this->info("{$key}");
+                foreach($value as $arrKey => $arrValue) {
+                    $this->info("{$arrKey}: {$arrValue}");
+                }
+            }
+     
+        }
 
         return self::SUCCESS;
     }
