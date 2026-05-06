@@ -40,10 +40,6 @@ class ProcessFetchSuggestionsCommand extends Command
 
         $accomidations = app(FetchAccommodationTask::class)->handle($searchRequest, $firstSuggestion, $intent);
 
-        $scores = app(ScoreAccommodationsTask::class)->handle($searchRequest, $accomidations);
-
-        dd($scores);
-
         return self::SUCCESS;
     }
-}
+}   

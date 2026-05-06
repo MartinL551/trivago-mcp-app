@@ -41,7 +41,6 @@ class ProcessFetchAccommodationCommand extends Command
 
         $scores = app(ScoreAccommodationsTask::class)->handle($searchRequest, $accomidations);
 
-        dd($scores);
 
         return self::SUCCESS;
     }

@@ -38,8 +38,6 @@ class ProcessFetchAccommodationCommand extends Command
 
         $accomidations = app(FetchAccommodationTask::class)->handle($searchRequest, $firstSuggestion, $intent);
 
-        dd($accomidations);
-
         return self::SUCCESS;
     }
 }

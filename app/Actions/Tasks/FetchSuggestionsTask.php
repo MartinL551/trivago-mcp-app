@@ -42,14 +42,14 @@ class FetchSuggestionsTask
             ]
         );
 
-        $insertedSuggesitons = Suggestion::whereIn('id_ns', collect($rows)->pluck('id_ns'))->get();
+        $insertedSuggestions = Suggestion::whereIn('id_ns', collect($rows)->pluck('id_ns'))->get();
 
-        if(count($insertedSuggesitons) > 0){
-            $searchRequest->suggestions()->syncWithoutDetaching($insertedSuggesitons);
+        if(count($insertedSuggestions) > 0){
+            $searchRequest->suggestions()->syncWithoutDetaching($insertedSuggestions);
         } else {
             return null;
         }
    
-        return $insertedSuggesitons;
+        return $insertedSuggestions;
     }
 }
