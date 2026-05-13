@@ -34,7 +34,7 @@ class ScoreAccommodationsTask
             'adventure' => $score->adventure ?? 0,
             'budget' => $score->budget ?? 0,
             
-        ])->all();
+        ])->take(5)->all();
 
         AccommodationScore::upsert(
             $rows,

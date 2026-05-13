@@ -28,7 +28,7 @@ class FetchSuggestionsTask
             'location' => $suggestion['location'],
             'location_label' => $suggestion['location_label'],
             'location_type' => $suggestion['location_type'],
-        ])->all();
+        ])->take(20)->all();
 
        Suggestion::upsert(
             $rows,

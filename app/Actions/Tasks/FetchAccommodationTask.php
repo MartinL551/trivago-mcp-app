@@ -39,7 +39,7 @@ class FetchAccommodationTask
             'distance_to_center' => $accom['distance_to_city_center']['value'] ?? null,
             'distance_units' => $accom['distance_to_city_center']['unit'] ?? null,
             'desc' => $accom['description'] ?? '',
-        ])->all();
+        ])->take(20)->all();
 
         Accommodation::upsert(
             $rows,
