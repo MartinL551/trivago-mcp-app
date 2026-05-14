@@ -10,8 +10,9 @@
 
 <template>
     <div class="max-w-sm rounded overflow-hidden shadow-lg">
-        <div v-for="(param, index) in props.result" :key="index"> 
-            {{  param  }}
-        </div>
+        name: {{  props.result.name }}
+        location: {{  props.result.city }}
+        address: {{ props.result.address }}
+        score {{ props.result.score }}
     </div>
 </template>

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Attributes\Unguarded;
 class Accommodation extends Model
 {
     //unguarded for now. Need to loop back later
-    private function score(): HasOne
+    public function score(): HasOne
     {
         return $this->hasOne(AccommodationScore::class);
     }

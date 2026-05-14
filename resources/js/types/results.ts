@@ -28,6 +28,7 @@ export type AccommidationResult = {
     desc: string;
     created_at: string;
     updated_at: string;
+    score: Array<AccommidationScore>
 }
 
 export type AccommidationScore = {
