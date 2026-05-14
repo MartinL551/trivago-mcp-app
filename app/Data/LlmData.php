@@ -11,7 +11,9 @@ class LlmData {
     public int $children;
     public int $rooms;
     public array $childAges;
-    public string $destination;
+    public string $city;
+    public string $country;
+    public string $continent;
     public array $holidayType;
     public float $budget;
     public array $amenities;
@@ -28,7 +30,9 @@ class LlmData {
         $this->children = $llmResponse['children'] ?? 1;
         $this->rooms = $llmResponse['rooms'] ?? 0;
         $this->childAges = $llmResponse['children_ages'] ?? [];
-        $this->destination = $llmResponse['destination'] ?? '';
+        $this->city = $llmResponse['city'] ?? '';
+        $this->country = $llmResponse['country'] ?? '';
+        $this->continent = $llmResponse['continent'] ?? '';
         $this->holidayType = $llmResponse['holiday_type'] ?? [];
         $this->budget = (float) $llmResponse['budget'] ?? 0;
         $this->amenities = $llmResponse['amenities'] ?? [];

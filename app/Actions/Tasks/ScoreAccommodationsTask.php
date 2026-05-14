@@ -29,14 +29,14 @@ class ScoreAccommodationsTask
 
         $rows = collect($scores)->map(fn ($score)  => [
             'trivago_id' => $score->trivagoId ?? '',
-            'accommodation_id' => array_key_exists($score->trivagoId, $mappedAccoms) ? $mappedAccoms[$score->trivagoId] : null,
+            'accommodation_id' => $mappedAccoms[$score->trivagoId],
             'search_request_id' => $searchRequest->id,
             'romance' => $score->romance ?? 0,
             'adventure' => $score->adventure ?? 0,
             'budget' => $score->budget ?? 0,
             'why' => $score->why ?? '',
             
-        ])->whereNotNull('accommodation_id')->all();
+        ])->take(5)->all();
 
         AccommodationScore::upsert(
             $rows,

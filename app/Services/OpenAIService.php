@@ -39,7 +39,7 @@ class OpenAIService
                     'trivago_id' => $accommodation->trivago_id,
                     'name' => $accommodation->name,
                     'location' => $accommodation->city,
-                    'price_per_night' => $accommodation->price_per_night,
+                    'price_per_day' => $accommodation->price_per_day,
                     'amenities' => $accommodation->amenites,
                     'description' => $accommodation->description,
             ])
@@ -63,6 +63,18 @@ class OpenAIService
                         [
                             'type' => 'input_text',
                             'text' => 'This was the orignal prompt. IMPORTANT USE THIS TO SCORE THE ACCOMMODATION AGAINST FOR A GIVEN SIGNAL 100 MEANS GOOD 0 MEANS BAD:' . $prompt
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Budget signal is measured against the price_per_day in the JSON packet for that accommodation. try to esitmate a current conversion for each accomidation. Eg. if the promt is in pounds convert to euros first to compare'
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Romance signal is measured against the location and avaliable amenities and any extra info in the name or description in the JSON packet for that accommodation'
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Adventure signal is measured against the location and avaliable amenities and any extra info in the name or description in the JSON packet for that accommodation'
                         ],
                         [
                             'type' => 'input_text',
@@ -153,7 +165,9 @@ class OpenAIService
                                     'type' => 'array',
                                     'items' => ['type' => 'number'],
                                 ],
-                                'destination' => ['type' => 'string'],
+                                'city' => ['type' => 'string'],
+                                'country' => ['type' => 'string'],
+                                'continent' => ['type' => 'string'],
                                 'holiday_type' => [
                                     'type' => 'array',
                                     'items' => ['type' => 'string']
@@ -164,7 +178,7 @@ class OpenAIService
                                     'items' => ['type' => 'string']
                                 ],
                             ],
-                            'required' => ['arrival', 'departure', 'adults', 'children', 'rooms', 'children_ages', 'destination', 'holiday_type', 'budget', 'amenities'],
+                            'required' => ['arrival', 'departure', 'adults', 'children', 'rooms', 'children_ages', 'city', 'country', 'continent', 'holiday_type', 'budget', 'amenities'],
                             'additionalProperties' => false,
                         ],
                     ],

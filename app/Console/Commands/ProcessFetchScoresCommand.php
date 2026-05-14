@@ -34,7 +34,7 @@ class ProcessFetchScoresCommand extends Command
         }
 
         $suggestions = app(FetchSuggestionsTask::class)->handle($intent, $searchRequest);
-        $this->info("Proccesed Sgguestions");
+        $this->info("Proccesed Suguestions");
         $firstSuggestion = $suggestions->first();
 
         $accomidations = app(FetchAccommodationTask::class)->handle($searchRequest, $firstSuggestion, $intent);

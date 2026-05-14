@@ -11,7 +11,7 @@ class McpSearchMapper
     public function toSuggestionsPayload(LlmData $data): array
     {
         return [
-            'query' => $data->destination,
+            'query' => "{$data->city}, {$data->country}, {$data->continent}",
         ];
     }
 

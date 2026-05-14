@@ -25,10 +25,10 @@ class FetchSuggestionsTask
             'trivago_id' => $suggestion['id'],
             'trivago_ns' => $suggestion['ns'],
             'id_ns' => (string) $suggestion['id'] . "_" . (string) $suggestion['ns'],
-            'location' => $suggestion['location'],
-            'location_label' => $suggestion['location_label'],
-            'location_type' => $suggestion['location_type'],
-        ])->take(20)->all();
+            'location' => array_key_exists('location', $suggestion) ? $suggestion['location'] : '',
+            'location_label' => array_key_exists('location_label', $suggestion) ? $suggestion['location_label'] : '',
+            'location_type' => array_key_exists('location_type', $suggestion) ? $suggestion['location_type'] : '',
+        ])->take(1)->all();
 
        Suggestion::upsert(
             $rows,
