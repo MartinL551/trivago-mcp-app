@@ -10,7 +10,11 @@ class DashboardController extends Controller
 
     public function index(SearchRequest $searchRequest)
     {
-        $testRequest = $searchRequest::with('accommodations')->find(1);
+        $testRequest = $searchRequest::with([
+            'accommodations' => function ($query) {
+                $query->limit(5);
+            }
+        ])->find(1);
 
 
         return Inertia::render('Dashboard', [

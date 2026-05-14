@@ -11,7 +11,5 @@
 
 
 <template> 
-    <div>  
-        <ResultsList :results="props.searchRequest" />
-    </div>
+    <ResultsList :results="props.searchRequest" />
 </template>

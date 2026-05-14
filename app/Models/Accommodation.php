@@ -17,15 +17,6 @@ class Accommodation extends Model
         return $this->hasOne(AccommodationScore::class);
     }
 
-    public function getOrFetchScore(): HasOne
-    {
-        if(!($score = $this->score())) {
-            $fetchedScore = $this->AiService->getScoreForAccommidation($this);
-        }
-
-        return $score;
-    }
-
     public function searchRequest()
     {
         return $this->belongsToMany(SearchRequest::class)

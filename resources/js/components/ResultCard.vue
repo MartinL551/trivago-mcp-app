@@ -10,6 +10,8 @@
 
 <template>
     <div class="max-w-sm rounded overflow-hidden shadow-lg">
-        {{ props.result.name }}
+        <div v-for="(param, index) in props.result" :key="index"> 
+            {{  param  }}
+        </div>
     </div>
 </template>
