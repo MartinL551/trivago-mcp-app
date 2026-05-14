@@ -36,4 +36,5 @@ export type AccommidationScore = {
     romance: number; 
     adventure: number;
     budget: number;
+    why: string;
 }

@@ -148,7 +148,13 @@ class TrivagoMcpService
         $ns = $suggestion->trivago_ns;
         $id = $suggestion->trivago_id;
 
-        $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns)['result']['structuredContent']['accommodations'];
+        $response = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns);
+
+        if(!array_key_exists('accommodations', $response['result']['structuredContent'])) {
+            return $accommodations;
+        }
+
+        $accommodationsForSuggestion = $response['result']['structuredContent']['accommodations'];
        
         foreach($accommodationsForSuggestion as $accommodation){
             $accommodations[$accommodation['accommodation_id']] = $accommodation;

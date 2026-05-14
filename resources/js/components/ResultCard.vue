@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import type { AccommidationResult } from '@/types';
+import ResultScore from './ResultScore.vue';
 
     type Props = {
         result: AccommidationResult
@@ -13,6 +14,7 @@
         name: {{  props.result.name }}
         location: {{  props.result.city }}
         address: {{ props.result.address }}
-        score {{ props.result.score }}
+        budget per day: {{  props.result.price_per_day }}
+        <ResultScore :score="props.result.scores[0]" />
     </div>
 </template>

@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('accommodation_scores', function (Blueprint $table) {
             $table->id();
-            $table->integer('accommodation_id')->unique();
+            $table->integer('accommodation_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('search_request_id')->constrained()->cascadeOnDelete();
             $table->string('trivago_id')->unique();
-            $table->integer('Romance');
-            $table->integer('Adventure');
-            $table->integer('Budget');
+            $table->integer('romance');
+            $table->integer('adventure');
+            $table->integer('budget');
+            $table->string('why');
             $table->timestamps();
         });
     }

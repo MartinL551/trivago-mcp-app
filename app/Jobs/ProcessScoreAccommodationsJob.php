@@ -37,10 +37,9 @@ class ProcessScoreAccommodationsJob implements ShouldQueue
 
         $scores = app(ScoreAccommodationsTask::class)->handle($this->searchRequest, $this->accommodations);
 
-        if(count($scores) > 0) {
+        if($scores && count($scores) > 0) {
             $this->searchRequest->status = SearchRequestStatus::Complete;
             $this->searchRequest->save();
         }
-        
     }
 }

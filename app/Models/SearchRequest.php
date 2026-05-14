@@ -29,4 +29,10 @@ class SearchRequest extends Model
         return $this->belongsToMany(Accommodation::class)
             ->withTimestamps();
     }
+
+    public function scores()
+    {
+        return $this->hasMany(AccommodationScore::class)
+            ->withTimestamps();
+    }
 }

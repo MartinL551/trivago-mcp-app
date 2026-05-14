@@ -11,4 +11,9 @@ class AccommodationScore extends Model
     {
         return $this->belongsTo(Accommodation::class);
     }
+
+    public function searchRequest(): BelongsTo
+    {
+        return $this->belongsTo(SearchRequest::class);
+    }
 }

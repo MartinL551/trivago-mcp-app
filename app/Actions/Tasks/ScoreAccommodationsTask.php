@@ -19,7 +19,7 @@ class ScoreAccommodationsTask
 
     public function handle(SearchRequest $searchRequest, Collection $accommodations): ?Collection
     {
-        $scores = $this->openAiService->getScoreForAccommidations($accommodations);
+        $scores = $this->openAiService->getScoreForAccommidations($accommodations, $searchRequest->prompt);
 
         $mappedAccoms = [];
 
@@ -29,12 +29,14 @@ class ScoreAccommodationsTask
 
         $rows = collect($scores)->map(fn ($score)  => [
             'trivago_id' => $score->trivagoId ?? '',
-            'accommodation_id' => $mappedAccoms[$score->trivagoId],
+            'accommodation_id' => array_key_exists($score->trivagoId, $mappedAccoms) ? $mappedAccoms[$score->trivagoId] : null,
+            'search_request_id' => $searchRequest->id,
             'romance' => $score->romance ?? 0,
             'adventure' => $score->adventure ?? 0,
             'budget' => $score->budget ?? 0,
+            'why' => $score->why ?? '',
             
-        ])->all();
+        ])->whereNotNull('accommodation_id')->all();
 
         AccommodationScore::upsert(
             $rows,
@@ -44,11 +46,19 @@ class ScoreAccommodationsTask
                 'accommodation_id',
                 'romance',
                 'adventure',
-                'budget'
+                'budget',
+                'why'
             ]
         );
 
-        $insertedScores = AccommodationScore::whereIn('trivago_id', collect($rows)->pluck('trivago_id'))->get();
+        $insertedScores = AccommodationScore::whereIn('accommodation_id', $accommodations->pluck('trivago_id'))->get();
+
+        if(count($insertedScores) > 0){
+            $insertedScores->accommodation()->sync();
+            $insertedScores->searchRequest()->sync();
+        } else {
+            return null;
+        }
 
         return $insertedScores;
     }

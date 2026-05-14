@@ -35,7 +35,8 @@
 
 
 <template>
-    <div> Prompt: {{ searchRequest.prompt }} Status: {{ searchRequest.status }}</div>
+    <div class="py-4 text-xl"> Prompt: {{ searchRequest.prompt }}</div>
+    <div class="py-4 text-xl"> Status: {{ searchRequest.status }} </div>
     <ResultsList v-if="(searchRequest.status === 'scoring' || searchRequest.status === 'complete') && accommodations" :results="props.accommodations" />
     <div v-else>
         Fetching Results..

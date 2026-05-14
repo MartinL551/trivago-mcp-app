@@ -38,7 +38,7 @@ class ProcessFetchAccommodationJob implements ShouldQueue
 
         $accommodations = app(FetchAccommodationTask::class)->handle($this->searchRequest, $this->suggestion, $this->intent);
 
-        if(count($accommodations) > 0 && $this->chain) {
+        if($accommodations && count($accommodations) > 0 && $this->chain) {
             ProcessScoreAccommodationsJob::dispatch($this->searchRequest, $accommodations);
         }
         

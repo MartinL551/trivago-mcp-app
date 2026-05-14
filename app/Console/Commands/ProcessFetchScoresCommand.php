@@ -9,11 +9,11 @@ use App\Models\SearchRequest;
 use App\Actions\Tasks\ExtractIntentTask;
 use App\Actions\Tasks\FetchSuggestionsTask;
 use App\Actions\Tasks\FetchAccommodationTask;
-use app\Actions\Tasks\ScoreAccommodationsTask;
+use App\Actions\Tasks\ScoreAccommodationsTask;
 
-#[Signature('search:fetchaccom {prompt}')]
-#[Description('Send a prompt to the LLM and Get Accommodations from MCP')]
-class ProcessFetchAccommodationCommand extends Command
+#[Signature('search:scores {prompt}')]
+#[Description('Send a prompt to the LLM and Get Accommodations from MCP and Score them')]
+class ProcessFetchScoresCommand extends Command
 {
     public function handle(): int
     {
@@ -27,19 +27,20 @@ class ProcessFetchAccommodationCommand extends Command
         $this->info("Search for Request {$searchRequest->id}");
 
         $intent = app(ExtractIntentTask::class)->handle($searchRequest);
-
+        $this->info("Proccesed intent");
         if($intent->status === 'Failed'){
             $this->error('Failed to Get Search intent');
             return self::FAILURE;
         }
 
         $suggestions = app(FetchSuggestionsTask::class)->handle($intent, $searchRequest);
-
+        $this->info("Proccesed Sgguestions");
         $firstSuggestion = $suggestions->first();
 
         $accomidations = app(FetchAccommodationTask::class)->handle($searchRequest, $firstSuggestion, $intent);
-
+        $this->info("Proccesed accoms");
         $scores = app(ScoreAccommodationsTask::class)->handle($searchRequest, $accomidations);
+        $this->info("Proccesed Scores");
 
 
         return self::SUCCESS;

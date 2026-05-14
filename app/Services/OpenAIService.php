@@ -14,7 +14,7 @@ class OpenAIService
     private OpenAI\Client $client;
     private string $model;
     private const ROLE_CONTENT_INTENT = 'Extract travel search parameters. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
-    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The Trivago_Id MUST be listed for each entry int the scoring.The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
+    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The Trivago_Id MUST be listed for each entry int the scoring.The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date.  A short description of why these scores are given can be put in the why section';
 
     public function __construct() {
         $key = config('services.openai.key');
@@ -32,61 +32,7 @@ class OpenAIService
         return $response->outputText;
     }
 
-    public function getScoreForAccommidation(Accommodation $accommodation): LlmScore
-    {
-        $response = $this->client->responses()->create([
-            'model' => $this->model,
-            'input' => [
-                [
-                    'role' => 'system',
-                    'content' => $this::ROLE_CONTENT_SCORE . ' Todays Date is: ' . now()->toString(),
-                ],
-                [
-                    'role' => 'user',
-                    'content' => [
-                        [
-                            'type' => 'input_text',
-                            'text' => 'Score this accommodation.'
-                        ],
-                        [
-                            'type' => 'input_text',
-                            'text' => json_encode([
-                                'name' => $accommodation->name,
-                                'location' => $accommodation->city,
-                                'price_per_night' => $accommodation->price_per_night,
-                                'amenities' => $accommodation->amenites,
-                                'description' => $accommodation->description,
-                            ])
-                        ]
-                    ],
-                ]
-            ],
-            'text' => [
-                'format' => [
-                        'type' => 'json_schema',
-                        'name' => 'accommodation_score',
-                        'schema' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'romance' => ['type' => 'number'],
-                                'adventure' => ['type' => 'number'],
-                                'budget' => ['type' => 'number'],
-                            ],
-                            'required' => ['romance', 'adventure', 'budget'],
-                            'additionalProperties' => false,
-                        ],
-                    ],
-                ],
-        ]);
-
-
-        $decodedResponse = json_decode($response->outputText, true) ?? [];
-
-        return new LlmScore($decodedResponse);
-    }
-
-
-    public function getScoreForAccommidations(Collection $accommodations): array
+    public function getScoreForAccommidations(Collection $accommodations, string $prompt): array
     {
         $payload = $accommodations->take(25)
             ->map(fn ($accommodation) => [
@@ -116,6 +62,10 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
+                            'text' => 'This was the orignal prompt. IMPORTANT USE THIS TO SCORE THE ACCOMMODATION AGAINST FOR A GIVEN SIGNAL 100 MEANS GOOD 0 MEANS BAD:' . $prompt
+                        ],
+                        [
+                            'type' => 'input_text',
                             'text' => json_encode($payload)
                         ]
                     ],
@@ -137,12 +87,14 @@ class OpenAIService
                                         'romance' => ['type' => 'number'],
                                         'adventure' => ['type' => 'number'],
                                         'budget' => ['type' => 'number'],
+                                        'why' => ['type' => 'string'],
                                     ],
                                     'required' => [
                                         'trivago_id',
                                         'romance',
                                         'adventure',
                                         'budget',
+                                        'why',
                                     ],
                                     'additionalProperties' => false,
                                 ],

@@ -35,7 +35,7 @@ class ProcessFetchSuggestionsJob implements ShouldQueue
 
         $suggestions = app(FetchSuggestionsTask::class)->handle($this->intent, $this->searchRequest);
 
-        if(count($suggestions) > 0 && $this->chain) {
+        if($suggestions && count($suggestions) > 0 && $this->chain) {
             foreach($suggestions as $suggestion){
                 ProcessFetchAccommodationJob::dispatch($this->searchRequest, $suggestion, $this->intent, true);
             }

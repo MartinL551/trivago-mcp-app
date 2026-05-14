@@ -8,6 +8,7 @@ class LlmScore {
     public int $adventure;
     public int $budget;
     public string $status;
+    public string $why;
 
     /**
      * @param array $llmResponse Raw structured output from LLM
@@ -18,6 +19,7 @@ class LlmScore {
         $this->romance = $llmResponse['romance'] ?? 0;
         $this->adventure = $llmResponse['adventure'] ?? 0;
         $this->budget = $llmResponse['budget'] ?? 0;
+        $this->why = $llmResponse['why'] ?? 0;
         $this->status = count($llmResponse) === 0 ? "failed" : "success";
     }
 }
