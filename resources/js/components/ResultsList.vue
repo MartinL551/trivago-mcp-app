@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import type { SearchResult } from '@/types';
+    import type { AccommidationResults } from '@/types';
 import ResultCard from './ResultCard.vue';
 
     type Props = {
-        results: SearchResult
+        results: AccommidationResults;
     };
 
     const props = defineProps<Props>();
@@ -13,7 +13,6 @@ import ResultCard from './ResultCard.vue';
 
 <template>
     <div class="w-full flex gap-20">
-        <ResultCard v-for="accommodation in props.results.accommodations"   :key="accommodation.id" class="w-full" :result="accommodation" />
+        <ResultCard v-for="accommodation in props.results"   :key="accommodation.id" class="w-full" :result="accommodation" />
     </div>
-    
 </template>
