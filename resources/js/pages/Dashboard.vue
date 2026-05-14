@@ -3,17 +3,15 @@
     import type { SearchResult } from '@/types';
 
     type Props = {
-        searchResult: SearchResult
+        searchRequest: SearchResult
     };
 
-    const props = withDefaults(defineProps<Props>(), {
-    });
-
+    const props = defineProps<Props>();
 </script>
 
 
 <template> 
     <div>  
-        <ResultsList :search-result="props.searchResult" />
+        <ResultsList :results="props.searchRequest" />
     </div>
 </template>

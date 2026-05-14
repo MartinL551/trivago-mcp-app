@@ -1,12 +1,12 @@
 export type SearchResult = {
     id: number;
     status: string;
-    resultState: Array<AccommidationResult>;
+    promt: string;
+    accommodations: Array<AccommidationResult>
 };
 
 export type AccommidationResult = {
     id: number;
-    score: AccommidationScore;
 }
 
 export type AccommidationScore = {

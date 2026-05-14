@@ -1,6 +1,15 @@
 <script setup lang="ts">
+    import type { AccommidationResult } from '@/types';
+
+    type Props = {
+        result: AccommidationResult
+    };
+
+    const props = defineProps<Props>();
 </script>
 
 <template>
-    <div></div>
+    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+        {{ props.result.name }}
+    </div>
 </template>
