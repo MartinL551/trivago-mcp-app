@@ -10,11 +10,22 @@ import ResultScore from './ResultScore.vue';
 </script>
 
 <template>
-    <div class="max-w-sm rounded overflow-hidden shadow-lg">
-        name: {{  props.result.name }}
-        location: {{  props.result.city }}
-        address: {{ props.result.address }}
-        budget per day: {{  props.result.price_per_day }}
+    <div class="max-w-sm rounded overflow-hidden shadow-lg dark:bg-gray-600">
+        <div class="py-2">
+            name: {{  props.result.name }}
+        </div>
+        <div class="py-2">
+            location: {{  props.result.city }}
+        </div>
+        <div class="py-2">
+            address: {{ props.result.address }}
+        </div>
+        <div class="py-2">
+            budget per day: {{  props.result.price_per_day }}
+        </div>
+    
+        
+      
         <ResultScore :score="props.result.scores[0]" />
     </div>
 </template>
