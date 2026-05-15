@@ -10,6 +10,6 @@ Route::get('/search', [SearchController::class, 'index'])->name('Search');
 
 
 Route::post('/search', [SearchController::class, 'search'])->name('search');
-Route::post('/results/{searchRequest}/poll', [ResultsController::class, 'poll'])->name('results');
+Route::post('/results/{searchRequest}/poll', [ResultsController::class, 'poll'])->name('results.poll');
 
 require __DIR__.'/settings.php';
