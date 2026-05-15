@@ -54,16 +54,9 @@ class TrivagoMcpService
             ],
         ];
 
-        
-        $start = microtime(true);
+    
 
         $response = $this->sendJson($headers, $jsonBody);
-
-        logger()->info('MCP request finished get session', [
-            'duration_ms' => round((microtime(true) - $start) * 1000),
-            'status' => $response->status(),
-        ]);
-
 
         $response->throw();
 
@@ -105,14 +98,7 @@ class TrivagoMcpService
             ],
         ];
 
-        $start = microtime(true);
-
         $response = $this->sendJson($headers, $request) ?? null;
-
-        logger()->info('MCP request finished get results:' . $tool, [
-            'duration_ms' => round((microtime(true) - $start) * 1000),
-            'status' => $response->status(),
-        ]);
 
         $response->throw();
 

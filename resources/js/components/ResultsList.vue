@@ -12,7 +12,7 @@ import ResultCard from './ResultCard.vue';
 
 
 <template>
-    <div class="w-full flex flex-wrap gap-20">
+    <div class="w-full flex flex-wrap gap-10">
         <ResultCard v-for="accommodation in props.results"   :key="accommodation.id" class="w-full" :result="accommodation" />
     </div>
 </template>
