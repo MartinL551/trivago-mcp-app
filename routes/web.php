@@ -10,5 +10,6 @@ Route::get('/search', [SearchController::class, 'index'])->name('Search');
 
 
 Route::post('/search', [SearchController::class, 'search'])->name('search');
+Route::post('/results/{searchRequest}/poll', [ResultsController::class, 'poll'])->name('results');
 
 require __DIR__.'/settings.php';
