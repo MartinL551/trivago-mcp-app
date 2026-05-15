@@ -65,7 +65,7 @@ class FetchAccommodationTask
             ]
         );
 
-        $insertedAccoms = Accommodation::whereIn('trivago_id', collect($rows)->pluck('trivago_id'))->latest()->limit(5)->get();
+        $insertedAccoms = Accommodation::whereIn('trivago_id', collect($rows)->pluck('trivago_id'))->latest()->get();
 
         if(count($insertedAccoms) > 0){
             $searchRequest->accommodations()->syncWithoutDetaching($insertedAccoms);

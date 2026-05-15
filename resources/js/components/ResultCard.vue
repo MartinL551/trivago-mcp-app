@@ -23,9 +23,7 @@ import ResultScore from './ResultScore.vue';
         <div class="py-2">
             budget per day: {{  props.result.price_per_day }}
         </div>
-    
-        
-      
-        <ResultScore :score="props.result.scores[0]" />
+
+        <ResultScore :scores="props.result.scores" />
     </div>
 </template>

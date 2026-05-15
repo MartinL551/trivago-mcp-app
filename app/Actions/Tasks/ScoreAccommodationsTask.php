@@ -38,12 +38,13 @@ class ScoreAccommodationsTask
             
         ])->take(5)->all();
 
+
         AccommodationScore::upsert(
             $rows,
             ['trivago_id'],
             [
-                'trivago_id',
                 'accommodation_id',
+                'search_request_id',
                 'romance',
                 'adventure',
                 'budget',
@@ -51,14 +52,11 @@ class ScoreAccommodationsTask
             ]
         );
 
-        $insertedScores = AccommodationScore::whereIn('accommodation_id', $accommodations->pluck('trivago_id'))->get();
+        $insertedScores = AccommodationScore::whereIn('accommodation_id', $accommodations->pluck('id'))->latest()->limit(5)->get();
 
-        if(count($insertedScores) > 0){
-            $insertedScores->accommodation()->sync();
-            $insertedScores->searchRequest()->sync();
-        } else {
+        if(count($insertedScores) <= 0){
             return null;
-        }
+        } 
 
         return $insertedScores;
     }

@@ -2,26 +2,26 @@
     import type { AccommidationScore } from '@/types';
 
     type Props = {
-        score: AccommidationScore
+        scores: AccommidationScore
     };
 
     const props = defineProps<Props>();
 </script>
 
 <template>
-    <div v-if="props.score">
+    <div v-if="props.scores">
         <dl>
             <dt class="py-1">Adventure</dt>
-            <dd class="py-2">{{  props.score.adventure }}</dd>
+            <dd class="py-2">{{  props.scores[0].adventure }}</dd>
             <dt class="py-1">Romance</dt>
-            <dd class="py-2">{{  props.score.romance }}</dd>
+            <dd class="py-2">{{  props.scores[0].romance }}</dd>
             <dt class="py-1">Budget</dt>
-            <dd class="py-2">{{  props.score.budget }}</dd>
+            <dd class="py-2">{{  props.scores[0].budget }}</dd>
         </dl>
 
         <div>
             <div class="py-2"> Why has the AI scored this way?</div>
-            {{ props.score.why }}
+            {{ props.scores[0].why }}
         </div>
     </div>
     <div v-else>

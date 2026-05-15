@@ -9,7 +9,7 @@ use Inertia\Inertia;
 class ResultsController extends Controller
 {   
 
-    public function index(SearchRequest $searchRequest)
+    public function show(SearchRequest $searchRequest)
     {
        
         return Inertia::render('Results', [
@@ -18,16 +18,7 @@ class ResultsController extends Controller
                 'status',
                 'prompt',
             ]),
-            'accommodations' => (
-                $searchRequest->status === SearchRequestStatus::Complete->value || $searchRequest->status === SearchRequestStatus::Scoring->value) 
-                    ? Inertia::optional(fn () => $searchRequest->accommodations()
-                        ->with('scores')
-                        ->whereHas('scores', function($query) use ($searchRequest) {
-                            $query->where('search_request_id', $searchRequest->id);
-                        })
-                        ->latest()
-                        ->limit(5)->get()) : null,
+            'accommodations' =>($accoms = $searchRequest->accommodationsForStatus()) ? Inertia::optional(fn () => $accoms->get()) : null,
         ]);
     }
-    
 }

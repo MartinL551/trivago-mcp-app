@@ -19,8 +19,7 @@ class Accommodation extends Model
 
     public function searchRequest()
     {
-        return $this->belongsToMany(SearchRequest::class)
-            ->withTimestamps();
+        return $this->belongsToMany(SearchRequest::class);
     }
 
 }

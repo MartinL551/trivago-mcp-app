@@ -4,8 +4,8 @@ use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/results/{searchRequest}', [ResultsController::class, 'index'])->name('results');
-Route::get('/', [SearchController::class, 'index'])->name('Search');
+Route::get('/results/{searchRequest}', [ResultsController::class, 'show'])->name('results');
+Route::get('/search', [SearchController::class, 'index'])->name('Search');
 
 
 
