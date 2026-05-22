@@ -27,7 +27,7 @@ class SearchController extends Controller
 
         ProcessExtractIntentJob::dispatch($searchRequest, true);
 
-        return redirect()->route('results',[
+        return redirect()->route('results.show',[
             'searchRequest' => $searchRequest->id,
         ]);
     }
