@@ -6,6 +6,7 @@ use App\Models\SearchRequest;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessExtractIntentJob;
+use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
 {
@@ -20,6 +21,7 @@ class SearchController extends Controller
 
         $searchRequest = SearchRequest::create([
             'prompt' => $requestBody['prompt'],
+            'user_id' => Auth::id(),
             'status' => 'pending',
         ]);
 

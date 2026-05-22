@@ -1,12 +1,4 @@
 <script setup lang="ts">
-    import { usePage } from '@inertiajs/vue3'
-    import { router } from '@inertiajs/vue3'
-
-    const logout = () => {
-        router.post('/logout')
-    }
-
-    const page = usePage();
 </script>
 
 <template>
@@ -14,9 +6,8 @@
         <header class="shadow">
             <nav class="mx-auto max-w-7xl px-4 py-4">
                 <span class="font-bold">Travel App</span>
-                <span class="mx-2 font-bold">{{ page.props.auth.user.name }}</span>
-                <button class="mx-2 border" @click="logout">
-                    Logout
+                <button class="mx-2 border" href="/login">
+                    Login
                 </button>
             </nav>
         </header>

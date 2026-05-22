@@ -6,13 +6,15 @@ use App\Enums\SearchRequestStatus;
 use App\Models\SearchRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class ResultsController extends Controller
 {   
 
     public function show(SearchRequest $searchRequest)
     {
-       
+        abort_unless($searchRequest->user_id === Auth::id(), 403);
+
         return Inertia::render('Results', [
             'initialSearchRequest' => fn () => $searchRequest->only([
                 'id',
@@ -32,7 +34,7 @@ class ResultsController extends Controller
 
         $accommodationsQuery = match($searchRequest->status) {
             SearchRequestStatus::Scoring->value => $accommodationsQuery->whereIn('id', $requestedIds ?? []),
-            SearchRequestStatus::Complete->value => $accommodationsQuery,
+            SearchRequestStatus::Complete->value => $accommodationsQuery->whereNotIn('id', $knownIds ?? []),
             default => $accommodationsQuery,
         };
 
