@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Attributes\Unguarded;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Unguarded]
 class User extends Authenticatable
@@ -19,5 +20,10 @@ class User extends Authenticatable
 
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    public function searchRequests(): HasMany
+    {
+        return $this->hasMany(SearchRequest::class);
+    }
 
 }

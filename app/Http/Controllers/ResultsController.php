@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class ResultsController extends Controller
 {   
+    public function index()
+    {
+        $user =  Auth::getUser();
+       
+        if($lastSearchReqest = $user->searchRequests()->get()->last()) {
+            return redirect()->route('results.show',[
+                'searchRequest' => $lastSearchReqest->id,
+            ]);
+        } else {
+            return redirect()->route('search.index');
+        }
+
+    }
 
     public function show(SearchRequest $searchRequest)
     {

@@ -11,6 +11,7 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 
 Route::middleware(['auth'])->group(function() {
+    Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
     Route::get('/results/{searchRequest}', [ResultsController::class, 'show'])->name('results.show');
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
