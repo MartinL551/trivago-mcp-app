@@ -10,7 +10,7 @@ import ResultScore from './ResultScore.vue';
 </script>
 
 <template>
-    <div class="max-w-sm rounded overflow-hidden shadow-lg dark:bg-gray-600">
+    <div>
         <div class="py-2">
             name: {{  props.result.name }}
         </div>
