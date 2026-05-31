@@ -22,4 +22,9 @@ class Accommodation extends Model
         return $this->belongsToMany(SearchRequest::class);
     }
 
+    public function wishListItems(): HasMany
+    {
+        return $this->hasMany(WishlistItem::class);
+    }
+
 }

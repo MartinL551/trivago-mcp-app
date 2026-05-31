@@ -23,4 +23,18 @@ class User extends Authenticatable
         return $this->hasMany(SearchRequest::class);
     }
 
+    public function wishListItems(): HasMany
+    {
+        return $this->hasMany(WishlistItem::class);
+    }
+
+    public function wishlistedAccommodations()
+    {
+        return $this->belongsToMany(
+            Accommodation::class,
+            'wishlist_items'
+        );
+    }
+
+
 }

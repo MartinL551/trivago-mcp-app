@@ -78,6 +78,10 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
+                            'text' => 'They scoring IS BASED ON COMPARIOSN TO OTHERS IN THE PAYLOAD AND ANY EXTRA KNOWLEDGE YOU HAVE OF THE AREA'
+                        ],
+                        [
+                            'type' => 'input_text',
                             'text' => json_encode($payload)
                         ]
                     ],

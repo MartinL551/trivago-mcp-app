@@ -12,7 +12,7 @@ class ResultsController extends Controller
 {   
     public function index()
     {
-        $user =  Auth::getUser();
+        $user = Auth::getUser();
        
         if($lastSearchReqest = $user->searchRequests()->get()->last()) {
             return redirect()->route('results.show',[

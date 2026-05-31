@@ -13,10 +13,10 @@
                 label: 'Last Result',
                 route: 'results.index',
             },
-            // {
-            //     label: 'Wishlist',
-            //     route: 'wishlist.index',
-            // },
+            {
+                label: 'Wishlist',
+                route: 'wishlist.show',
+            },
         ];
 </script>
 
