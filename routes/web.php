@@ -7,7 +7,7 @@ use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landingpage.index');
-Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');;
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 
 Route::middleware(['auth'])->group(function() {
