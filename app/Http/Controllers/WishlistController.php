@@ -19,7 +19,7 @@ class WishlistController extends Controller
 
     public function add(Accommodation $accommodation)
     {
-        $wishlistItem = WishlistItem::create([
+        $wishlistItem = WishlistItem::updateOrCreate([
             'user_id' => Auth::id(),
             'accommodation_id' => $accommodation->id,
         ]);
@@ -31,6 +31,10 @@ class WishlistController extends Controller
 
     public function remove(Accommodation $accommodation)
     {
+       WishlistItem::where('user_id', Auth::id())
+            ->where('accommodation_id', $accommodation->id)
+            ->delete();
 
+        return back()->with('success', 'Removed from wishlist');
     }
 }

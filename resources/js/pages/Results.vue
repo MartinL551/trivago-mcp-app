@@ -21,7 +21,11 @@
     )
     
     const handleWishListAdd = async(id: number) => {
-          const response = await fetch(`/wishlist/${id}/add`, {
+        const accommodation = accommodations.value.find(a => a.id === id);
+
+        accommodation.wishlisted = true;
+
+        const response = await fetch(`/wishlist/${id}/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,22 +33,32 @@
             },
         })
 
-        if(!response.ok){
-
+        if(!response.ok) {
+            accommodation.wishlisted = false;
         }
+    }
 
-        if (response.status === 200 || response.status === 201) {
-           const accommodation = accommodations.value.find(a => a.id === id);
+    const handleWishListRemove = async(id: number) => {
+        const accommodation = accommodations.value.find(a => a.id === id);
 
-            if (accommodation) {
-                console.log('Updating Wishlist');
-                accommodation.wishlisted = true;
-            }
+        accommodation.wishlisted = false;
+
+        const response = await fetch(`/wishlist/${id}/remove`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        })
+
+        if(!response.ok) {
+            accommodation.wishlisted = true;
         }
     }
 
     
     provide('handleWishListAdd', handleWishListAdd);
+    provide('handleWishListRemove', handleWishListRemove);
 
 </script>
 
