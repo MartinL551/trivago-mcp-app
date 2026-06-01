@@ -26,7 +26,7 @@ class WishlistController extends Controller
 
         $wishlistItem->save();
 
-         return back()->with('success', 'Added to wishlist');
+        return back()->with('success', 'Added to wishlist');
     }
 
     public function remove(Accommodation $accommodation)

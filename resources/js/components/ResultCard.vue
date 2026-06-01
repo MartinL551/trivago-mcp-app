@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import type { AccommidationResult } from '@/types';
     import ResultScore from './ResultScore.vue';
+import WishlistButton from './WishlistButton.vue';
 
 
     type Props = {
@@ -48,5 +49,6 @@
         </div>
 
         <ResultScore :scores="props.result.scores" />
+        <WishlistButton :result="props.result"  />
     </div>
 </template>

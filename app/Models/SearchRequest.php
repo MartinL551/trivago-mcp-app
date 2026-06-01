@@ -27,7 +27,11 @@ class SearchRequest extends Model
 
     public function accommodations(): BelongsToMany
     {
-        return $this->belongsToMany(Accommodation::class);
+        return $this->belongsToMany(Accommodation::class)
+            ->withExists([
+                'wishlistItems as wishlisted' => fn ($q) =>
+                    $q->where('user_id', $this->user_id)
+            ]);
     }
 
     public function scores(): HasMany

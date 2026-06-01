@@ -19,8 +19,8 @@ Route::middleware(['auth'])->group(function() {
 
     Route::post('/search', [SearchController::class, 'search'])->name('search.search');
     Route::post('/results/{searchRequest}/poll', [ResultsController::class, 'poll'])->name('results.poll');
-    Route::post('/wishlist/{accommodation}', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::post('/wishlist/{accommodation}', [WishlistController::class, 'remove'])->name('wishlist.add');
+    Route::post('/wishlist/{accommodation}/add', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::post('/wishlist/{accommodation}/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
 
 

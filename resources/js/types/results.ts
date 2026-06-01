@@ -29,6 +29,7 @@ export type AccommidationResult = {
     created_at: string;
     updated_at: string;
     score: Array<AccommidationScore>
+    wishlisted: boolean;
 }
 
 export type AccommidationScore = {
