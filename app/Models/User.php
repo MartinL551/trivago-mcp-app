@@ -33,7 +33,16 @@ class User extends Authenticatable
         return $this->belongsToMany(
             Accommodation::class,
             'wishlist_items'
-        );
+        )->withExists([
+            'wishlistItems as wishlisted' => fn ($q) =>
+                $q->where('user_id', $this->id)
+        ]);
+    }
+
+    public function wishlistedAccommodationsWithScores()
+    {
+        return $this->wishlistedAccommodations()
+            ->with('scores');
     }
 
 

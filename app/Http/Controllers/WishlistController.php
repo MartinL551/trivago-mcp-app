@@ -13,7 +13,7 @@ class WishlistController extends Controller
     public function show()
     {
         return Inertia::render('Wishlist', [
-
+            'wishListedAccoms' => Auth::user()->wishlistedAccommodationsWithScores()->get(),
         ]);
     }
 
