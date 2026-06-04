@@ -18,6 +18,8 @@ class LlmData {
     public float $budget;
     public array $amenities;
     public string $status;
+    public string $mainSignal;
+    public string $secondarySignal;
 
     /**
      * @param array $llmResponse Raw structured output from LLM
@@ -37,5 +39,7 @@ class LlmData {
         $this->budget = (float) $llmResponse['budget'] ?? 0;
         $this->amenities = $llmResponse['amenities'] ?? [];
         $this->status = count($llmResponse) === 0 ? "failed" : "success";
+        $this->mainSignal = $llmResponse['main_signal'] ?? null;
+        $this->secondarySignal = $llmResponse['secondary_signal'] ?? null;
     }
 }

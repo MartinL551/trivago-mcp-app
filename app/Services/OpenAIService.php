@@ -7,14 +7,16 @@ use App\Data\LlmScore;
 use App\Models\Accommodation;
 use Illuminate\Database\Eloquent\Collection;
 use OpenAI;
+use App\Enums\PromptSignals;
 
 
 class OpenAIService
 {
     private OpenAI\Client $client;
     private string $model;
-    private const ROLE_CONTENT_INTENT = 'Extract travel search parameters. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date';
+    private const ROLE_CONTENT_INTENT = 'Extract travel search parameters. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date.';
     private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The Trivago_Id MUST be listed for each entry int the scoring.The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date.  A short description of why these scores are given can be put in the why section';
+
 
     public function __construct() {
         $key = config('services.openai.key');
@@ -144,7 +146,16 @@ class OpenAIService
                 ],
                 [
                     'role' => 'user',
-                    'content' => $msg,
+                    'content' => [
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Prompt: ' . $msg,
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'These are the allowed signals for the main_signal and secondary_signal fields. You MUST select one for each which best desribes the prompt. main_signal IS the primary meaning of the prompt. secondary_signal IS the secondary meaning of the prompt: ' . json_encode(array_column(PromptSignals::cases(), 'value')),
+                        ],
+                    ],
                 ]
             ],
             'text' => [
@@ -181,8 +192,10 @@ class OpenAIService
                                     'type' => 'array',
                                     'items' => ['type' => 'string']
                                 ],
+                                'main_signal' => ['type' => 'string'],
+                                'secondary_signal' => ['type' => 'string'],
                             ],
-                            'required' => ['arrival', 'departure', 'adults', 'children', 'rooms', 'children_ages', 'city', 'country', 'continent', 'holiday_type', 'budget', 'amenities'],
+                            'required' => ['arrival', 'departure', 'adults', 'children', 'rooms', 'children_ages', 'city', 'country', 'continent', 'holiday_type', 'budget', 'amenities', 'main_signal', 'secondary_signal'],
                             'additionalProperties' => false,
                         ],
                     ],

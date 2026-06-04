@@ -14,7 +14,7 @@ class ResultsController extends Controller
     {
         $user = Auth::getUser();
        
-        if($lastSearchReqest = $user->searchRequests()->get()->last()) {
+        if($lastSearchReqest = $user->searchRequests()->latest()->first()) {
             return redirect()->route('results.show',[
                 'searchRequest' => $lastSearchReqest->id,
             ]);

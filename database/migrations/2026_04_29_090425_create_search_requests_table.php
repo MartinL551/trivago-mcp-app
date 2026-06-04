@@ -16,6 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('prompt');
+            $table->string('main_signal')->nullable();
+            $table->string('secondary_signal')->nullable();
             $table->string('status')->default('pending');
         });
     }

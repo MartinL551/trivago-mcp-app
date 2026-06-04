@@ -17,6 +17,7 @@ class ProcessExtractIntentCommand extends Command
           $prompt = $this->argument('prompt');
 
         $searchRequest = SearchRequest::create([
+            'user_id' => 1,
             'prompt' => $prompt,
             'status' => 'pending',
         ]);
