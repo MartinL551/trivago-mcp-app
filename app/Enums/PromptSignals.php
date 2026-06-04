@@ -9,4 +9,5 @@ enum PromptSignals: string
     case Adventure = 'adventure';
     case Romantic = 'romantic';
     case Business  = 'business';
+    case Luxury  = 'luxury';
 }

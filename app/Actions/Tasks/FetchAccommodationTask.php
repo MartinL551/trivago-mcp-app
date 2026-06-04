@@ -83,30 +83,42 @@ class FetchAccommodationTask
     private function sortForSignals(?string $mainSignal, ?string $secondarySignal): callable
     {
         return function ($accom) use ($mainSignal, $secondarySignal): float {
-            $score = 0;
+            return
+                $this->scoreForSignal($mainSignal, $accom) * 2 +
+                $this->scoreForSignal($secondarySignal, $accom);
+        };
+    }
 
-            $score += match ($mainSignal) {
-                PromptSignals::Business->value => $this->scoreBusiness($accom) * 2,
-                PromptSignals::Budget->value => $this->scoreBudget($accom) * 2,
-                default => 0,
-            };
-
-            $score += match ($secondarySignal) {
-                PromptSignals::Business->value => $this->scoreBusiness($accom),
-                PromptSignals::Budget->value => $this->scoreBudget($accom),
-                default => 0,
-            };
-
-            return $score;
+    private function scoreForSignal(?string $signal, $accom): float
+    {
+        return match ($signal) {
+            PromptSignals::Business->value => $this->scoreBusiness($accom),
+            PromptSignals::Budget->value => $this->scoreBudget($accom),
+            PromptSignals::Family->value => $this->scoreFamily($accom),
+            PromptSignals::Adventure->value => $this->scoreAdventure($accom),
+            PromptSignals::Romantic->value => $this->scoreRomantic($accom),
+            PromptSignals::Luxury->value => $this->scoreLuxury($accom),
+            default => 0,
         };
     }
 
     private function scoreBusiness($accom): float
     {
+        $wantedAmenites = [
+            'Gym' => 5,
+            'WiFi in public areas' => 10,
+            'WiFi (room)' => 10,
+            'Parking' => 6,
+            'Air conditioning' => 5,
+        ];
+
+        $amenitesScore = $this->scoreForWantedAmenites($accom, $wantedAmenites);
+
         return
+            $amenitesScore * 3 +
             (($accom['review_rating'] ?? 0) * 3) +
             (($accom['rating'] ?? 0) * 2) +
-            min(($accom->review_count ?? 0), 1000) / 100;
+            min(($accom['review_count'] ?? 0), 1000) / 100;
     }
 
     private function scoreBudget($accom): float
@@ -120,6 +132,55 @@ class FetchAccommodationTask
         return max(0, 100 - $price);
     }
 
+    private function scoreFamily($accom): float 
+    {
+        return 0;
+    }
+
+     private function scoreAdventure($accom): float 
+    {
+        return 0;
+    }
+     
+    private function scoreRomantic($accom): float 
+    {
+        return 0;
+    }
+
+    private function scoreLuxury($accom): float
+    {
+        $wantedAmenites = [
+            'Outdoor pool' => 10,
+            'Spa' => 7,
+        ];
+
+        $amenitesScore = $this->scoreForWantedAmenites($accom, $wantedAmenites);
+
+        return
+            $amenitesScore * 4 +
+            (($accom['review_rating'] ?? 0) * 3) +
+            (($accom['rating'] ?? 0) * 4) +
+            min(($accom['review_count'] ?? 0), 1000) / 100;
+    }
+
+    private function scoreForWantedAmenites($accom, array $wantedAmenites): float
+    {
+        $totalScore = 0; 
+
+        foreach($wantedAmenites as $amenity => $score){
+            if($this->hasAmenity($accom, $amenity)){
+                $totalScore += $score;
+            }
+        }
+
+        return $totalScore;
+    }
+
+    private function hasAmenity($accom, string $amenity): bool
+    {
+        return str_contains(strtolower($accom['amenites']), strtolower($amenity));
+    }
+    
     private function parsePrice(?string $price): float
     {
         if (!$price) {

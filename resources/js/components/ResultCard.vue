@@ -47,6 +47,9 @@ import WishlistButton from './WishlistButton.vue';
         <div class="py-2">
             budget per day: {{  props.result.price_per_day }}
         </div>
+        <div class="py-2">
+            Rating: {{  props.result.rating }}
+        </div>
 
         <ResultScore :scores="props.result.scores" />
         <WishlistButton :result="props.result"  />

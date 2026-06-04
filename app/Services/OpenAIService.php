@@ -15,7 +15,7 @@ class OpenAIService
     private OpenAI\Client $client;
     private string $model;
     private const ROLE_CONTENT_INTENT = 'Extract travel search parameters. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date.';
-    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The Trivago_Id MUST be listed for each entry int the scoring.The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date.  A short description of why these scores are given can be put in the why section';
+    private const ROLE_CONTENT_SCORE = 'Extract score for accommodation signals based on the values passed. The Trivago_Id MUST be listed for each entry int the scoring.The signals to check will be the JSON keys and be a value of 0 to 100. 100 is a good match and 0 is a bad match. Return ONLY raw JSON. Do not use markdown. Do not wrap the JSON in backticks. No explanation. arrival and departure MUST be after todays date.  A short description of why these scores are given can be put in the why section this will be end user facing so needs to be friendly to read';
 
 
     public function __construct() {
@@ -84,7 +84,7 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
-                            'text' => 'They scoring IS BASED ON COMPARIOSN TO OTHERS IN THE PAYLOAD AND ANY EXTRA KNOWLEDGE YOU HAVE OF THE AREA'
+                            'text' => 'The scoring IS BASED ON COMPARIOSN TO OTHERS IN THE PAYLOAD AND ANY EXTRA KNOWLEDGE YOU HAVE OF THE AREA'
                         ],
                         [
                             'type' => 'input_text',
@@ -161,8 +161,16 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
-                            'text' => 'These are the allowed signals for the main_signal and secondary_signal fields. You MUST select one for each which best desribes the prompt. main_signal IS the primary meaning of the prompt. secondary_signal IS the secondary meaning of the prompt: ' . json_encode(array_column(PromptSignals::cases(), 'value')),
+                            'text' => 'Allowed signals: ' . json_encode(array_column(PromptSignals::cases(), 'value')) . '. Select the signal that best represents the PRIMARY intent of the prompt as main_signal. Select a secondary_signal ONLY if the prompt clearly expresses a second distinct intent. If there is no clear secondary intent, return null.',
                         ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Budget should only be selected if the user explicitly mentions budget, cheap, affordable, low-cost, value, price limits, or similar cost-sensitive language.',
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Examples: "Luxury hotel for a romantic holiday" => main_signal=luxury, secondary_signal=romantic. "Cheap hotel in London" => main_signal=budget, secondary_signal=null. "Business hotel with good wifi" => main_signal=business, secondary_signal=null.',
+                        ]
                     ],
                 ]
             ],
