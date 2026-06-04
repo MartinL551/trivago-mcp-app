@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('postcode');
             $table->string('address');
             $table->string('currency');
-            $table->string('price_per_stay');
-            $table->string('price_per_day');
+            $table->float('price_per_stay');
+            $table->float('price_per_day');
             $table->integer('rating');
             $table->string('city');
             $table->string('review_rating');

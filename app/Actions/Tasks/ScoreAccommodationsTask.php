@@ -19,7 +19,7 @@ class ScoreAccommodationsTask
 
     public function handle(SearchRequest $searchRequest, Collection $accommodations): ?Collection
     {
-        $scores = $this->openAiService->getScoreForAccommidations($accommodations, $searchRequest->prompt);
+        $scores = $this->openAiService->getScoreForAccommidations($accommodations, $searchRequest);
 
         $mappedAccoms = [];
 

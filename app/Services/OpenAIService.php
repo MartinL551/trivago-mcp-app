@@ -8,7 +8,7 @@ use App\Models\Accommodation;
 use Illuminate\Database\Eloquent\Collection;
 use OpenAI;
 use App\Enums\PromptSignals;
-
+use App\Models\SearchRequest;
 
 class OpenAIService
 {
@@ -34,8 +34,12 @@ class OpenAIService
         return $response->outputText;
     }
 
-    public function getScoreForAccommidations(Collection $accommodations, string $prompt): array
+    public function getScoreForAccommidations(Collection $accommodations, SearchRequest $searchRequest): array
     {
+        $prompt = $searchRequest->prompt;
+        $mainSignal = $searchRequest->mainSignal;
+        $secondarySignal = $searchRequest->secondarySignal;
+
         $payload = $accommodations->take(25)
             ->map(fn ($accommodation) => [
                     'trivago_id' => $accommodation->trivago_id,
@@ -85,7 +89,11 @@ class OpenAIService
                         [
                             'type' => 'input_text',
                             'text' => json_encode($payload)
-                        ]
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'These are the the signals for the main_signal and secondary_signal fields. This is used to help filter results down on the search request. main_signal IS the primary meaning of the prompt. secondary_signal IS the secondary meaning of the prompt. This CAN be used to help guide the scoring: ' . json_encode(array_column(PromptSignals::cases(), 'value')),
+                        ],
                     ],
                 ]
             ],
