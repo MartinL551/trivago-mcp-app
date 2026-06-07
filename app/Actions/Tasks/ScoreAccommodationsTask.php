@@ -34,6 +34,9 @@ class ScoreAccommodationsTask
             'romance' => $score->romance ?? 0,
             'adventure' => $score->adventure ?? 0,
             'budget' => $score->budget ?? 0,
+            'luxury' => $score->luxury ?? 0,
+            'business' => $score->business ?? 0,
+            'family' => $score->family ?? 0,
             'why' => $score->why ?? '',
             
         ])->take(5)->all();
@@ -48,6 +51,9 @@ class ScoreAccommodationsTask
                 'romance',
                 'adventure',
                 'budget',
+                'luxury',
+                'business',
+                'family',
                 'why'
             ]
         );

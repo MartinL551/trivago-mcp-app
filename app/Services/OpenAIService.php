@@ -72,7 +72,7 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
-                            'text' => 'Budget signal is measured against the price_per_day in the JSON packet for that accommodation. try to esitmate a current conversion for each accomidation. Eg. if the promt is in pounds convert to euros first to compare'
+                            'text' => 'Budget signal is measured against the price_per_day in the JSON packet for that accommodation. try to esitmate a current conversion for each accommodation, Eg. if the promt is in pounds convert to euros first to compare'
                         ],
                         [
                             'type' => 'input_text',
@@ -81,6 +81,18 @@ class OpenAIService
                         [
                             'type' => 'input_text',
                             'text' => 'Adventure signal is measured against the location and avaliable amenities and any extra info in the name or description in the JSON packet for that accommodation'
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Family signal is measured against the location and avaliable amenities and any extra info in the name or description in the JSON packet for that accommodation'
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Business signal is measured against the location and avaliable amenities and any extra info in the name or description in the JSON packet for that accommodation'
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Luxury signal is measured against the location and avaliable amenities and any extra info in the name or description in the JSON packet for that accommodation'
                         ],
                         [
                             'type' => 'input_text',
@@ -112,12 +124,18 @@ class OpenAIService
                                         'trivago_id' => ['type' => 'string'],
                                         'romance' => ['type' => 'number'],
                                         'adventure' => ['type' => 'number'],
+                                        'luxury' => ['type' => 'number'],
+                                        'family' => ['type' => 'number'],
+                                        'business' => ['type' => 'number'],
                                         'budget' => ['type' => 'number'],
                                         'why' => ['type' => 'string'],
                                     ],
                                     'required' => [
                                         'trivago_id',
                                         'romance',
+                                        'luxury',
+                                        'business',
+                                        'family',
                                         'adventure',
                                         'budget',
                                         'why',

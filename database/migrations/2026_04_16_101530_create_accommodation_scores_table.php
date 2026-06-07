@@ -19,6 +19,9 @@ return new class extends Migration
             $table->integer('romance');
             $table->integer('adventure');
             $table->integer('budget');
+            $table->integer('luxury');
+            $table->integer('business');
+            $table->integer('family');
             $table->string('why');
             $table->timestamps();
         });

@@ -40,6 +40,9 @@ class ProcessScoreAccommodationsJob implements ShouldQueue
         if($scores) {
             $this->searchRequest->status = SearchRequestStatus::Complete;
             $this->searchRequest->save();
+        } else {
+            $this->searchRequest->status = SearchRequestStatus::Failed;
+            $this->searchRequest->save();
         }
     }
 }

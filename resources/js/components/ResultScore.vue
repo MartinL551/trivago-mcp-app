@@ -17,6 +17,12 @@
             <dd class="py-2">{{  props.scores[0].romance }}</dd>
             <dt class="py-1">Budget</dt>
             <dd class="py-2">{{  props.scores[0].budget }}</dd>
+            <dt class="py-1">Luxury</dt>
+            <dd class="py-2">{{  props.scores[0].luxury }}</dd>
+            <dt class="py-1">Business</dt>
+            <dd class="py-2">{{  props.scores[0].business }}</dd>
+            <dt class="py-1">Family</dt>
+            <dd class="py-2">{{  props.scores[0].family }}</dd>
         </dl>
 
         <div>

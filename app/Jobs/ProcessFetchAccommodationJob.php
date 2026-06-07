@@ -40,6 +40,9 @@ class ProcessFetchAccommodationJob implements ShouldQueue
 
         if($accommodations && count($accommodations) > 0 && $this->chain) {
             ProcessScoreAccommodationsJob::dispatch($this->searchRequest, $accommodations);
+        } else {
+            $this->searchRequest->status = SearchRequestStatus::Failed;
+            $this->searchRequest->save();
         }
         
     }

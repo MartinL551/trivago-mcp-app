@@ -36,6 +36,9 @@ class ProcessExtractIntentJob implements ShouldQueue
 
         if($intent->status === 'success' && $this->chain) {
             ProcessFetchSuggestionsJob::dispatch($this->searchRequest, $intent, true);
+        } else {
+            $this->searchRequest->status = SearchRequestStatus::Failed;
+            $this->searchRequest->save();
         }
         
     }

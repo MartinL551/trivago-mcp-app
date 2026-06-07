@@ -104,15 +104,18 @@ class FetchAccommodationTask
 
     private function scoreBusiness($accom): float
     {
-        $wantedAmenites = [
-            'Gym' => 5,
-            'WiFi in public areas' => 10,
+        $wantedAmenities = [
             'WiFi (room)' => 10,
-            'Parking' => 6,
-            'Air conditioning' => 5,
+            'WiFi in public areas' => 9,
+            'Air conditioning' => 8,
+            'Parking' => 7,
+            'Restaurant' => 6,
+            'Gym' => 5,
+            'Bar' => 4,
+            'Pet-friendly' => 1,
         ];
 
-        $amenitesScore = $this->scoreForWantedAmenites($accom, $wantedAmenites);
+        $amenitesScore = $this->scoreForWantedAmenites($accom, $wantedAmenities);
 
         return
             $amenitesScore * 3 +
@@ -134,27 +137,62 @@ class FetchAccommodationTask
 
     private function scoreFamily($accom): float 
     {
-        return 0;
+        $wantedAmenities = [
+            'Outdoor pool' => 10,
+            'Restaurant' => 8,
+            'Parking' => 7,
+            'WiFi (room)' => 5,
+            'Air conditioning' => 5,
+            'Pet-friendly' => 3,
+            'Gym' => 1,
+        ];
+        $amenitesScore = $this->scoreForWantedAmenites($accom, $wantedAmenities);
+
+        return $amenitesScore + 0;
     }
 
      private function scoreAdventure($accom): float 
     {
+        $wantedAmenities = [
+            'Parking' => 10,
+            'WiFi (room)' => 8,
+            'Restaurant' => 6,
+            'Air conditioning' => 5,
+            'Gym' => 4,
+            'Bar' => 3,
+            'Pet-friendly' => 2,
+        ];
+
         return 0;
     }
      
     private function scoreRomantic($accom): float 
     {
+        $wantedAmenities = [
+            'Spa' => 10,
+            'Bar' => 7,
+            'Restaurant' => 7,
+            'Outdoor pool' => 6,
+            'WiFi (room)' => 1,
+        ];
+
         return 0;
     }
 
     private function scoreLuxury($accom): float
     {
-        $wantedAmenites = [
-            'Outdoor pool' => 10,
-            'Spa' => 7,
+        $wantedAmenities = [
+            'Spa' => 10,
+            'Outdoor pool' => 9,
+            'Restaurant' => 8,
+            'Bar' => 7,
+            'Air conditioning' => 6,
+            'Gym' => 5,
+            'WiFi (room)' => 3,
+            'Parking' => 2,
         ];
 
-        $amenitesScore = $this->scoreForWantedAmenites($accom, $wantedAmenites);
+        $amenitesScore = $this->scoreForWantedAmenites($accom, $wantedAmenities);
 
         return
             $amenitesScore * 4 +

@@ -39,6 +39,9 @@ class ProcessFetchSuggestionsJob implements ShouldQueue
             foreach($suggestions as $suggestion){
                 ProcessFetchAccommodationJob::dispatch($this->searchRequest, $suggestion, $this->intent, true);
             }
+        } else {
+            $this->searchRequest->status = SearchRequestStatus::Failed;
+            $this->searchRequest->save();
         }
         
     }
