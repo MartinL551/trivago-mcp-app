@@ -37,9 +37,6 @@ class OpenAIService
     public function getScoreForAccommidations(Collection $accommodations, SearchRequest $searchRequest): array
     {
         $prompt = $searchRequest->prompt;
-        $mainSignal = $searchRequest->mainSignal;
-        $secondarySignal = $searchRequest->secondarySignal;
-
         $payload = $accommodations->take(25)
             ->map(fn ($accommodation) => [
                     'trivago_id' => $accommodation->trivago_id,
@@ -96,7 +93,7 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
-                            'text' => 'The scoring IS BASED ON COMPARIOSN TO OTHERS IN THE PAYLOAD AND ANY EXTRA KNOWLEDGE YOU HAVE OF THE AREA'
+                            'text' => 'The scoring IS BASED ON COMPARIOSN TO OTHERS IN THE PAYLOAD AND ANY EXTRA KNOWLEDGE YOU HAVE OF THE LOCATION. E.g London is good for business and luxury. A small town in the alps is good for adventure'
                         ],
                         [
                             'type' => 'input_text',
