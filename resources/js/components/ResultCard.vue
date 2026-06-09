@@ -50,6 +50,10 @@ import WishlistButton from './WishlistButton.vue';
         <div class="py-2">
             Rating: {{  props.result.rating }}
         </div>
+        <div>
+            <a :href="props.result.trivago_url"> View Now On Trivago! </a>
+        </div>
+    
 
         <ResultScore :scores="props.result.scores" />
         <WishlistButton :result="props.result"  />

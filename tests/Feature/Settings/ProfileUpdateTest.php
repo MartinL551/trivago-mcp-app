@@ -27,11 +27,11 @@ class ProfileUpdateTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->delete(route('landingpage.index'));
+            ->delete(route('profile.destroy'));
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect(route(''));
+            ->assertRedirect(route('landingpage.index'));
 
         $this->assertGuest();
         $this->assertNull($user->fresh());
