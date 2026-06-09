@@ -24,7 +24,10 @@
             },
         })
 
-        router.reload();
+        if(response.ok) {
+            router.reload();
+        }
+ 
 
     }
 
@@ -38,7 +41,9 @@
         })
 
         
-        router.reload();
+        if(response.ok) {
+            router.reload();
+        }
     }
 
     
