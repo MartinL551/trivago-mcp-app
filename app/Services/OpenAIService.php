@@ -7,6 +7,7 @@ use App\Data\LlmScore;
 use App\Enums\PromptSignals;
 use App\Models\SearchRequest;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use OpenAI;
 
 class OpenAIService
@@ -197,6 +198,10 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
+                            'text' => 'rating is how many stars (e.g. a 5 star hotel and 4 star hotel) needed. review_rating is how users score the hotel on trivagos website this is a value from 1 to 10',
+                        ],
+                        [
+                            'type' => 'input_text',
                             'text' => 'Examples: "Luxury hotel for a romantic holiday" => main_signal=luxury, secondary_signal=romantic. "Cheap hotel in London" => main_signal=budget, secondary_signal=null. "Business hotel with good wifi" => main_signal=business, secondary_signal=null.',
                         ],
                     ],
@@ -238,8 +243,30 @@ class OpenAIService
                             ],
                             'main_signal' => ['type' => 'string'],
                             'secondary_signal' => ['type' => 'string'],
+                            'rating' => [
+                                'type' => 'array',
+                                'items' => ['type' => 'number'],
+                            ],
+                            'review_rating' => ['type' => 'number'],
                         ],
-                        'required' => ['arrival', 'departure', 'adults', 'children', 'rooms', 'children_ages', 'city', 'country', 'continent', 'holiday_type', 'budget', 'amenities', 'main_signal', 'secondary_signal'],
+                        'required' => [
+                            'arrival', 
+                            'departure', 
+                            'adults', 
+                            'children', 
+                            'rooms', 
+                            'children_ages', 
+                            'city', 
+                            'country', 
+                            'continent', 
+                            'holiday_type', 
+                            'budget', 
+                            'amenities', 
+                            'main_signal', 
+                            'secondary_signal',
+                            'rating',
+                            'review_rating',
+                        ],
                         'additionalProperties' => false,
                     ],
                 ],

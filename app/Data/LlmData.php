@@ -36,6 +36,10 @@ class LlmData
 
     public string $secondarySignal;
 
+    public array $rating;
+
+    public int $review_rating;
+
     /**
      * @param  array  $llmResponse  Raw structured output from LLM
      */
@@ -56,5 +60,7 @@ class LlmData
         $this->status = count($llmResponse) === 0 ? 'failed' : 'success';
         $this->mainSignal = $llmResponse['main_signal'] ?? null;
         $this->secondarySignal = $llmResponse['secondary_signal'] ?? null;
+        $this->rating = $llmResponse['rating'] ?? [];
+        $this->review_rating = $llmResponse['review_rating'] ?? null;
     }
 }

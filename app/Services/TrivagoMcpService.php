@@ -90,6 +90,10 @@ class TrivagoMcpService
             // TrivagoMcpService::RADIUS_SEARCH => TrivagoMcpService::RADIUS_SEARCH
         };
 
+        Log::info('Trivago API Params', [
+            'params' => $params,
+        ]);
+
         $request = [
             'jsonrpc' => '2.0',
             'id' => (string) Str::uuid(),
@@ -147,7 +151,7 @@ class TrivagoMcpService
 
         $response = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns);
 
-        if (! array_key_exists('accommodations', $response['result']['structuredContent'])) {
+        if (!array_key_exists('accommodations', $response['result']['structuredContent'])) {
             return $accommodations;
         }
 
