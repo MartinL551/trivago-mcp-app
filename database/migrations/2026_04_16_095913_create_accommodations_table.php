@@ -23,8 +23,8 @@ return new class extends Migration
             $table->float('price_per_day');
             $table->integer('rating');
             $table->string('city');
-            $table->string('review_rating');
-            $table->string('review_count');
+            $table->float('review_rating');
+            $table->integer('review_count');
             $table->string('amenites');
             $table->string('trivago_url');
             $table->string('trivago_image_url');
