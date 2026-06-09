@@ -17,6 +17,10 @@
                 label: 'Wishlist',
                 route: 'wishlist.show',
             },
+            {
+                label: 'Manage Account',
+                route: 'profile.edit',
+            },
         ];
 </script>
 
