@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SearchRequest;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 use App\Jobs\ProcessExtractIntentJob;
+use App\Models\SearchRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class SearchController extends Controller
 {
@@ -27,7 +27,7 @@ class SearchController extends Controller
 
         ProcessExtractIntentJob::dispatch($searchRequest, true);
 
-        return redirect()->route('results.show',[
+        return redirect()->route('results.show', [
             'searchRequest' => $searchRequest->id,
         ]);
     }

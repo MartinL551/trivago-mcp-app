@@ -2,14 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Services\OpenAIService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
 use App\Actions\Tasks\FetchAccommodationTask;
 use App\Data\LlmData;
 use App\Enums\SearchRequestStatus;
 use App\Models\SearchRequest;
 use App\Models\Suggestion;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 
 class ProcessFetchAccommodationJob implements ShouldQueue
 {
@@ -19,13 +18,11 @@ class ProcessFetchAccommodationJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private SearchRequest $searchRequest, 
+        private SearchRequest $searchRequest,
         private Suggestion $suggestion,
         private LlmData $intent,
         private bool $chain = false,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -38,12 +35,12 @@ class ProcessFetchAccommodationJob implements ShouldQueue
 
         $accommodations = app(FetchAccommodationTask::class)->handle($this->searchRequest, $this->suggestion, $this->intent);
 
-        if($accommodations && count($accommodations) > 0 && $this->chain) {
+        if ($accommodations && count($accommodations) > 0 && $this->chain) {
             ProcessScoreAccommodationsJob::dispatch($this->searchRequest, $accommodations);
         } else {
             $this->searchRequest->status = SearchRequestStatus::Failed;
             $this->searchRequest->save();
         }
-        
+
     }
 }

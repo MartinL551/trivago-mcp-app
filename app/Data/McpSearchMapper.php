@@ -4,9 +4,7 @@ namespace App\Data;
 
 class McpSearchMapper
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function toSuggestionsPayload(LlmData $data): array
     {
@@ -28,7 +26,7 @@ class McpSearchMapper
                 ? ''
                 : implode('-', $data->childAges),
             'rooms' => min($data->rooms, $data->adults),
-           
+
         ];
     }
 }

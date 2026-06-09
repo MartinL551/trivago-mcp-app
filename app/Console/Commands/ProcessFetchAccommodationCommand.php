@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Tasks\ExtractIntentTask;
+use App\Actions\Tasks\FetchAccommodationTask;
+use App\Actions\Tasks\FetchSuggestionsTask;
+use App\Models\SearchRequest;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Models\SearchRequest;
-use App\Actions\Tasks\ExtractIntentTask;
-use App\Actions\Tasks\FetchSuggestionsTask;
-use App\Actions\Tasks\FetchAccommodationTask;
 
 #[Signature('search:fetchaccom {prompt}')]
 #[Description('Send a prompt to the LLM and Get Accommodations from MCP')]
@@ -28,8 +28,9 @@ class ProcessFetchAccommodationCommand extends Command
 
         $intent = app(ExtractIntentTask::class)->handle($searchRequest);
 
-        if($intent->status === 'Failed'){
+        if ($intent->status === 'Failed') {
             $this->error('Failed to Get Search intent');
+
             return self::FAILURE;
         }
 

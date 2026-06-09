@@ -4,25 +4,40 @@ namespace App\Data;
 
 use Carbon\Carbon;
 
-class LlmData {
+class LlmData
+{
     public Carbon $arrival;
+
     public Carbon $departure;
+
     public int $adults;
+
     public int $children;
+
     public int $rooms;
+
     public array $childAges;
+
     public string $city;
+
     public string $country;
+
     public string $continent;
+
     public array $holidayType;
+
     public float $budget;
+
     public array $amenities;
+
     public string $status;
+
     public string $mainSignal;
+
     public string $secondarySignal;
 
     /**
-     * @param array $llmResponse Raw structured output from LLM
+     * @param  array  $llmResponse  Raw structured output from LLM
      */
     public function __construct(array $llmResponse)
     {
@@ -38,7 +53,7 @@ class LlmData {
         $this->holidayType = $llmResponse['holiday_type'] ?? [];
         $this->budget = (float) $llmResponse['budget'] ?? 0;
         $this->amenities = $llmResponse['amenities'] ?? [];
-        $this->status = count($llmResponse) === 0 ? "failed" : "success";
+        $this->status = count($llmResponse) === 0 ? 'failed' : 'success';
         $this->mainSignal = $llmResponse['main_signal'] ?? null;
         $this->secondarySignal = $llmResponse['secondary_signal'] ?? null;
     }

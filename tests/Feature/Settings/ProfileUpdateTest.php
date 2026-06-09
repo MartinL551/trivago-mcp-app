@@ -21,7 +21,6 @@ class ProfileUpdateTest extends TestCase
         $response->assertOk();
     }
 
-
     public function test_user_can_delete_their_account()
     {
         $user = User::factory()->create();

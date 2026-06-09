@@ -4,8 +4,6 @@ namespace app\Actions\Tasks;
 
 use App\Data\LlmData;
 use App\Models\SearchRequest;
-use App\Services\OpenAIService;
-use App\Enums\SearchRequestStatus;
 use App\Models\Suggestion;
 use App\Services\TrivagoMcpService;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,40 +14,39 @@ class FetchSuggestionsTask
         private TrivagoMcpService $mcpSerivce,
     ) {}
 
-
     public function handle(LlmData $intent, SearchRequest $searchRequest): ?Collection
     {
         $suggestions = $this->mcpSerivce->getSuggestions($intent);
 
-        $rows = collect($suggestions)->map(fn ($suggestion)  => [
+        $rows = collect($suggestions)->map(fn ($suggestion) => [
             'trivago_id' => $suggestion['id'],
             'trivago_ns' => $suggestion['ns'],
-            'id_ns' => (string) $suggestion['id'] . "_" . (string) $suggestion['ns'],
+            'id_ns' => (string) $suggestion['id'].'_'.(string) $suggestion['ns'],
             'location' => array_key_exists('location', $suggestion) ? $suggestion['location'] : '',
             'location_label' => array_key_exists('location_label', $suggestion) ? $suggestion['location_label'] : '',
             'location_type' => array_key_exists('location_type', $suggestion) ? $suggestion['location_type'] : '',
         ])->take(1)->all();
 
-       Suggestion::upsert(
+        Suggestion::upsert(
             $rows,
             ['id_ns'],
             [
-                'trivago_id', 
-                'trivago_ns', 
+                'trivago_id',
+                'trivago_ns',
                 'location',
-                'location_label', 
-                'location_type', 
+                'location_label',
+                'location_type',
             ]
         );
 
         $insertedSuggestions = Suggestion::whereIn('id_ns', collect($rows)->pluck('id_ns'))->get();
 
-        if(count($insertedSuggestions) > 0){
+        if (count($insertedSuggestions) > 0) {
             $searchRequest->suggestions()->syncWithoutDetaching($insertedSuggestions);
         } else {
             return null;
         }
-   
+
         return $insertedSuggestions;
     }
 }

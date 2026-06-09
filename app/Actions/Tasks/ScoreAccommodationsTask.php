@@ -2,20 +2,16 @@
 
 namespace app\Actions\Tasks;
 
-use App\Data\LlmData;
+use App\Models\AccommodationScore;
 use App\Models\SearchRequest;
 use App\Services\OpenAIService;
-use App\Enums\SearchRequestStatus;
-use App\Models\Accommodation;
-use App\Models\AccommodationScore;
 use Illuminate\Database\Eloquent\Collection;
 
 class ScoreAccommodationsTask
 {
     public function __construct(
-        private OpenAiService $openAiService,
+        private OpenAIService $openAiService,
     ) {}
-
 
     public function handle(SearchRequest $searchRequest, Collection $accommodations): ?Collection
     {
@@ -23,11 +19,11 @@ class ScoreAccommodationsTask
 
         $mappedAccoms = [];
 
-        foreach($accommodations as $accom) {
+        foreach ($accommodations as $accom) {
             $mappedAccoms[$accom['trivago_id']] = $accom['id'];
         }
 
-        $rows = collect($scores)->map(fn ($score)  => [
+        $rows = collect($scores)->map(fn ($score) => [
             'trivago_id' => $score->trivagoId ?? '',
             'accommodation_id' => $mappedAccoms[$score->trivagoId],
             'search_request_id' => $searchRequest->id,
@@ -38,9 +34,8 @@ class ScoreAccommodationsTask
             'business' => $score->business ?? 0,
             'family' => $score->family ?? 0,
             'why' => $score->why ?? '',
-            
-        ])->take(5)->all();
 
+        ])->take(5)->all();
 
         AccommodationScore::upsert(
             $rows,
@@ -54,15 +49,15 @@ class ScoreAccommodationsTask
                 'luxury',
                 'business',
                 'family',
-                'why'
+                'why',
             ]
         );
 
         $insertedScores = AccommodationScore::whereIn('accommodation_id', $accommodations->pluck('id'))->latest()->limit(5)->get();
 
-        if(count($insertedScores) <= 0){
+        if (count($insertedScores) <= 0) {
             return null;
-        } 
+        }
 
         return $insertedScores;
     }

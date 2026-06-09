@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Tasks\ExtractIntentTask;
+use App\Models\SearchRequest;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Models\SearchRequest;
-use App\Actions\Tasks\ExtractIntentTask;
 
 #[Signature('search:process {prompt}')]
 #[Description('Send a prompt to the LLM')]
@@ -14,7 +14,7 @@ class ProcessExtractIntentCommand extends Command
 {
     public function handle(): int
     {
-          $prompt = $this->argument('prompt');
+        $prompt = $this->argument('prompt');
 
         $searchRequest = SearchRequest::create([
             'user_id' => 1,
@@ -22,21 +22,21 @@ class ProcessExtractIntentCommand extends Command
             'status' => 'pending',
         ]);
 
-         $this->info("Search for Request {$searchRequest->id}");
+        $this->info("Search for Request {$searchRequest->id}");
 
         $intent = app(ExtractIntentTask::class)->handle($searchRequest);
 
-        $this->info("Intent From LLM");
+        $this->info('Intent From LLM');
         foreach ($intent as $key => $value) {
-            if(gettype($value) != "array"){
+            if (gettype($value) != 'array') {
                 $this->info("{$key}: {$value}");
             } else {
                 $this->info("{$key}");
-                foreach($value as $arrKey => $arrValue) {
+                foreach ($value as $arrKey => $arrValue) {
                     $this->info("{$arrKey}: {$arrValue}");
                 }
             }
-     
+
         }
 
         return self::SUCCESS;

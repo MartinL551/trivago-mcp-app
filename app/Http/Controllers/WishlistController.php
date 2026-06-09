@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Accommodation;
 use App\Models\WishlistItem;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class WishlistController extends Controller
 {
@@ -31,7 +30,7 @@ class WishlistController extends Controller
 
     public function remove(Accommodation $accommodation)
     {
-       WishlistItem::where('user_id', Auth::id())
+        WishlistItem::where('user_id', Auth::id())
             ->where('accommodation_id', $accommodation->id)
             ->delete();
 

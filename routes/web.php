@@ -11,7 +11,7 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landingpage.inde
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('/results', [ResultsController::class, 'index'])->name('results.index');
     Route::get('/results/{searchRequest}', [ResultsController::class, 'show'])->name('results.show');
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
@@ -22,7 +22,5 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/wishlist/{accommodation}/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::post('/wishlist/{accommodation}/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
-
-
 
 require __DIR__.'/settings.php';

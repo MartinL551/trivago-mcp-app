@@ -8,6 +8,6 @@ enum PromptSignals: string
     case Family = 'family';
     case Adventure = 'adventure';
     case Romantic = 'romantic';
-    case Business  = 'business';
-    case Luxury  = 'luxury';
+    case Business = 'business';
+    case Luxury = 'luxury';
 }

@@ -4,16 +4,16 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Attributes\Unguarded;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Unguarded]
 class User extends Authenticatable
-{   
-    //Ungaurded for now;
+{
+    // Ungaurded for now;
 
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -34,8 +34,7 @@ class User extends Authenticatable
             Accommodation::class,
             'wishlist_items'
         )->withExists([
-            'wishlistItems as wishlisted' => fn ($q) =>
-                $q->where('user_id', $this->id)
+            'wishlistItems as wishlisted' => fn ($q) => $q->where('user_id', $this->id),
         ]);
     }
 
@@ -44,6 +43,4 @@ class User extends Authenticatable
         return $this->wishlistedAccommodations()
             ->with('scores');
     }
-
-
 }

@@ -2,12 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Services\OpenAIService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
 use App\Actions\Tasks\ExtractIntentTask;
 use App\Enums\SearchRequestStatus;
 use App\Models\SearchRequest;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 
 class ProcessExtractIntentJob implements ShouldQueue
 {
@@ -17,11 +16,9 @@ class ProcessExtractIntentJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private SearchRequest $searchRequest, 
+        private SearchRequest $searchRequest,
         private bool $chain = false,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -34,12 +31,12 @@ class ProcessExtractIntentJob implements ShouldQueue
 
         $intent = app(ExtractIntentTask::class)->handle($this->searchRequest);
 
-        if($intent->status === 'success' && $this->chain) {
+        if ($intent->status === 'success' && $this->chain) {
             ProcessFetchSuggestionsJob::dispatch($this->searchRequest, $intent, true);
         } else {
             $this->searchRequest->status = SearchRequestStatus::Failed;
             $this->searchRequest->save();
         }
-        
+
     }
 }

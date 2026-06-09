@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ProcessExtractIntentJob;
+use App\Models\SearchRequest;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Models\SearchRequest;
-use App\Actions\Tasks\ExtractIntentTask;
-use App\Jobs\ProcessExtractIntentJob;
 
 #[Signature('search:searchRequestChain {prompt}')]
 #[Description('Send Request to job queue')]

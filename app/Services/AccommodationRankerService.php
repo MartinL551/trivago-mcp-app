@@ -15,12 +15,12 @@ class AccommodationRankerService
 
     public static function getSortedArray(Collection $rows, SearchRequest $searchRequest): array
     {
-        return self::sortAccommodation($rows,$searchRequest)->all();
+        return self::sortAccommodation($rows, $searchRequest)->all();
     }
 
     public static function getSortedArrayAndTakeCount(Collection $rows, SearchRequest $searchRequest, int $count): array
     {
-        return self::sortAccommodation($rows,$searchRequest)->take($count)->all();
+        return self::sortAccommodation($rows, $searchRequest)->take($count)->all();
     }
 
     private static function sortForSignals(?string $mainSignal, ?string $secondarySignal): callable
@@ -246,7 +246,7 @@ class AccommodationRankerService
     {
         $price = $accom['price_per_day'];
 
-        if (!$price) {
+        if (! $price) {
             return 0;
         }
 
@@ -255,20 +255,19 @@ class AccommodationRankerService
 
     private static function scoreForWantedAmenities($accom, array $wantedAmenites, int $weight = 1): float
     {
-        $totalScore = 0; 
+        $totalScore = 0;
 
-        foreach($wantedAmenites as $amenity => $score){
-            if(self::hasAmenity($accom, $amenity)){
+        foreach ($wantedAmenites as $amenity => $score) {
+            if (self::hasAmenity($accom, $amenity)) {
                 $totalScore += $score;
             }
         }
 
-        return $totalScore * $weight ;
+        return $totalScore * $weight;
     }
 
     private static function hasAmenity($accom, string $amenity): bool
     {
         return str_contains(strtolower($accom['amenites']), strtolower($amenity));
     }
-    
 }

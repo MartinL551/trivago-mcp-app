@@ -2,13 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Services\OpenAIService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
 use App\Actions\Tasks\FetchSuggestionsTask;
 use App\Data\LlmData;
 use App\Enums\SearchRequestStatus;
 use App\Models\SearchRequest;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 
 class ProcessFetchSuggestionsJob implements ShouldQueue
 {
@@ -21,9 +20,7 @@ class ProcessFetchSuggestionsJob implements ShouldQueue
         private SearchRequest $searchRequest,
         private LlmData $intent,
         private bool $chain = false,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -35,14 +32,14 @@ class ProcessFetchSuggestionsJob implements ShouldQueue
 
         $suggestions = app(FetchSuggestionsTask::class)->handle($this->intent, $this->searchRequest);
 
-        if($suggestions && count($suggestions) > 0 && $this->chain) {
-            foreach($suggestions as $suggestion){
+        if ($suggestions && count($suggestions) > 0 && $this->chain) {
+            foreach ($suggestions as $suggestion) {
                 ProcessFetchAccommodationJob::dispatch($this->searchRequest, $suggestion, $this->intent, true);
             }
         } else {
             $this->searchRequest->status = SearchRequestStatus::Failed;
             $this->searchRequest->save();
         }
-        
+
     }
 }

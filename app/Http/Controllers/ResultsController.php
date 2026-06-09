@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Enums\SearchRequestStatus;
 use App\Models\SearchRequest;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ResultsController extends Controller
-{   
+{
     public function index()
     {
         $user = Auth::getUser();
-       
-        if($lastSearchReqest = $user->searchRequests()->latest()->first()) {
-            return redirect()->route('results.show',[
+
+        if ($lastSearchReqest = $user->searchRequests()->latest()->first()) {
+            return redirect()->route('results.show', [
                 'searchRequest' => $lastSearchReqest->id,
             ]);
         } else {
@@ -34,7 +34,7 @@ class ResultsController extends Controller
                 'status',
                 'prompt',
             ]),
-            'initalAccommodations' =>($accoms = $searchRequest->accommodationsForStatus()) ? Inertia::optional(fn () => $accoms->get()) : null,
+            'initalAccommodations' => ($accoms = $searchRequest->accommodationsForStatus()) ? Inertia::optional(fn () => $accoms->get()) : null,
         ]);
     }
 
@@ -45,18 +45,18 @@ class ResultsController extends Controller
 
         $accommodationsQuery = $searchRequest->accommodationsForStatus();
 
-        $accommodationsQuery = match($searchRequest->status) {
+        $accommodationsQuery = match ($searchRequest->status) {
             SearchRequestStatus::Scoring->value => $accommodationsQuery->whereIn('id', $requestedIds ?? []),
             SearchRequestStatus::Complete->value => $accommodationsQuery->whereNotIn('id', $knownIds ?? []),
             default => $accommodationsQuery,
         };
 
-        $accommodations = $accommodationsQuery ? $accommodationsQuery->get() : null ;
+        $accommodations = $accommodationsQuery ? $accommodationsQuery->get() : null;
 
         return response()->json([
             'status' => $searchRequest->status,
             'prompt' => $searchRequest->prompt,
-            'accommodations' => $accommodations, 
+            'accommodations' => $accommodations,
         ]);
     }
 }
