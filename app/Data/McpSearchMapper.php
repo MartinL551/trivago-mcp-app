@@ -35,25 +35,8 @@ class McpSearchMapper
     {
         $reviewRatings = [
             'rating70' => true,
-            'rating75' => true,
-            'rating80' => true,
-            'rating85' => true,
         ];
 
-        if($llmReviewRating < 8.5) {
-            $reviewRatings['rating85'] = false;
-        }
-
-        if($llmReviewRating < 8) {
-            $reviewRatings['rating85'] = false;
-            $reviewRatings['rating80'] = false;
-        }
-
-        if($llmReviewRating < 7.5) {
-            $reviewRatings['rating85'] = false;
-            $reviewRatings['rating80'] = false;
-            $reviewRatings['rating75'] = false;
-        }
 
         return $reviewRatings;
     }

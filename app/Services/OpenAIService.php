@@ -198,11 +198,11 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
-                            'text' => 'rating is how many stars (e.g. a 5 star hotel and 4 star hotel) needed. This should be given as an array of needed ratings e.g [5,4,3,2,1]. review_rating is how users score the hotel on trivagos website this is a value from 1 to 10. The rating put here should be based on the user prompt give. E.g. luxury wants 5 and 4 star hotels. Family is probably ok with 3. But IMPORTANT this is based on the context of the prompt',
+                            'text' => 'rating is how many stars (e.g. a 5 star hotel and 4 star hotel) needed. This should be given as an array of needed ratings e.g [5,4,3,2,1]. review_rating is how users score the hotel on trivagos website this is a value from 1 to 10. The rating put here should be based on the user prompt give. E.g. luxury wants 5 and 4 star hotels, or family as 3. But IMPORTANT this is based on the context of the prompt Luxury familt might be in the middle for example you can use the main_signal and secondary_signal to help with this',
                         ],
                         [
                             'type' => 'input_text',
-                            'text' => 'The room count should be generated from the number of adults and children. With rooms being <= the number of adults. But with the goal of 4 people per room max',
+                            'text' => 'The room count should be generated from the number of adults and children. With rooms being <= the number of adults. But with the goal of 3 people per room max',
                         ],
                         [
                             'type' => 'input_text',

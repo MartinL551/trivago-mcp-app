@@ -113,7 +113,7 @@ class AccommodationRankerService
         $score += self::scoreReviewRating($accom, weight: 5);
         $score += self::scoreRating($accom, weight: 3);
         $score += self::scoreReviewCount($accom, weight: 4);
-        $score += self::scoreDistanceFromCentre($accom, weight: 3);
+        $score += self::scoreDistanceFromCentre($accom, weight: 5);
         $score += self::scoreBudgetRating($accom, weight: 4);
 
         return $score;
