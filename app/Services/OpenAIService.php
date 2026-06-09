@@ -43,6 +43,9 @@ class OpenAIService
                     'name' => $accommodation->name,
                     'location' => $accommodation->city,
                     'price_per_day' => $accommodation->price_per_day,
+                    'rating' =>  $accommodation->rating,
+                    'review_rating' =>  $accommodation->rating,
+                    'review_count' =>  $accommodation->rating,
                     'amenities' => $accommodation->amenites,
                     'description' => $accommodation->description,
             ])
@@ -94,6 +97,10 @@ class OpenAIService
                         [
                             'type' => 'input_text',
                             'text' => 'The scoring IS BASED ON COMPARIOSN TO OTHERS IN THE PAYLOAD AND ANY EXTRA KNOWLEDGE YOU HAVE OF THE LOCATION. E.g London is good for business and luxury. A small town in the alps is good for adventure'
+                        ],
+                             [
+                            'type' => 'input_text',
+                            'text' => 'rating in the payload is how many stars it has. review_rating is how users score the hotel on trivagos website'
                         ],
                         [
                             'type' => 'input_text',
@@ -181,6 +188,10 @@ class OpenAIService
                         [
                             'type' => 'input_text',
                             'text' => 'Budget should only be selected if the user explicitly mentions budget, cheap, affordable, low-cost, value, price limits, or similar cost-sensitive language.',
+                        ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'IMPORTANT: these are the known amenites that trivago MCP accepts. WiFi in public areas, WiFi (room), Outdoor pool, Spa, Parking, Pet-friendly, Air conditioning, Restaurant, Bar, Gym'
                         ],
                         [
                             'type' => 'input_text',

@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class TrivagoMcpService
 {
@@ -62,7 +63,7 @@ class TrivagoMcpService
 
         $sessionId = $response->header('Mcp-Session-Id');
 
-        if(! $sessionId){
+        if(!$sessionId){
             throw new \RuntimeException('No MCP Session ID');
         }
 
@@ -100,7 +101,13 @@ class TrivagoMcpService
 
         $response = $this->sendJson($headers, $request) ?? null;
 
-        $response->throw();
+        $response->throw(function ($response, $e) {
+            Log::error('Trivago API request failed', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+                'url' => $response->effectiveUri(),
+            ]);
+        });
 
         return $response->json() ?? [];
     }

@@ -20,7 +20,7 @@ class AccommodationRankerService
 
     public static function getSortedArrayAndTakeCount(Collection $rows, SearchRequest $searchRequest, int $count): array
     {
-        return self::sortAccommodation($rows,$searchRequest)->take(5)->all();
+        return self::sortAccommodation($rows,$searchRequest)->take($count)->all();
     }
 
     private static function sortForSignals(?string $mainSignal, ?string $secondarySignal): callable
@@ -86,7 +86,7 @@ class AccommodationRankerService
 
         $score = self::scoreForWantedAmenities($accom, $wantedAmenities, weight: 5);
         $score += self::scoreReviewRating($accom, weight: 5);
-        $score += self::scoreRating($accom, weight: 10);
+        $score = self::scoreRating($accom, weight: 10);
         $score += self::scoreReviewCount($accom, weight: 2);
         $score += self::scoreDistanceFromCentre($accom, weight: 2);
         $score += self::scoreBudgetRating($accom, weight: 1);
