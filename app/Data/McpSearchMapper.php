@@ -15,6 +15,51 @@ class McpSearchMapper
 
     public function toAccommodationPayload(LlmData $data, int $ns, int $id): array
     {
+        return [
+            'ns' => $ns,
+            'id' => $id,
+            'arrival' => $data->arrival->format('Y-m-d'),
+            'departure' => $data->departure->format('Y-m-d'),
+            'adults' => $data->adults,
+            'children' => $data->children,
+            'hotel_rating' => $this->getRatingsState($data->rating),
+            'review_rating' =>  $this->getReveiewRatingsState($data->review_rating),
+            'children_ages' => empty($data->childAges)
+                ? ''
+                : implode('-', $data->childAges),
+            'rooms' => min($data->rooms, $data->adults),
+        ];
+    }
+
+    private function getReveiewRatingsState(float $llmReviewRating): array 
+    {
+        $reviewRatings = [
+            'rating70' => true,
+            'rating75' => true,
+            'rating80' => true,
+            'rating85' => true,
+        ];
+
+        if($llmReviewRating < 8.5) {
+            $reviewRatings['rating85'] = false;
+        }
+
+        if($llmReviewRating < 8) {
+            $reviewRatings['rating85'] = false;
+            $reviewRatings['rating80'] = false;
+        }
+
+        if($llmReviewRating < 7.5) {
+            $reviewRatings['rating85'] = false;
+            $reviewRatings['rating80'] = false;
+            $reviewRatings['rating75'] = false;
+        }
+
+        return $reviewRatings;
+    }
+
+    private function getRatingsState(array $llmRatings): array
+    {
         $ratings = [
             '1star' => false,
             '2star' => false,
@@ -23,35 +68,16 @@ class McpSearchMapper
             '5star' => false,
         ];
 
-        $reviewRatings = [
-            'rating70' => true,
-            'rating75' => true,
-            'rating80' => true,
-            'rating85' => true,
-        ];
 
-        if(count($data->rating) > 0) {
-            foreach($data->rating as $rating) {
+        if(count($llmRatings) > 0) {
+            foreach($llmRatings as $rating) {
                 $ratings["{$rating}star"] = true;
             }
         } else {
             $keys = array_keys($ratings);
             $ratings = array_fill_keys($keys, true);
         }
-     
-        return [
-            'ns' => $ns,
-            'id' => $id,
-            'arrival' => $data->arrival->format('Y-m-d'),
-            'departure' => $data->departure->format('Y-m-d'),
-            'adults' => $data->adults,
-            'children' => $data->children,
-            'rating' => $ratings,
-            'review_rating' =>  $reviewRatings,
-            'children_ages' => empty($data->childAges)
-                ? ''
-                : implode('-', $data->childAges),
-            'rooms' => min($data->rooms, $data->adults),
-        ];
+        
+        return $ratings;
     }
 }
