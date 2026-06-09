@@ -27,9 +27,7 @@ class ProfileUpdateTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->delete(route('profile.destroy'), [
-                'password' => 'password',
-            ]);
+            ->delete(route('profile.destroy'));
 
         $response
             ->assertSessionHasNoErrors()
