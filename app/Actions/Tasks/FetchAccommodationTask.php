@@ -1,7 +1,6 @@
 <?php
 
 namespace app\Actions\Tasks;
-
 use App\Data\LlmData;
 use App\Models\Accommodation;
 use App\Models\SearchRequest;
