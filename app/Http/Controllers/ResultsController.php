@@ -7,6 +7,7 @@ use App\Models\SearchRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
 
 class ResultsController extends Controller
 {
@@ -26,7 +27,7 @@ class ResultsController extends Controller
 
     public function show(SearchRequest $searchRequest)
     {
-        abort_unless($searchRequest->user_id === Auth::id(), 403);
+        Gate::authorize('view', $searchRequest);
 
         return Inertia::render('Results', [
             'initialSearchRequest' => fn () => $searchRequest->only([
@@ -40,6 +41,8 @@ class ResultsController extends Controller
 
     public function poll(Request $request, SearchRequest $searchRequest)
     {
+        Gate::authorize('view', $searchRequest);
+
         $knownIds = $request->input('know_ids');
         $requestedIds = $request->input('requested_ids');
 
