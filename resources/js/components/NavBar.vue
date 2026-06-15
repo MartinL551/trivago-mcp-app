@@ -37,7 +37,7 @@
        
         <nav class="mx-auto max-w-7xl px-4 py-4">
             <ul class="flex flex-col gap-2 md:flex-row md:gap-6">
-                <li class="relative flex h-16 items-center gap-2 px-4" v-for="item in navItems" :key="item.href">
+                <li class="relative flex h-10 items-center gap-2 px-4" v-for="item in navItems" :key="item.href">
                     <a
                         :href="route(item.href)"
                     >

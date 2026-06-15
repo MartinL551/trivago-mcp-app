@@ -114,6 +114,10 @@
         color: var(--primary);
         text-underline-offset: 0.2em;
     }
+
+    button:hover {
+        cursor: pointer;
+    }
 }
 
 

@@ -4,5 +4,14 @@
 </script>
 
 <template>
-    <SearchRequest />
+    <div>
+        <div class="flex flex-col w-full item-center py-5">
+            <h1>Find your perfect stay</h1>
+            <h5> Descirbe your ideal Horel and will find the perfect fit. </h5>
+        </div>
+
+
+        <SearchRequest />
+    </div>
+  
 </template>
