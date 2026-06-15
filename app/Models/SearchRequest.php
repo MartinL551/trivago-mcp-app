@@ -3,17 +3,21 @@
 namespace App\Models;
 
 use App\Enums\SearchRequestStatus;
-use Illuminate\Database\Eloquent\Attributes\Unguarded;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Unguarded]
+#[Fillable(
+    'user_id',
+    'prompt',
+    'main_signal',
+    'secondary_signal',
+    'status',
+)]
 class SearchRequest extends Model
 {
-    // unguarded for now. Need to loop back later
-
     public function setStatus(SearchRequestStatus $status): void
     {
         $this->status = $status;

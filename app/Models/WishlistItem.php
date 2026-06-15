@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Unguarded;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Unguarded]
+#[Fillable(
+    'user_id',
+    'accommodation_id',
+)]
 class WishlistItem extends Model
 {
-    // Ungaurded for now;
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -2,14 +2,33 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Unguarded;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Unguarded]
+#[Fillable(
+    'trivago_id',
+    'accommodationscore_id',
+    'name',
+    'postcode',
+    'address',
+    'currency',
+    'price_per_stay',
+    'price_per_day',
+    'rating',
+    'city',
+    'review_rating',
+    'review_count',
+    'amenites',
+    'trivago_url',
+    'trivago_image_url',
+    'distance_string',
+    'distance_to_center',
+    'distance_units',
+    'desc',
+)]
 class Accommodation extends Model
 {
-    // unguarded for now. Need to loop back later
     public function scores(): HasMany
     {
         return $this->hasMany(AccommodationScore::class);
