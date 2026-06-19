@@ -7,7 +7,6 @@ use App\Data\LlmData;
 use App\Enums\SearchRequestStatus;
 use App\Jobs\Concerns\FailSearchRequest;
 use App\Models\SearchRequest;
-use App\Models\Suggestion;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use RuntimeException;

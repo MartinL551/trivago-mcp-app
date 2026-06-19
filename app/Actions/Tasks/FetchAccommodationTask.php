@@ -4,11 +4,9 @@ namespace app\Actions\Tasks;
 use App\Data\LlmData;
 use App\Models\Accommodation;
 use App\Models\SearchRequest;
-use App\Models\Suggestion;
 use App\Services\AccommodationRankerService;
 use App\Services\TrivagoMcpService;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 
 class FetchAccommodationTask
 {
