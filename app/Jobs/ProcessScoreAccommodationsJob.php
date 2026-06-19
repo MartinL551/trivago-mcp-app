@@ -4,14 +4,18 @@ namespace App\Jobs;
 
 use App\Actions\Tasks\ScoreAccommodationsTask;
 use App\Enums\SearchRequestStatus;
+use App\Jobs\Concerns\FailSearchRequest;
 use App\Models\SearchRequest;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Queue\Queueable;
+use RuntimeException;
+use Throwable;
 
 class ProcessScoreAccommodationsJob implements ShouldQueue
 {
     use Queueable;
+    use FailSearchRequest;
 
     /**
      * Create a new job instance.
@@ -26,17 +30,27 @@ class ProcessScoreAccommodationsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->searchRequest->status = SearchRequestStatus::Scoring;
-        $this->searchRequest->save();
+        try {
+            $this->searchRequest->status = SearchRequestStatus::Scoring;
+            $this->searchRequest->save();
 
-        $scores = app(ScoreAccommodationsTask::class)->handle($this->searchRequest, $this->accommodations);
+            $scores = app(ScoreAccommodationsTask::class)->handle($this->searchRequest, $this->accommodations);
 
-        if ($scores) {
+            if (! $scores || count($scores) <= 0) {
+                throw new RuntimeException('No scores returned for search request.');
+            }
+
             $this->searchRequest->status = SearchRequestStatus::Complete;
             $this->searchRequest->save();
-        } else {
-            $this->searchRequest->status = SearchRequestStatus::Failed;
-            $this->searchRequest->save();
+        } catch (Throwable $exception) {
+            $this->fail($exception);
         }
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->failSearchRequest($this->searchRequest, $exception, [
+            'stage' => SearchRequestStatus::Scoring->value,
+        ]);
     }
 }

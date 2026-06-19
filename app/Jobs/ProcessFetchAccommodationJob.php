@@ -5,14 +5,18 @@ namespace App\Jobs;
 use App\Actions\Tasks\FetchAccommodationTask;
 use App\Data\LlmData;
 use App\Enums\SearchRequestStatus;
+use App\Jobs\Concerns\FailSearchRequest;
 use App\Models\SearchRequest;
 use App\Models\Suggestion;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use RuntimeException;
+use Throwable;
 
 class ProcessFetchAccommodationJob implements ShouldQueue
 {
     use Queueable;
+    use FailSearchRequest;
 
     /**
      * Create a new job instance.
@@ -29,18 +33,28 @@ class ProcessFetchAccommodationJob implements ShouldQueue
      */
     public function handle(): void
     {
-
-        $this->searchRequest->status = SearchRequestStatus::FetchingAccommodations;
-        $this->searchRequest->save();
-
-        $accommodations = app(FetchAccommodationTask::class)->handle($this->searchRequest, $this->suggestion, $this->intent);
-
-        if ($accommodations && count($accommodations) > 0 && $this->chain) {
-            ProcessScoreAccommodationsJob::dispatch($this->searchRequest, $accommodations);
-        } else {
-            $this->searchRequest->status = SearchRequestStatus::Failed;
+        try {
+            $this->searchRequest->status = SearchRequestStatus::FetchingAccommodations;
             $this->searchRequest->save();
-        }
 
+            $accommodations = app(FetchAccommodationTask::class)->handle($this->searchRequest, $this->suggestion, $this->intent);
+
+            if (! $accommodations || count($accommodations) <= 0) {
+                throw new RuntimeException('No accommodations returned for search request.');
+            }
+
+            if ($this->chain) {
+                ProcessScoreAccommodationsJob::dispatch($this->searchRequest, $accommodations);
+            }
+        } catch (Throwable $exception) {
+            $this->fail($exception);
+        }
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->failSearchRequest($this->searchRequest, $exception, [
+            'stage' => SearchRequestStatus::FetchingAccommodations->value,
+        ]);
     }
 }
