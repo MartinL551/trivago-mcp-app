@@ -6,18 +6,10 @@ class McpSearchMapper
 {
     public function __construct() {}
 
-    public function toSuggestionsPayload(LlmData $data): array
+    public function toAccommodationPayload(LlmData $data): array
     {
         return [
             'query' => "{$data->city}, {$data->country}, {$data->continent}",
-        ];
-    }
-
-    public function toAccommodationPayload(LlmData $data, int $ns, int $id): array
-    {
-        return [
-            'ns' => $ns,
-            'id' => $id,
             'arrival' => $data->arrival->format('Y-m-d'),
             'departure' => $data->departure->format('Y-m-d'),
             'adults' => $data->adults,

@@ -35,7 +35,7 @@ class ProcessExtractIntentJob implements ShouldQueue
             $intent = app(ExtractIntentTask::class)->handle($this->searchRequest);
 
             if ($this->chain) {
-                ProcessFetchSuggestionsJob::dispatch($this->searchRequest, $intent, true);
+                ProcessFetchAccommodationJob::dispatch($this->searchRequest, $intent, true);
             } 
 
         } catch (Throwable $exception)  {

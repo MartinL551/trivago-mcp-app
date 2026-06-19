@@ -23,7 +23,6 @@ class ProcessFetchAccommodationJob implements ShouldQueue
      */
     public function __construct(
         private SearchRequest $searchRequest,
-        private Suggestion $suggestion,
         private LlmData $intent,
         private bool $chain = false,
     ) {}
@@ -37,7 +36,7 @@ class ProcessFetchAccommodationJob implements ShouldQueue
             $this->searchRequest->status = SearchRequestStatus::FetchingAccommodations;
             $this->searchRequest->save();
 
-            $accommodations = app(FetchAccommodationTask::class)->handle($this->searchRequest, $this->suggestion, $this->intent);
+            $accommodations = app(FetchAccommodationTask::class)->handle($this->searchRequest, $this->intent);
 
             if (! $accommodations || count($accommodations) <= 0) {
                 throw new RuntimeException('No accommodations returned for search request.');

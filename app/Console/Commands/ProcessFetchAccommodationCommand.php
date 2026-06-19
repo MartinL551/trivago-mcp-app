@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Actions\Tasks\ExtractIntentTask;
 use App\Actions\Tasks\FetchAccommodationTask;
-use App\Actions\Tasks\FetchSuggestionsTask;
 use App\Enums\SearchRequestStatus;
 use App\Models\SearchRequest;
 use Illuminate\Console\Attributes\Description;
@@ -36,15 +35,7 @@ class ProcessFetchAccommodationCommand extends Command
 
             $this->info('Intent extracted.');
 
-            $suggestions = app(FetchSuggestionsTask::class)->handle($intent, $searchRequest);
-
-            if (! $suggestions || $suggestions->isEmpty()) {
-                throw new RuntimeException('No suggestions returned from MCP.');
-            }
-
-            $this->info("Suggestions fetched: {$suggestions->count()}");
-
-            $accommodations = app(FetchAccommodationTask::class)->handle($searchRequest, $suggestions->first(), $intent);
+            $accommodations = app(FetchAccommodationTask::class)->handle($searchRequest, $intent);
 
             if (! $accommodations || $accommodations->isEmpty()) {
                 throw new RuntimeException('No accommodations returned from MCP.');

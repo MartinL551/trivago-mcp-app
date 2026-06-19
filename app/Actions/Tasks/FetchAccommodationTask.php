@@ -17,35 +17,41 @@ class FetchAccommodationTask
         private AccommodationRankerService $rankerService,
     ) {}
 
-    public function handle(SearchRequest $searchRequest, Suggestion $suggestion, LlmData $intent): ?Collection
+    public function handle(SearchRequest $searchRequest, LlmData $intent): ?Collection
     {
-
-        Log::info('Fetching accommodations', [
-            'search_request_id' => $searchRequest->id,
-            'llm_data' => $intent,
-        ]);
-
-        $accomomdations = $this->mcpSerivce->getAccommodationSearchForSuggestion($intent, $suggestion);
+        $accomomdations = $this->mcpSerivce->getAccommodationSearch($intent);
 
         $rows = collect($accomomdations)->map(fn ($accom) => [
             'trivago_id' => $accom['accommodation_id'],
+
             'name' => $accom['accommodation_name'],
-            'postcode' => $accom['postal_code'],
-            'address' => $accom['address'],
+
             'currency' => $accom['currency'],
+
             'price_per_stay' => $this->parsePrice($accom['price_per_stay']),
-            'price_per_day' => $this->parsePrice($accom['price_per_night']),
-            'rating' => $accom['hotel_rating'],
+            'price_per_night' => $this->parsePrice($accom['price_per_night']),
+
+            'hotel_rating' => $accom['hotel_rating'],
+
             'city' => $accom['country_city'],
-            'review_rating' => $accom['review_rating'],
-            'review_count' => (string) $accom['review_count'],
+
+            'review_rating' => (float) $accom['review_rating'],
+            'review_count' => (int) preg_replace('/[^0-9]/', '', $accom['review_count']),
+
             'amenites' => $accom['top_amenities'],
+
             'trivago_url' => $accom['accommodation_url'],
             'trivago_image_url' => $accom['main_image'],
-            'distance_string' => $accom['distance'],
-            'distance_to_center' => $accom['distance_to_city_center']['value'] ?? null,
-            'distance_units' => $accom['distance_to_city_center']['unit'] ?? null,
-            'desc' => $accom['description'] ?? '',
+
+            'distance_string' => $accom['distance'] ?? null,
+
+            'latitude' => $accom['latitude'] ?? null,
+            'longitude' => $accom['longitude'] ?? null,
+
+            'arrival' => $accom['arrival'] ?? null,
+            'departure' => $accom['departure'] ?? null,
+
+            'advertiser' => $accom['advertisers'] ?? null,
         ]);
 
         $rowValues = $this->rankerService::getSortedArrayAndTakeCount($rows, $searchRequest, 5);
@@ -55,12 +61,10 @@ class FetchAccommodationTask
             ['trivago_id'],
             [
                 'name',
-                'postcode',
-                'address',
                 'currency',
                 'price_per_stay',
-                'price_per_day',
-                'rating',
+                'price_per_night',
+                'hotel_rating',
                 'city',
                 'review_rating',
                 'review_count',
@@ -68,9 +72,11 @@ class FetchAccommodationTask
                 'trivago_url',
                 'trivago_image_url',
                 'distance_string',
-                'distance_to_center',
-                'distance_units',
-                'desc',
+                'latitude',
+                'longitude',
+                'arrival',
+                'departure',
+                'advertiser',
             ]
         );
 

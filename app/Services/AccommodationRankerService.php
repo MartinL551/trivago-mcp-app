@@ -244,7 +244,7 @@ class AccommodationRankerService
 
     private static function scoreBudgetRating($accom, int $weight = 1): float
     {
-        $price = $accom['price_per_day'];
+        $price = $accom['price_per_night'];
 
         if (! $price) {
             return 0;

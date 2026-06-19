@@ -45,7 +45,7 @@ class OpenAIService
                 'trivago_id' => $accommodation->trivago_id,
                 'name' => $accommodation->name,
                 'location' => $accommodation->city,
-                'price_per_day' => $accommodation->price_per_day,
+                'price_per_night' => $accommodation->price_per_night,
                 'rating' => $accommodation->rating,
                 'review_rating' => $accommodation->rating,
                 'review_count' => $accommodation->rating,
@@ -75,7 +75,7 @@ class OpenAIService
                         ],
                         [
                             'type' => 'input_text',
-                            'text' => 'Budget signal is measured against the price_per_day in the JSON packet for that accommodation. try to esitmate a current conversion for each accommodation, Eg. if the promt is in pounds convert to euros first to compare',
+                            'text' => 'Budget signal is measured against the price_per_night in the JSON packet for that accommodation. try to esitmate a current conversion for each accommodation, Eg. if the promt is in pounds convert to euros first to compare',
                         ],
                         [
                             'type' => 'input_text',

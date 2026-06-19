@@ -24,11 +24,6 @@ class SearchRequest extends Model
         $this->save();
     }
 
-    public function suggestions(): BelongsToMany
-    {
-        return $this->belongsToMany(Suggestion::class);
-    }
-
     public function accommodations(): BelongsToMany
     {
         return $this->belongsToMany(Accommodation::class)

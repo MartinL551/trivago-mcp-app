@@ -5,32 +5,49 @@ export type SearchResult = {
 };
 
 export type AccommidationResults = {
-    accommodations: Array<AccommidationResult>;
+    accommodations: Array<AccommodationResult>;
 }
 
-export type AccommidationResult = {
+export type AccommodationResult = {
     id: number;
+
+    trivago_id: string;
     name: string;
-    postcode: string;
-    address: string;
+
     currency: string;
-    price_per_stay:  number;
-    price_per_day: number;
+
+    price_per_stay: number;
+    price_per_night: number;
+
+    hotel_rating: number;
+
     city: string;
-    review_rating: string;
+
+    review_rating: number;
     review_count: number;
+
     amenites: string;
+
     trivago_url: string;
     trivago_image_url: string;
-    distance_string: string;
-    distance_to_center: number;
-    distance_units: string;
-    desc: string;
+
+    distance_string: string | null;
+
+    latitude: number | null;
+    longitude: number | null;
+
+    arrival: string | null;
+    departure: string | null;
+
+    advertiser: string | null;
+
     created_at: string;
     updated_at: string;
-    score: Array<AccommidationScore>
+
+    score: Array<AccommidationScore>;
+
     wishlisted: boolean;
-}
+};
 
 export type AccommidationScore = {
     id: number;

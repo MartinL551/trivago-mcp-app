@@ -17,8 +17,6 @@ class TrivagoMcpService
 
     private const CACHE_KEY = 'trivago_mcp_session_id';
 
-    private const SUGGEST = 'trivago-search-suggestions';
-
     private const ACCOMMODATION_SEARCH = 'trivago-accommodation-search';
 
     private const RADIUS_SEARCH = 'trivago-accommodation-radius-search';
@@ -74,7 +72,7 @@ class TrivagoMcpService
         return $sessionId;
     }
 
-    private function getResultsFromMcp(LlmData $llmData, string $tool, ?int $id = null, ?int $ns = null): array
+    private function getResultsFromMcp(LlmData $llmData, string $tool): array
     {
         $sessionId = $this->getSessionId();
 
@@ -85,8 +83,7 @@ class TrivagoMcpService
         ];
 
         $params = match ($tool) {
-            TrivagoMcpService::SUGGEST => $this->mcpSearchMapper->toSuggestionsPayload($llmData),
-            TrivagoMcpService::ACCOMMODATION_SEARCH => $this->mcpSearchMapper->toAccommodationPayload($llmData, $ns, $id),
+            TrivagoMcpService::ACCOMMODATION_SEARCH => $this->mcpSearchMapper->toAccommodationPayload($llmData),
             // TrivagoMcpService::RADIUS_SEARCH => TrivagoMcpService::RADIUS_SEARCH
         };
 
@@ -114,48 +111,22 @@ class TrivagoMcpService
             ]);
         });
 
-        return $response->json() ?? [];
-    }
+        $results = $response->json() ?? [];
 
-    public function getSuggestions(LlmData $llmData): array
-    {
-        return $this->getResultsFromMcp($llmData, TrivagoMcpService::SUGGEST)['result']['structuredContent']['suggestions'];
+        Log::info('Trivago API raw response', [
+            'tool' => $tool,
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
+        return $results;
     }
 
     public function getAccommodationSearch(LlmData $llmData): array
     {
-        $suggestions = $this->getSuggestions($llmData);
-
         $accommodations = [];
 
-        $collection = collect($suggestions)->first();
-
-        $ns = $collection['ns'];
-        $id = $collection['id'];
-
-        $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns)['result']['structuredContent']['accommodations'];
-
-        foreach ($accommodationsForSuggestion as $accommodation) {
-            $accommodations[$accommodation['accommodation_id']] = $accommodation;
-        }
-
-        return $accommodations;
-    }
-
-    public function getAccommodationSearchForSuggestion(LlmData $llmData, Suggestion $suggestion): array
-    {
-        $accommodations = [];
-
-        $ns = $suggestion->trivago_ns;
-        $id = $suggestion->trivago_id;
-
-        $response = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH, $id, $ns);
-
-        if (!array_key_exists('accommodations', $response['result']['structuredContent'])) {
-            return $accommodations;
-        }
-
-        $accommodationsForSuggestion = $response['result']['structuredContent']['accommodations'];
+        $accommodationsForSuggestion = $this->getResultsFromMcp($llmData, TrivagoMcpService::ACCOMMODATION_SEARCH)['result']['structuredContent']['accommodations'];
 
         foreach ($accommodationsForSuggestion as $accommodation) {
             $accommodations[$accommodation['accommodation_id']] = $accommodation;

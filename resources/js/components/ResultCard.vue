@@ -1,11 +1,11 @@
 <script setup lang="ts">
-    import type { AccommidationResult } from '@/types';
+    import type { AccommodationResult } from '@/types';
     import ResultScore from './ResultScore.vue';
-import WishlistButton from './WishlistButton.vue';
+    import WishlistButton from './WishlistButton.vue';
 
 
     type Props = {
-        result: AccommidationResult
+        result: AccommodationResult
     };
 
     function imageUrl(width: number): string {
@@ -41,14 +41,32 @@ import WishlistButton from './WishlistButton.vue';
         <div class="py-2">
             location: {{  props.result.city }}
         </div>
-        <div class="py-2">
-            address: {{ props.result.address }}
+        <div v-if="props.result.distance_string" class="py-2">
+            distance: {{ props.result.distance_string }}
         </div>
         <div class="py-2">
-            budget per day: {{  props.result.price_per_day }}
+            price per night: {{ props.result.currency }} {{ props.result.price_per_night }}
         </div>
         <div class="py-2">
-            Rating: {{  props.result.rating }}
+            price per stay: {{ props.result.currency }} {{ props.result.price_per_stay }}
+        </div>
+        <div class="py-2">
+            hotel rating: {{ props.result.hotel_rating }}
+        </div>
+        <div class="py-2">
+            review rating: {{ props.result.review_rating }} ({{ props.result.review_count }} reviews)
+        </div>
+        <div class="py-2">
+            amenities: {{ props.result.amenites }}
+        </div>
+        <div v-if="props.result.arrival && props.result.departure" class="py-2">
+            dates: {{ props.result.arrival }} to {{ props.result.departure }}
+        </div>
+        <div v-if="props.result.advertiser" class="py-2">
+            advertiser: {{ props.result.advertiser }}
+        </div>
+        <div v-if="props.result.latitude && props.result.longitude" class="py-2">
+            coordinates: {{ props.result.latitude }}, {{ props.result.longitude }}
         </div>
         <div>
             <a :href="props.result.trivago_url"> View Now On Trivago! </a>
