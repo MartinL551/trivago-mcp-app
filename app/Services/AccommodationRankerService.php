@@ -195,10 +195,7 @@ class AccommodationRankerService
 
     private static function scoreDistanceFromCentre($accom, float $weight): float
     {
-        $distanceKm = self::distanceToKm(
-            $accom['distance_to_centre'] ?? null,
-            $accom['distance_unit'] ?? 'km',
-        );
+        $distanceKm = self::distanceStringToKm($accom['distance_string'] ?? null);
 
         if ($distanceKm === null) {
             return 0;
@@ -214,13 +211,20 @@ class AccommodationRankerService
         return $normalisedScore * 10 * $weight;
     }
 
-    private static function distanceToKm(?float $distance, string $unit): ?float
+    private static function distanceStringToKm(?string $distanceString): ?float
     {
-        if ($distance === null) {
+        if (! $distanceString) {
             return null;
         }
 
-        return match (strtolower($unit)) {
+        if (! preg_match('/(\d+(?:\.\d+)?)\s*([a-z]+)/i', $distanceString, $matches)) {
+            return null;
+        }
+
+        $distance = (float) $matches[1];
+        $unit = strtolower($matches[2]);
+
+        return match ($unit) {
             'km', 'kilometres', 'kilometers' => $distance,
             'mi', 'mile', 'miles' => $distance * 1.60934,
             default => null,
@@ -234,7 +238,7 @@ class AccommodationRankerService
 
     private static function scoreRating($accom, int $weight = 1): float
     {
-        return ($accom['rating'] ?? 0) * $weight;
+        return ($accom['hotel_rating'] ?? 0) * $weight;
     }
 
     private static function scoreReviewCount($accom, int $weight = 1): float
