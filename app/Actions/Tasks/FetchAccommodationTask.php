@@ -21,6 +21,7 @@ class FetchAccommodationTask
 
         $rows = collect($accomomdations)->map(fn ($accom) => [
             'trivago_id' => $accom['accommodation_id'],
+            'search_request_id' => $searchRequest->id,
 
             'name' => $accom['accommodation_name'],
 
@@ -60,7 +61,7 @@ class FetchAccommodationTask
 
         Accommodation::upsert(
             $rowValues,
-            ['trivago_id'],
+            ['trivago_id', 'search_request_id'],
             [
                 'name',
                 'currency',
@@ -84,12 +85,10 @@ class FetchAccommodationTask
 
         $insertedAccoms = Accommodation::whereIn('trivago_id', collect($rows)->pluck('trivago_id'))->latest()->get();
 
-        if (count($insertedAccoms) > 0) {
-            $searchRequest->accommodations()->syncWithoutDetaching($insertedAccoms);
-        } else {
-            return null;
-        }
-
+        if (count($insertedAccoms) < 0) {
+          return null;
+        } 
+        
         return $insertedAccoms;
     }
 

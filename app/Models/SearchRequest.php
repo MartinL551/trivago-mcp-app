@@ -29,9 +29,9 @@ class SearchRequest extends Model
         $this->save();
     }
 
-    public function accommodations(): BelongsToMany
+    public function accommodations(): HasMany
     {
-        return $this->belongsToMany(Accommodation::class)
+        return $this->hasMany(Accommodation::class)
             ->withExists([
                 'wishlistItems as wishlisted' => fn ($q) => $q->where('user_id', $this->user_id),
             ]);
@@ -42,7 +42,7 @@ class SearchRequest extends Model
         return $this->hasMany(AccommodationScore::class);
     }
 
-    public function accommodationsWithScores(): BelongsToMany
+    public function accommodationsWithScores(): HasMany
     {
         return $this->accommodations()
             ->with('scores')
@@ -56,7 +56,7 @@ class SearchRequest extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function accommodationsForStatus(): ?BelongsToMany
+    public function accommodationsForStatus(): ?HasMany
     {
         return match ($this->status) {
             SearchRequestStatus::Scoring->value => $this->accommodations(),

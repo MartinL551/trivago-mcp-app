@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(
@@ -34,9 +35,9 @@ class Accommodation extends Model
         return $this->hasMany(AccommodationScore::class);
     }
 
-    public function searchRequest()
+    public function searchRequest(): BelongsTo
     {
-        return $this->belongsToMany(SearchRequest::class);
+        return $this->belongsTo(SearchRequest::class);
     }
 
     public function wishListItems(): HasMany

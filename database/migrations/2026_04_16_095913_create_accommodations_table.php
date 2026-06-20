@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
             $table->string('trivago_id')->unique();
+            $table->foreignId('search_request_id')->constrained()->cascadeOnDelete();
             $table->integer('accommodationscore_id')->unique()->nullable();
             $table->string('name');
             $table->string('currency');
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->date('departure')->nullable();
             $table->string('advertiser')->nullable();
             $table->timestamps();
+            $table->unique(['search_request_id', 'trivago_id']);
         });
     }
 
