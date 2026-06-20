@@ -212,6 +212,10 @@ class OpenAIService
                             'type' => 'input_text',
                             'text' => 'Landmark location string is for if the user mentions being near a landmark. For example they SAY they want to be near the eiffel tower if the city is Paris.',
                         ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'For the city try to make a good suggestion if not stated in the prompt. If wanting a small town it should be a small town out etc.',
+                        ],
                     ],
                 ],
             ],
