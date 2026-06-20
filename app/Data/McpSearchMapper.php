@@ -34,7 +34,7 @@ class McpSearchMapper
     }
 
     private function getRatingsState(array $llmRatings): array
-    {
+{
         $ratings = [
             '1star' => false,
             '2star' => false,
