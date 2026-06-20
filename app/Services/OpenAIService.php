@@ -208,6 +208,10 @@ class OpenAIService
                             'type' => 'input_text',
                             'text' => 'Examples: "Luxury hotel for a romantic holiday" => main_signal=luxury, secondary_signal=romantic. "Cheap hotel in London" => main_signal=budget, secondary_signal=null. "Business hotel with good wifi" => main_signal=business, secondary_signal=null.',
                         ],
+                        [
+                            'type' => 'input_text',
+                            'text' => 'Landmark location string is for if the user mentions being near a landmark. For example they SAY they want to be near the eiffel tower if the city is Paris.',
+                        ],
                     ],
                 ],
             ],
@@ -236,6 +240,7 @@ class OpenAIService
                             'city' => ['type' => 'string'],
                             'country' => ['type' => 'string'],
                             'continent' => ['type' => 'string'],
+                            'landmark' => ['type' => ['string', 'null']],
                             'holiday_type' => [
                                 'type' => 'array',
                                 'items' => ['type' => 'string'],
@@ -270,6 +275,7 @@ class OpenAIService
                             'secondary_signal',
                             'rating',
                             'review_rating',
+                            'landmark'
                         ],
                         'additionalProperties' => false,
                     ],
@@ -278,6 +284,10 @@ class OpenAIService
         ]);
 
         $decodedResponse = json_decode($response->outputText, true) ?? [];
+
+        Log::info('LLM Intent', [
+            'body' => $decodedResponse,
+        ]);
 
         return new LlmData($decodedResponse);
     }

@@ -40,6 +40,8 @@ class LlmData
 
     public int $review_rating;
 
+    public string $landmark; 
+
     /**
      * @param  array  $llmResponse  Raw structured output from LLM
      */
@@ -54,6 +56,7 @@ class LlmData
         $this->city = $llmResponse['city'] ?? '';
         $this->country = $llmResponse['country'] ?? '';
         $this->continent = $llmResponse['continent'] ?? '';
+        $this->landmark = $llmResponse['landmark'] ?? '';
         $this->holidayType = $llmResponse['holiday_type'] ?? [];
         $this->budget = (float) $llmResponse['budget'] ?? 0;
         $this->amenities = $llmResponse['amenities'] ?? [];

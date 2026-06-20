@@ -62,7 +62,7 @@ class TrivagoMcpService
 
         $sessionId = $response->header('Mcp-Session-Id');
 
-        if (! $sessionId) {
+        if (!$sessionId) {
             throw new \RuntimeException('No MCP Session ID');
         }
 

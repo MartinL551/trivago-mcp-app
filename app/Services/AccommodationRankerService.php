@@ -5,25 +5,40 @@ namespace App\Services;
 use App\Enums\PromptSignals;
 use App\Models\SearchRequest;
 use Illuminate\Support\Collection;
+use App\Services\Concerns\Coordinates;
 
 class AccommodationRankerService
 {
-    public static function sortAccommodation(Collection $rows, SearchRequest $searchRequest): Collection
+    private SearchRequest $searchRequest; 
+    private NominatimGeocodingService $geoCodingService;
+    private DistanceService $distanceService;
+
+    public function __construct(
+        SearchRequest $searchRequest,
+        DistanceService $distanceService
+    )
     {
-        return $rows->sortByDesc(self::sortForSignals($searchRequest->main_signal, $searchRequest->secondary_signal));
+        $this->searchRequest = $searchRequest;
+        $this->distanceService = $distanceService;
+        $this->geoCodingService = new NominatimGeocodingService();
     }
 
-    public static function getSortedArray(Collection $rows, SearchRequest $searchRequest): array
+    public function sortAccommodation(Collection $rows): Collection
     {
-        return self::sortAccommodation($rows, $searchRequest)->all();
+        return $rows->sortByDesc(self::sortForSignals($this->searchRequest->main_signal, $this->searchRequest->secondary_signal));
     }
 
-    public static function getSortedArrayAndTakeCount(Collection $rows, SearchRequest $searchRequest, int $count): array
+    public function getSortedArray(Collection $rows): array
     {
-        return self::sortAccommodation($rows, $searchRequest)->take($count)->all();
+        return self::sortAccommodation($rows, $this->searchRequest)->all();
     }
 
-    private static function sortForSignals(?string $mainSignal, ?string $secondarySignal): callable
+    public function getSortedArrayAndTakeCount(Collection $rows, int $count): array
+    {
+        return self::sortAccommodation($rows, $this->searchRequest)->take($count)->all();
+    }
+
+    private function sortForSignals(?string $mainSignal, ?string $secondarySignal): callable
     {
         return function ($accom) use ($mainSignal, $secondarySignal): float {
             return
@@ -32,7 +47,7 @@ class AccommodationRankerService
         };
     }
 
-    private static function scoreForSignal(?string $signal, $accom): float
+    private function scoreForSignal(?string $signal, $accom): float
     {
         return match ($signal) {
             PromptSignals::Business->value => self::scoreBusiness($accom),
@@ -45,7 +60,7 @@ class AccommodationRankerService
         };
     }
 
-    private static function scoreBusiness($accom): float
+    private function scoreBusiness($accom): float
     {
         // Convention here is 10 is most weighted and 1 is least
         $wantedAmenities = [
@@ -69,7 +84,7 @@ class AccommodationRankerService
         return $score;
     }
 
-    private static function scoreLuxury($accom): float
+    private function scoreLuxury($accom): float
     {
         // Convention here is 10 is most weighted and 1 is least
         $wantedAmenities = [
@@ -86,7 +101,7 @@ class AccommodationRankerService
 
         $score = self::scoreForWantedAmenities($accom, $wantedAmenities, weight: 5);
         $score += self::scoreReviewRating($accom, weight: 5);
-        $score = self::scoreRating($accom, weight: 10);
+        $score += self::scoreRating($accom, weight: 10);
         $score += self::scoreReviewCount($accom, weight: 2);
         $score += self::scoreDistanceFromCentre($accom, weight: 2);
         $score += self::scoreBudgetRating($accom, weight: 1);
@@ -94,7 +109,7 @@ class AccommodationRankerService
         return $score;
     }
 
-    private static function scoreFamily($accom): float
+    private  function scoreFamily($accom): float
     {
         // Convention here is 10 is most weighted and 1 is least
         $wantedAmenities = [
@@ -119,7 +134,7 @@ class AccommodationRankerService
         return $score;
     }
 
-    private static function scoreBudget($accom): float
+    private  function scoreBudget($accom): float
     {
         // Convention here is 10 is most weighted and 1 is least
         $wantedAmenities = [
@@ -143,7 +158,7 @@ class AccommodationRankerService
         return $score;
     }
 
-    private static function scoreAdventure($accom): float
+    private  function scoreAdventure($accom): float
     {
         // Convention here is 10 is most weighted and 1 is least
         $wantedAmenities = [
@@ -168,7 +183,7 @@ class AccommodationRankerService
         return $score;
     }
 
-    private static function scoreRomantic($accom): float
+    private  function scoreRomantic($accom): float
     {
         // Convention here is 10 is most weighted and 1 is least
         $wantedAmenities = [
@@ -193,60 +208,34 @@ class AccommodationRankerService
         return $score;
     }
 
-    private static function scoreDistanceFromCentre($accom, float $weight): float
-    {
-        $distanceKm = self::distanceStringToKm($accom['distance_string'] ?? null);
-
-        if ($distanceKm === null) {
+    private  function scoreDistanceFromCentre($accom, float $weight): float
+    {   
+        if(!$accom['latitude'] || !$accom['longitude']) {
             return 0;
         }
 
-        $maxUsefulDistanceKm = 20;
+        $fromCoords = new Coordinates($this->searchRequest->latitude, $this->searchRequest->longitude);
+        $toCoords = new Coordinates($accom['latitude'], $accom['longitude']);
 
-        $normalisedScore = max(
-            0,
-            1 - ($distanceKm / $maxUsefulDistanceKm)
-        );
-
-        return $normalisedScore * 10 * $weight;
+        return $this->distanceService->between($fromCoords, $toCoords) * $weight;
     }
 
-    private static function distanceStringToKm(?string $distanceString): ?float
-    {
-        if (! $distanceString) {
-            return null;
-        }
-
-        if (! preg_match('/(\d+(?:\.\d+)?)\s*([a-z]+)/i', $distanceString, $matches)) {
-            return null;
-        }
-
-        $distance = (float) $matches[1];
-        $unit = strtolower($matches[2]);
-
-        return match ($unit) {
-            'km', 'kilometres', 'kilometers' => $distance,
-            'mi', 'mile', 'miles' => $distance * 1.60934,
-            default => null,
-        };
-    }
-
-    private static function scoreReviewRating($accom, int $weight = 1): float
+    private  function scoreReviewRating($accom, int $weight = 1): float
     {
         return ($accom['review_rating'] ?? 0) * $weight;
     }
 
-    private static function scoreRating($accom, int $weight = 1): float
+    private  function scoreRating($accom, int $weight = 1): float
     {
         return ($accom['hotel_rating'] ?? 0) * $weight;
     }
 
-    private static function scoreReviewCount($accom, int $weight = 1): float
+    private  function scoreReviewCount($accom, int $weight = 1): float
     {
         return ($accom['review_count'] ?? 0) * $weight;
     }
 
-    private static function scoreBudgetRating($accom, int $weight = 1): float
+    private  function scoreBudgetRating($accom, int $weight = 1): float
     {
         $price = $accom['price_per_night'];
 
@@ -257,7 +246,7 @@ class AccommodationRankerService
         return max(0, 100 - $price);
     }
 
-    private static function scoreForWantedAmenities($accom, array $wantedAmenites, int $weight = 1): float
+    private  function scoreForWantedAmenities($accom, array $wantedAmenites, int $weight = 1): float
     {
         $totalScore = 0;
 
@@ -270,7 +259,7 @@ class AccommodationRankerService
         return $totalScore * $weight;
     }
 
-    private static function hasAmenity($accom, string $amenity): bool
+    private  function hasAmenity($accom, string $amenity): bool
     {
         return str_contains(strtolower($accom['amenites']), strtolower($amenity));
     }

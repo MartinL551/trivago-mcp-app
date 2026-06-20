@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('main_signal')->nullable();
             $table->string('secondary_signal')->nullable();
             $table->string('status')->default('pending');
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();
+            $table->string('landmark')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
         });
     }
 

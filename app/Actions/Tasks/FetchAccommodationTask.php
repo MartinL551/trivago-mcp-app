@@ -5,6 +5,7 @@ use App\Data\LlmData;
 use App\Models\Accommodation;
 use App\Models\SearchRequest;
 use App\Services\AccommodationRankerService;
+use App\Services\DistanceService;
 use App\Services\TrivagoMcpService;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -12,7 +13,6 @@ class FetchAccommodationTask
 {
     public function __construct(
         private TrivagoMcpService $mcpSerivce,
-        private AccommodationRankerService $rankerService,
     ) {}
 
     public function handle(SearchRequest $searchRequest, LlmData $intent): ?Collection
@@ -52,7 +52,11 @@ class FetchAccommodationTask
             'advertiser' => $accom['advertisers'] ?? null,
         ]);
 
-        $rowValues = $this->rankerService::getSortedArrayAndTakeCount($rows, $searchRequest, 5);
+        $distance = new DistanceService();
+        $ranker = new AccommodationRankerService($searchRequest, $distance);
+  
+
+        $rowValues = $ranker->getSortedArrayAndTakeCount($rows, 5);
 
         Accommodation::upsert(
             $rowValues,

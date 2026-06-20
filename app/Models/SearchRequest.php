@@ -14,6 +14,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'prompt',
     'main_signal',
     'secondary_signal',
+    'city',
+    'country',
+    'landmark',
+    'latitude',
+    'longitude',
     'status',
 )]
 class SearchRequest extends Model
