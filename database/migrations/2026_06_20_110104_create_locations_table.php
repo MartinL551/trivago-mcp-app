@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('city');
+            $table->string('country');
+            $table->string('landmark');
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->unique(['city', 'country', 'landmark']);
         });
     }
 
