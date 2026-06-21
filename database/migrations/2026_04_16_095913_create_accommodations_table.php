@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
-            $table->string('trivago_id')->unique();
+            $table->string('trivago_id');
             $table->foreignId('search_request_id')->constrained()->cascadeOnDelete();
             $table->integer('accommodationscore_id')->unique()->nullable();
             $table->string('name');

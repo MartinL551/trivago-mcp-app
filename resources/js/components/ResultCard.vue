@@ -73,7 +73,7 @@
         </div>
     
 
-        <ResultScore :scores="props.result.scores" />
+        <ResultScore v-if="props.result.scores" :scores="props.result.scores" />
         <WishlistButton :result="props.result"  />
     </div>
 </template>

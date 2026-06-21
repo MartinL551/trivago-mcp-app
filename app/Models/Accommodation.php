@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(
     'trivago_id',
+    'search_request_id',
     'accommodationscore_id',
     'name',
     'currency',
@@ -30,9 +32,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 )]
 class Accommodation extends Model
 {
-    public function scores(): HasMany
+    public function scores(): HasOne
     {
-        return $this->hasMany(AccommodationScore::class);
+        return $this->hasOne(AccommodationScore::class);
     }
 
     public function searchRequest(): BelongsTo

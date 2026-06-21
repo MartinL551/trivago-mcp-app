@@ -44,11 +44,7 @@ class SearchRequest extends Model
 
     public function accommodationsWithScores(): HasMany
     {
-        return $this->accommodations()
-            ->with('scores')
-            ->whereHas('scores', fn ($query) => $query->where('search_request_id', $this->id)
-            )
-            ->latest();
+        return $this->accommodations()->with('scores');
     }
 
     public function user(): BelongsTo

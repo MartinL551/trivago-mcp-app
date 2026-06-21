@@ -39,9 +39,9 @@ class ScoreAccommodationsTask
 
         AccommodationScore::upsert(
             $rows,
-            ['trivago_id'],
+            ['accommodation_id'],
             [
-                'accommodation_id',
+                'trivago_id',
                 'search_request_id',
                 'romance',
                 'adventure',

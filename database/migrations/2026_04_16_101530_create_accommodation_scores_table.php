@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('accommodation_scores', function (Blueprint $table) {
             $table->id();
-            $table->integer('accommodation_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('accommodation_id')->unique()->constrained()->cascadeOnDelete();
             $table->foreignId('search_request_id')->constrained()->cascadeOnDelete();
-            $table->string('trivago_id')->unique();
+            $table->string('trivago_id');
             $table->integer('romance');
             $table->integer('adventure');
             $table->integer('budget');
