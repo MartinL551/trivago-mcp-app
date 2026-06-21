@@ -72,7 +72,7 @@
             <a :href="props.result.trivago_url"> View Now On Trivago! </a>
         </div>
     
-
+            
         <ResultScore v-if="props.result.scores" :scores="props.result.scores" />
         <WishlistButton :result="props.result"  />
     </div>
