@@ -213,11 +213,15 @@ class AccommodationRankerService
         if(!$accom['latitude'] || !$accom['longitude']) {
             return 0;
         }
+        
+        $maxUsefulDistanceKm = 20;
 
         $fromCoords = new Coordinates($this->searchRequest->latitude, $this->searchRequest->longitude);
         $toCoords = new Coordinates($accom['latitude'], $accom['longitude']);
 
-        return $this->distanceService->between($fromCoords, $toCoords) * $weight;
+        $distance = $this->distanceService->between($fromCoords, $toCoords);
+
+        return  max(0, 100 - (($distance / $maxUsefulDistanceKm) * 100)) * $weight;
     }
 
     private  function scoreReviewRating($accom, int $weight = 1): float
