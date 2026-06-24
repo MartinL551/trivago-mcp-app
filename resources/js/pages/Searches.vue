@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import GenericResultList from '@/components/GenericCard.vue';
+    import GenericResultList from '@/components/GenericResultList.vue';
     import SearchResultCard from '@/components/SearchResultCard.vue';
     import type { SearchRequests } from '@/types';
 

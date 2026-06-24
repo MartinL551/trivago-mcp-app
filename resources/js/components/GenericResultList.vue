@@ -14,6 +14,7 @@
 
     const items = computed(() => Array.from(props.results));
 
+
     const keyFor = (item: T, index: number) => {
         return props.getKey?.(item, index) ?? index;
     };

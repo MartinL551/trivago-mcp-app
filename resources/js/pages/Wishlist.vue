@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { router } from '@inertiajs/vue3';
     import { provide } from 'vue';
-    import GenericResultList from '@/components/GenericCard.vue';
+    import GenericResultList from '@/components/GenericResultList.vue';
     import ResultCard from '@/components/ResultCard.vue';
     import type { AccommidationResults } from '@/types';
   

@@ -18,7 +18,7 @@ class SearchController extends Controller
     public function show()
     {
         $user = Auth::getUser();
-        $searchRequests = $user->searchRequests();
+        $searchRequests = $user->searchRequests()->get();
 
         return Inertia::render('Searches', [
             'searchRequests' => $searchRequests,
