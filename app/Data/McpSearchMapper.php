@@ -20,6 +20,7 @@ class McpSearchMapper
                 ? ''
                 : implode('-', $data->childAges),
             'rooms' => min($data->rooms, $data->adults),
+            'currency' => $data->currency ?? '',
         ];
     }
 
