@@ -1,5 +1,11 @@
 import { onMounted, onUnmounted, ref } from "vue";
-import type { SearchResult, AccommidationResults } from '@/types';
+import type { AccommodationResult, AccommidationResults, SearchResult } from '@/types';
+
+type PollResponse = {
+    status: SearchResult['status'];
+    prompt: SearchResult['prompt'];
+    accommodations: AccommodationResult[] | null;
+};
 
 export function useSearchPolling(
     currentSearchRequest: SearchResult,
@@ -24,9 +30,9 @@ export function useSearchPolling(
         }
 
         if(SCORING_STATUSES.includes(searchRequest.value.status)){
-            requestedIds = accommodations.value.map((accom) => {
-                return !accom.scores ? accom.id : null;
-            });
+            requestedIds = accommodations.value
+                .filter((accom) => !accom.scores)
+                .map((accom) => accom.id);
         }
 
         console.log(knownIds);
@@ -59,14 +65,14 @@ export function useSearchPolling(
             isPolling = false;
         }
 
-        const data = await response.json()
+        const data = await response.json() as PollResponse;
 
         searchRequest.value.status = data.status
 
-        if(data.accommodations?.length > 0) {
+        if(data.accommodations && data.accommodations.length > 0) {
             const currentAccoms = accommodations.value;
 
-            data.accommodations.forEach(accom => {
+            data.accommodations.forEach((accom) => {
                 const indexToUpdate = currentAccoms.findIndex(currAccom => currAccom.id === accom.id);
 
                 if(indexToUpdate != -1) {

@@ -1,6 +1,6 @@
 import { createInertiaApp } from '@inertiajs/vue3';
 import { createApp, h } from 'vue';
-import { ZiggyVue } from 'ziggy-js';
+import { ZiggyVue, type Config as ZiggyConfig } from 'ziggy-js';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
 import PublicLayout from './layouts/PublicLayout.vue';
@@ -27,7 +27,7 @@ createInertiaApp({
 
             createApp({ render: () => h(App, props) })
                 .use(plugin)
-                .use(ZiggyVue, props.initialPage.props.ziggy)
+                .use(ZiggyVue, props.initialPage.props.ziggy as ZiggyConfig)
                 .mount(el);
     }
 });

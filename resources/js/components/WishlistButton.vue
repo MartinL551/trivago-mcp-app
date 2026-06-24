@@ -13,6 +13,10 @@
     const handleWishListRemove = inject<(id: number) => Promise<void>>('handleWishListRemove');
 
     const handleClick = async() =>  {
+        if (!handleWishListAdd || !handleWishListRemove) {
+            return;
+        }
+
         if(props.result.wishlisted){
             await handleWishListRemove(props.result.id);
         } else {

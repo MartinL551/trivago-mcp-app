@@ -1,21 +1,32 @@
 export type SearchResult = {
     id: number;
+    user_id?: number;
     status: string;
     prompt: string;
+    main_signal?: string | null;
+    secondary_signal?: string | null;
+    city?: string | null;
+    country?: string | null;
+    landmark?: string | null;
+    latitude?: number | string | null;
+    longitude?: number | string | null;
+    langauge?: string | null;
+    currency?: string | null;
+    created_at?: string;
+    updated_at?: string;
 };
 
-export type SearchRequests = {
-    searchRequests: Array<SearchResult>
-}
+export type SearchRequests = SearchResult[];
 
-export type AccommidationResults = {
-    accommodations: Array<AccommodationResult>;
-}
+export type AccommodationResults = AccommodationResult[];
+export type AccommidationResults = AccommodationResults;
 
 export type AccommodationResult = {
     id: number;
 
     trivago_id: string;
+    search_request_id: number;
+    accommodationscore_id: number | null;
     name: string;
 
     currency: string;
@@ -48,15 +59,26 @@ export type AccommodationResult = {
     created_at: string;
     updated_at: string;
 
-    score: Array<AccommidationScore>;
+    scores?: AccommodationScore | null;
 
     wishlisted: boolean;
 };
 
-export type AccommidationScore = {
+export type AccommodationScore = {
     id: number;
+    accommodation_id: number;
+    search_request_id: number;
+    trivago_id: string;
     romance: number; 
     adventure: number;
     budget: number;
+    luxury: number;
+    business: number;
+    family: number;
     why: string;
-}
+    created_at: string;
+    updated_at: string;
+};
+
+export type AccommidationResult = AccommodationResult;
+export type AccommidationScore = AccommodationScore;

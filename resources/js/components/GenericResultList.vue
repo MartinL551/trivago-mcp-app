@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
     import { computed } from 'vue';
     import GenericCard from './GenericCard.vue';
 

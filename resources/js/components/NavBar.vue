@@ -6,7 +6,7 @@
 
     const page = usePage();
 
-    const navItems: Array<NavItem> = [
+    const navItems: Array<NavItem<string>> = [
         {
             title: 'Search',
             icon: Circle,

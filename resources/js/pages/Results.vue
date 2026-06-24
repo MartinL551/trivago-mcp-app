@@ -26,6 +26,10 @@
     const handleWishListAdd = async(id: number) => {
         const accommodation = accommodations.value.find(a => a.id === id);
 
+        if (!accommodation) {
+            return;
+        }
+
         accommodation.wishlisted = true;
 
         const response = await fetch(`/wishlist/${id}/add`, {
@@ -43,6 +47,10 @@
 
     const handleWishListRemove = async(id: number) => {
         const accommodation = accommodations.value.find(a => a.id === id);
+
+        if (!accommodation) {
+            return;
+        }
 
         accommodation.wishlisted = false;
 
