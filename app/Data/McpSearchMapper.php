@@ -6,7 +6,7 @@ class McpSearchMapper
 {
     public function __construct() {}
 
-    public function toAccommodationPayload(LlmData $data): array
+    public function toAccommodationPayload(SearchIntentData $data): array
     {
         return [
             'query' => "{$data->city}, {$data->country}, {$data->continent}",

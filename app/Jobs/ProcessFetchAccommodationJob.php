@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Actions\Tasks\FetchAccommodationTask;
-use App\Data\LlmData;
+use App\Data\SearchIntentData;
 use App\Enums\SearchRequestStatus;
 use App\Jobs\Concerns\FailSearchRequest;
 use App\Models\SearchRequest;
@@ -22,7 +22,7 @@ class ProcessFetchAccommodationJob implements ShouldQueue
      */
     public function __construct(
         private SearchRequest $searchRequest,
-        private LlmData $intent,
+        private SearchIntentData $intent,
         private bool $chain = false,
     ) {}
 

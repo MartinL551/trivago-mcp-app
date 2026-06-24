@@ -1,7 +1,7 @@
 <?php
 
 namespace app\Actions\Tasks;
-use App\Data\LlmData;
+use App\Data\SearchIntentData;
 use App\Models\Accommodation;
 use App\Models\SearchRequest;
 use App\Services\AccommodationRankerService;
@@ -15,7 +15,7 @@ class FetchAccommodationTask
         private TrivagoMcpService $mcpSerivce,
     ) {}
 
-    public function handle(SearchRequest $searchRequest, LlmData $intent): ?Collection
+    public function handle(SearchRequest $searchRequest, SearchIntentData $intent): ?Collection
     {
         $accomomdations = $this->mcpSerivce->getAccommodationSearch($intent);
 

@@ -2,7 +2,7 @@
 
 namespace app\Actions\Tasks;
 
-use App\Data\LlmData;
+use App\Data\SearchIntentData;
 use App\Enums\SearchRequestStatus;
 use App\Models\SearchRequest;
 use App\Services\NominatimGeocodingService;
@@ -15,7 +15,7 @@ class ExtractIntentTask
         private NominatimGeocodingService $geoCodeService,
     ) {}
 
-    public function handle(SearchRequest $searchRequest): LlmData
+    public function handle(SearchRequest $searchRequest): SearchIntentData
     {
         $prompt = $searchRequest->prompt;
 
@@ -37,6 +37,8 @@ class ExtractIntentTask
             $searchRequest->currency = $user->preferred_currency ?? null;
 
             $searchRequest->setStatus(SearchRequestStatus::Interpreting);
+
+            $intent->currency = $searchRequest->currency;
         }
 
         return $intent;

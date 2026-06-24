@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Data\LlmData;
 use App\Data\McpSearchMapper;
+use App\Data\SearchIntentData;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -71,7 +71,7 @@ class TrivagoMcpService
         return $sessionId;
     }
 
-    private function getResultsFromMcp(LlmData $llmData, string $tool): array
+    private function getResultsFromMcp(SearchIntentData $llmData, string $tool): array
     {
         $sessionId = $this->getSessionId();
 
@@ -121,7 +121,7 @@ class TrivagoMcpService
         return $results;
     }
 
-    public function getAccommodationSearch(LlmData $llmData): array
+    public function getAccommodationSearch(SearchIntentData $llmData): array
     {
         $accommodations = [];
 

@@ -19,6 +19,7 @@ class DistanceService
         return $this->calculateDistance($lat1, $lon1, $lat2, $lon2);
     }
 
+    // uses Haversine Formula.
     public function calculateDistance(
         float $lat1,
         float $lon1,

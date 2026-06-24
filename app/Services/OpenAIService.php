@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Data\LlmData;
+use App\Data\SearchIntentData;
 use App\Data\LlmScore;
 use App\Enums\PromptSignals;
 use App\Models\SearchRequest;
@@ -168,7 +168,7 @@ class OpenAIService
         return $scores;
     }
 
-    public function extractSearchIntent(string $msg): LlmData
+    public function extractSearchIntent(string $msg): SearchIntentData
     {
         $response = $this->client->responses()->create([
             'model' => $this->model,
@@ -293,6 +293,6 @@ class OpenAIService
             'body' => $decodedResponse,
         ]);
 
-        return new LlmData($decodedResponse);
+        return new SearchIntentData($decodedResponse);
     }
 }
