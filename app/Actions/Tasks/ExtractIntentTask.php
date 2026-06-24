@@ -33,6 +33,9 @@ class ExtractIntentTask
             $searchRequest->latitude = $searchCoords->latitude;
             $searchRequest->longitude = $searchCoords->longitude;
 
+            $user = $searchRequest->user;
+            $searchRequest->currency = $user->preferred_currency ?? null;
+
             $searchRequest->setStatus(SearchRequestStatus::Interpreting);
         }
 
