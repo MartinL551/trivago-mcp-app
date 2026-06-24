@@ -13,8 +13,8 @@
             href: 'search.index',
         },
         {
-            title: 'Last Result',
-            href: 'results.index',
+            title: 'Past Searches',
+            href: 'search.show',
         },
         {
             title: 'Wishlist',

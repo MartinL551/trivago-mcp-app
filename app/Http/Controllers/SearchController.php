@@ -15,6 +15,16 @@ class SearchController extends Controller
         return Inertia::render('Search');
     }
 
+    public function show()
+    {
+        $user = Auth::getUser();
+        $searchRequests = $user->searchRequests();
+
+        return Inertia::render('Searches', [
+            'searchRequests' => $searchRequests,
+        ]);
+    }
+
     public function search(Request $request)
     {
         $requestBody = $request->toArray();

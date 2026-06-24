@@ -1,8 +1,11 @@
 <script setup lang="ts">
     import { provide } from 'vue';
-    import ResultsList from '@/components/ResultsList.vue';
+    import GenericResultList from '@/components/GenericResultList.vue';
+    import ResultCard from '@/components/ResultCard.vue';
     import { useSearchPolling } from '@/composables/useSearchPolling';
     import type { SearchResult, AccommidationResults } from '@/types';
+
+
 
 
     type Props = {
@@ -66,7 +69,11 @@
 <template>
     <div class="py-4 text-xl"> Prompt: {{ searchRequest.prompt }}</div>
     <div class="py-4 text-xl"> Status: {{ searchRequest.status }} </div>
-    <ResultsList v-if="(searchRequest.status === 'scoring' || searchRequest.status === 'complete') && accommodations" :results="accommodations" />
+    <GenericResultList v-if="(searchRequest.status === 'scoring' || searchRequest.status === 'complete') && accommodations" :results="accommodations">
+        <template #default="{ item: accommodation }">
+            <ResultCard class="w-full" :result="accommodation" />
+        </template>
+    </GenericResultList>
     <div v-else>
         Fetching Results..
     </div>

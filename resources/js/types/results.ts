@@ -4,6 +4,10 @@ export type SearchResult = {
     prompt: string;
 };
 
+export type SearchRequests = {
+    searchRequests: Array<SearchResult>
+}
+
 export type AccommidationResults = {
     accommodations: Array<AccommodationResult>;
 }
