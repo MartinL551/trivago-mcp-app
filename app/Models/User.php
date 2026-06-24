@@ -10,15 +10,43 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 #[Fillable(
     'name',
     'provider',
     'provider_id',
+    'preferred_currency',
 )]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+    // app/Models/User.php
+
+    public const PREFERRED_CURRENCIES = [
+        'EUR',
+        'GBP',
+        'USD',
+        'CAD',
+        'AUD',
+        'NZD',
+        'JPY',
+        'CNY',
+        'HKD',
+        'SGD',
+        'CHF',
+        'SEK',
+        'NOK',
+        'DKK',
+        'PLN',
+        'CZK',
+        'HUF',
+        'TRY',
+        'ZAR',
+        'BRL',
+        'MXN',
+        'INR',
+    ];
 
     public function searchRequests(): HasMany
     {

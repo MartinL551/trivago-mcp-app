@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('provider');
             $table->string('provider_id')->unique()->nullable();
+            $table->string('preferred_currency')->nullable();
             $table->timestamps();
         });
 
