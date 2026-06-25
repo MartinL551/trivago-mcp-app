@@ -23,7 +23,7 @@
 
 
 <template>
-    <div class="w-full flex flex-wrap gap-10">
+    <div class="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         <GenericCard v-for="(item, index) in items" :key="keyFor(item, index)">
             <slot :item="item" :index="index" />
         </GenericCard>

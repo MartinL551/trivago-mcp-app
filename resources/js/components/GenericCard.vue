@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-sm rounded overflow-hidden shadow-lg dark:bg-gray-600">
+    <div class="w-full rounded shadow-[var(--card-shadow)] border-3 bg-[var(--card-bg)] border-[var(--card-border)]">
         <slot />
     </div>
 </template>

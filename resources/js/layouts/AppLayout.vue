@@ -5,7 +5,7 @@
 <template>
     <div class="min-h-screen text-[var(--text)] bg-[var(--bg)]">
         <nav-bar />
-        <main class="mx-auto max-w-7xl px-4 py-6">
+        <main class="mx-auto max-w-7xl px-2 py-6">
             <slot />
         </main>
     </div>

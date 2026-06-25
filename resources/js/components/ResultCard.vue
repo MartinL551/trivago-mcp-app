@@ -1,7 +1,24 @@
 <script setup lang="ts">
+    import { MapPinHouse, StarIcon, Target, UserCheck } from 'lucide-vue-next';
+    import { computed } from 'vue';
     import type { AccommodationResult } from '@/types';
+    import AmenitiesList from './AmenitiesList.vue';
     import ResultScore from './ResultScore.vue';
     import WishlistButton from './WishlistButton.vue';
+
+
+
+
+    const amenities = computed(() => {
+        if (!props.result.amenites) {
+            return [];
+        }
+
+        return props.result.amenites
+            .split(',')
+            .map((amenity) => amenity.trim())
+            .filter(Boolean);
+    });
 
 
     type Props = {
@@ -20,60 +37,73 @@
 </script>
 
 <template>
-    <div>
-        <div>
-            <img
-                :src="imageUrl(800)"
-                :srcset="`
-                    ${imageUrl(400)} 400w,
-                    ${imageUrl(800)} 800w,
-                    ${imageUrl(1200)} 1200w
-                `"
-                sizes="(max-width: 768px) 100vw, 400px"
-                alt="Hotel image"
-                loading="lazy"
-                decoding="async"
-            />
+    <article class="relative">
+        <img
+            class="w-full"
+            :src="imageUrl(800)"
+            :srcset="`
+                ${imageUrl(400)} 400w,
+                ${imageUrl(800)} 800w,
+                ${imageUrl(1200)} 1200w
+            `"
+            sizes="(max-width: 768px) 100vw, 400px"
+            alt="Hotel image"
+            loading="lazy"
+            decoding="async"
+        />
+        <header class="my-4 px-3">
+            <h3> {{ props.result.name }} </h3>
+        </header>
+
+        <WishlistButton :result="props.result"  />
+
+        <div class="px-3">
+            <div class="py-2">
+                <dl>
+                    <div>
+                        <dt class="sr-only">Location</dt>
+                        <dd><MapPinHouse /> {{ props.result.city }}</dd>
+                    </div>
+                    <div v-if="props.result.distance_string">
+                        <dt class="sr-only">Distance</dt>
+                        <dd><Target /> {{ props.result.distance_string }}</dd>
+                    </div>
+                    <div>
+                        <dt class="sr-only">Hotel rating</dt>
+                        <dd><StarIcon /> {{ props.result.hotel_rating }} Stars</dd>
+                    </div>
+                    <div>
+                        <dt class="sr-only">Review rating</dt>
+                        <dd><UserCheck /> Trivago User Score {{ props.result.review_rating }} - review count {{ props.result.review_count }}</dd>
+                    </div>
+                </dl>
+            </div>
+            <div class="py-2 flex gap-10">
+                <div>
+                    <h5>{{ props.result.currency }} {{ props.result.price_per_night }}</h5>
+                    <p>price per day</p>
+                </div>
+                <div>
+                    <h5>{{ props.result.currency }} {{ props.result.price_per_stay }}</h5>
+                    <p>total for stay</p>
+                </div>
+            </div>
+            <div class="py-2">
+                <AmenitiesList :amenities="amenities" />
+            </div>
+            <div v-if="props.result.arrival && props.result.departure" class="py-2">
+                dates: {{ props.result.arrival }} to {{ props.result.departure }}
+            </div>
+            <div v-if="props.result.advertiser" class="py-2">
+                advertiser: {{ props.result.advertiser }}
+            </div>
+            <div v-if="props.result.latitude && props.result.longitude" class="py-2">
+                coordinates: {{ props.result.latitude }}, {{ props.result.longitude }}
+            </div>
         </div>
-        <div class="py-2">
-            name: {{  props.result.name }}
-        </div>
-        <div class="py-2">
-            location: {{  props.result.city }}
-        </div>
-        <div v-if="props.result.distance_string" class="py-2">
-            distance: {{ props.result.distance_string }}
-        </div>
-        <div class="py-2">
-            price per night: {{ props.result.currency }} {{ props.result.price_per_night }}
-        </div>
-        <div class="py-2">
-            price per stay: {{ props.result.currency }} {{ props.result.price_per_stay }}
-        </div>
-        <div class="py-2">
-            hotel rating: {{ props.result.hotel_rating }}
-        </div>
-        <div class="py-2">
-            review rating: {{ props.result.review_rating }} ({{ props.result.review_count }} reviews)
-        </div>
-        <div class="py-2">
-            amenities: {{ props.result.amenites }}
-        </div>
-        <div v-if="props.result.arrival && props.result.departure" class="py-2">
-            dates: {{ props.result.arrival }} to {{ props.result.departure }}
-        </div>
-        <div v-if="props.result.advertiser" class="py-2">
-            advertiser: {{ props.result.advertiser }}
-        </div>
-        <div v-if="props.result.latitude && props.result.longitude" class="py-2">
-            coordinates: {{ props.result.latitude }}, {{ props.result.longitude }}
-        </div>
+        <ResultScore v-if="props.result.scores" :scores="props.result.scores" />
         <div>
             <a :href="props.result.trivago_url"> View Now On Trivago! </a>
         </div>
-    
-            
-        <ResultScore v-if="props.result.scores" :scores="props.result.scores" />
-        <WishlistButton :result="props.result"  />
-    </div>
+    </article>
 </template>
