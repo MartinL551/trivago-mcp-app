@@ -30,12 +30,12 @@ class AccommodationRankerService
 
     public function getSortedArray(Collection $rows): array
     {
-        return self::sortAccommodation($rows, $this->searchRequest)->all();
+        return self::sortAccommodation($rows)->all();
     }
 
     public function getSortedArrayAndTakeCount(Collection $rows, int $count): array
     {
-        return self::sortAccommodation($rows, $this->searchRequest)->take($count)->all();
+        return self::sortAccommodation($rows)->take($count)->all();
     }
 
     private function sortForSignals(?string $mainSignal, ?string $secondarySignal): callable

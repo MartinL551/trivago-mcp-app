@@ -26,7 +26,6 @@
 
         <a
             :href="`/results/${props.result.id}`"
-            class="text-blue-600 underline"
         >
             View results
         </a>
