@@ -57,7 +57,7 @@ class FetchAccommodationTask
         $ranker = new AccommodationRankerService($searchRequest, $distance);
   
 
-        $rowValues = $ranker->getSortedArrayAndTakeCount($rows, 5);
+        $rowValues = $ranker->getSortedArrayAndTakeCount($rows, 12);
 
         Accommodation::upsert(
             $rowValues,
@@ -83,7 +83,7 @@ class FetchAccommodationTask
             ]
         );
 
-        $insertedAccoms = Accommodation::whereIn('trivago_id', collect($rows)->pluck('trivago_id'))->latest()->get();
+        $insertedAccoms = Accommodation::whereIn('search_request_id', collect($rows)->pluck('search_request_id'))->latest()->get();
 
         if (count($insertedAccoms) < 0) {
           return null;

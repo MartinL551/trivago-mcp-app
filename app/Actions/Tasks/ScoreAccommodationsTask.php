@@ -35,7 +35,7 @@ class ScoreAccommodationsTask
             'family' => $score->family ?? 0,
             'why' => $score->why ?? '',
 
-        ])->take(5)->all();
+        ])->take(12)->all();
 
         AccommodationScore::upsert(
             $rows,
@@ -53,7 +53,7 @@ class ScoreAccommodationsTask
             ]
         );
 
-        $insertedScores = AccommodationScore::whereIn('accommodation_id', $accommodations->pluck('id'))->latest()->limit(5)->get();
+        $insertedScores = AccommodationScore::whereIn('accommodation_id', $accommodations->pluck('id'))->latest()->limit(12)->get();
 
         if (count($insertedScores) <= 0) {
             return null;

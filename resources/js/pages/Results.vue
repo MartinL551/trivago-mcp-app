@@ -5,9 +5,6 @@
     import { useSearchPolling } from '@/composables/useSearchPolling';
     import type { SearchResult, AccommidationResults } from '@/types';
 
-
-
-
     type Props = {
         initialSearchRequest: SearchResult;
         initalAccommodations: AccommidationResults;

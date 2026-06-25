@@ -11,6 +11,7 @@ export function useSearchPolling(
     currentSearchRequest: SearchResult,
     currentAccomState: AccommidationResults,
 ) {
+    console.log('test', currentAccomState);
     const searchRequest = ref(currentSearchRequest);
     const accommodations = currentAccomState ? ref([...currentAccomState]) : ref([]);
     const SCORING_STATUSES = ['scoring'];
@@ -30,13 +31,14 @@ export function useSearchPolling(
         }
 
         if(SCORING_STATUSES.includes(searchRequest.value.status)){
+            console.log('test2', accommodations.value);
             requestedIds = accommodations.value
-                .filter((accom) => !accom.scores)
+                .filter((accom) => accom.scores === undefined)
                 .map((accom) => accom.id);
         }
 
-        console.log(knownIds);
-        console.log(requestedIds);
+        console.log('Known', knownIds);
+        console.log('requested', requestedIds);
         
         isPolling = true;
 
