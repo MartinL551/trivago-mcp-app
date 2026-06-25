@@ -75,7 +75,14 @@
     --chip-bg: #f8fafc;
     --chip-text: #334155;
     --chip-border: #cbd5e1;
-  
+
+    --score-adventure: #7c3aed;
+    --score-romance: #db2777;
+    --score-budget: #16a34a;
+    --score-luxury: #ca8a04;
+    --score-business: #2563eb;
+    --score-family: #ea580c;
+
     --overlay: rgb(15 23 42 / 0.45);
 
     --focus-ring: #93c5fd;
@@ -123,6 +130,13 @@
     --chip-bg: #0f172a;
     --chip-text: #cbd5e1;
     --chip-border: #334155;
+
+    --score-adventure: #a78bfa;
+    --score-romance: #f472b6;
+    --score-budget: #4ade80;
+    --score-luxury: #facc15;
+    --score-business: #60a5fa;
+    --score-family: #fb923c;
 
     --overlay: rgb(0 0 0 / 0.55);
 

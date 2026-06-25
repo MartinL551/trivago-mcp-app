@@ -101,7 +101,7 @@
             <p v-if="props.result.advertiser">
                 {{ props.result.advertiser }}
             </p>
-            <a class="border-1" :href="props.result.trivago_url"> View Now On Trivago! </a>
+            <a class="border-1 border-" :href="props.result.trivago_url"> View Now On Trivago! </a>
         </div>
     </article>
 </template>

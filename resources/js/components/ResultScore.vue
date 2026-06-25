@@ -1,41 +1,53 @@
 <script setup lang="ts">
-    import type { AccommidationScore } from '@/types';
+    import { BriefcaseBusiness, Gem, Heart, Mountain, Users, Wallet } from 'lucide-vue-next';
+    import type { AccommodationScore } from '@/types';
+    import ScoreMetric from './ScoreMetric.vue';
 
     type Props = {
-        scores: AccommidationScore
+        scores: AccommodationScore;
     };
 
     const props = defineProps<Props>();
 </script>
 
 <template>
-    <section v-if="props.scores" aria-label="Accommodation scores">
-        <dl>
-            <div>
-                <dt class="py-1">Adventure</dt>
-                <dd class="py-2">{{ props.scores.adventure }}</dd>
-            </div>
-            <div>
-                <dt class="py-1">Romance</dt>
-                <dd class="py-2">{{ props.scores.romance }}</dd>
-            </div>
-            <div>
-                <dt class="py-1">Budget</dt>
-                <dd class="py-2">{{ props.scores.budget }}</dd>
-            </div>
-            <div>
-                <dt class="py-1">Luxury</dt>
-                <dd class="py-2">{{ props.scores.luxury }}</dd>
-            </div>
-            <div>
-                <dt class="py-1">Business</dt>
-                <dd class="py-2">{{ props.scores.business }}</dd>
-            </div>
-            <div>
-                <dt class="py-1">Family</dt>
-                <dd class="py-2">{{ props.scores.family }}</dd>
-            </div>
-        </dl>
+    <section v-if="props.scores" aria-label="Accommodation scores" class="p-2 pb-3  border-1 shadow-[var(--card-shadow)] bg-[var(--chip-bg)] border-[var(--chip-border)] ">
+        <ScoreMetric
+            name="Adventure"
+            :icon="Mountain"
+            :score="props.scores.adventure"
+            color="var(--score-adventure)"
+        />
+        <ScoreMetric
+            name="Romance"
+            :icon="Heart"
+            :score="props.scores.romance"
+            color="var(--score-romance)"
+        />
+        <ScoreMetric
+            name="Budget"
+            :icon="Wallet"
+            :score="props.scores.budget"
+            color="var(--score-budget)"
+        />
+        <ScoreMetric
+            name="Luxury"
+            :icon="Gem"
+            :score="props.scores.luxury"
+            color="var(--score-luxury)"
+        />
+        <ScoreMetric
+            name="Business"
+            :icon="BriefcaseBusiness"
+            :score="props.scores.business"
+            color="var(--score-business)"
+        />
+        <ScoreMetric
+            name="Family"
+            :icon="Users"
+            :score="props.scores.family"
+            color="var(--score-family)"
+        />
 
         <section aria-labelledby="score-reason-heading">
             <h4 class="py-2">Why has the AI scored this way?</h4>
