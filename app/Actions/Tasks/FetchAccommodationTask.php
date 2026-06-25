@@ -57,7 +57,7 @@ class FetchAccommodationTask
         $ranker = new AccommodationRankerService($searchRequest, $distance);
   
 
-        $rowValues = $ranker->getSortedArrayAndTakeCount($rows, 12);
+        $rowValues = $ranker->getSortedArrayAndTakeCount($rows, config('accommodations.result_limit'));
 
         Accommodation::upsert(
             $rowValues,
