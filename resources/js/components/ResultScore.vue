@@ -11,7 +11,7 @@
 </script>
 
 <template>
-    <section v-if="props.scores" aria-label="Accommodation scores" class="p-2 pb-3  border-1 shadow-[var(--card-shadow)] bg-[var(--chip-bg)] border-[var(--chip-border)] ">
+    <section v-if="props.scores" aria-label="Accommodation scores" class="p-3 pb-3  border-1 shadow-[var(--card-shadow)] bg-[var(--chip-bg)] border-[var(--chip-border)] ">
         <ScoreMetric
             name="Adventure"
             :icon="Mountain"

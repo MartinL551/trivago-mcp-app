@@ -37,7 +37,7 @@
 </script>
 
 <template>
-    <article class="relative pb-3">
+    <article class="relative pb-3 flex flex-col h-full ">
         <img
             class="w-full"
             :src="imageUrl(800)"
@@ -97,11 +97,11 @@
         </div>
 
   
-        <div class="w-full flex flex-wrap justify-between gap-2 px-3">
+        <div class="w-full flex flex-wrap justify-between gap-2 mt-auto px-3 pt-5">
             <p v-if="props.result.advertiser">
                 {{ props.result.advertiser }}
             </p>
-            <a class="border-1 border-" :href="props.result.trivago_url"> View Now On Trivago! </a>
+            <a class="border-1 rounded border-[var(--button-card-border)] bg-[var(--button-card-bg)] px-3 py-2 text-[var(--button-card-text)] transition-colors hover:bg-[var(--button-card-bg-hover)] hover:text-[var(--button-card-text-hover)]" :href="props.result.trivago_url"> View Now On Trivago! </a>
         </div>
     </article>
 </template>

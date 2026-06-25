@@ -4,6 +4,7 @@
     import ResultCard from '@/components/ResultCard.vue';
     import { useSearchPolling } from '@/composables/useSearchPolling';
     import type { SearchResult, AccommidationResults } from '@/types';
+    import { SearchCode } from 'lucide-vue-next';
 
     type Props = {
         initialSearchRequest: SearchResult;
@@ -72,8 +73,19 @@
 
 
 <template>
-    <div class="py-4 text-xl"> Prompt: {{ searchRequest.prompt }}</div>
-    <div class="py-4 text-xl"> Status: {{ searchRequest.status }} </div>
+    <div class="my-5 rounded border-3 border-[var(--card-border)] bg-[var(--card-bg)] p-4 shadow-[var(--card-shadow)]">
+        <div class="flex items-center gap-4">
+            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">
+                <SearchCode class="size-6" />
+            </div>
+
+            <div class="min-w-0 flex-1">
+                <h2 class="text-lg font-semibold leading-snug text-[var(--text)]">{{ searchRequest.prompt }}</h2>
+                <p class="mt-1 text-sm font-medium text-[var(--text-muted)]">{{ searchRequest.status }}</p>
+            </div>
+        </div>
+    </div>
+
     <GenericResultList v-if="(searchRequest.status === 'scoring' || searchRequest.status === 'complete') && accommodations" :results="accommodations">
         <template #default="{ item: accommodation }">
             <ResultCard class="w-full" :result="accommodation" />

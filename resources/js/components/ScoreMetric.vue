@@ -10,13 +10,13 @@
 </script>
 
 <template>
-    <article class="" :style="{ '--score-color': color }">
-        <div class="">
+    <article :style="{ '--score-color': color }" class="py-2">
+        <div>
             <component :is="icon" />
         </div>
 
-        <div class="">
-            <header class="s">
+        <div>
+            <header>
                 <h4>{{ name }}</h4>
                 <data :value="score">{{ score }}</data>
             </header>
