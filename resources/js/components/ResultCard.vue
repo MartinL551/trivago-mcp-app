@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { MapPinHouse, StarIcon, Target, UserCheck } from 'lucide-vue-next';
+    import { Calendar, MapPinHouse, StarIcon, Target, UserCheck } from 'lucide-vue-next';
     import { computed } from 'vue';
     import type { AccommodationResult } from '@/types';
     import AmenitiesList from './AmenitiesList.vue';
@@ -37,7 +37,7 @@
 </script>
 
 <template>
-    <article class="relative">
+    <article class="relative pb-3">
         <img
             class="w-full"
             :src="imageUrl(800)"
@@ -91,19 +91,17 @@
             <div class="py-2">
                 <AmenitiesList :amenities="amenities" />
             </div>
-            <div v-if="props.result.arrival && props.result.departure" class="py-2">
-                dates: {{ props.result.arrival }} to {{ props.result.departure }}
-            </div>
-            <div v-if="props.result.advertiser" class="py-2">
-                advertiser: {{ props.result.advertiser }}
-            </div>
-            <div v-if="props.result.latitude && props.result.longitude" class="py-2">
-                coordinates: {{ props.result.latitude }}, {{ props.result.longitude }}
+            <div class="py-2">
+                <ResultScore v-if="props.result.scores" :scores="props.result.scores" />
             </div>
         </div>
-        <ResultScore v-if="props.result.scores" :scores="props.result.scores" />
-        <div>
-            <a :href="props.result.trivago_url"> View Now On Trivago! </a>
+
+  
+        <div class="w-full flex flex-wrap justify-between gap-2 px-3">
+            <p v-if="props.result.advertiser">
+                {{ props.result.advertiser }}
+            </p>
+            <a class="border-1" :href="props.result.trivago_url"> View Now On Trivago! </a>
         </div>
     </article>
 </template>

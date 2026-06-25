@@ -52,6 +52,12 @@
     --primary-soft: #dbeafe;
     --primary-text: #ffffff;
 
+    --button-card-text: #ffffff;
+    --button-card-text-hover: #ffffff;
+    --button-card-bg: #2563eb;
+    --button-card-bg-hover: #1d4ed8;
+    --button-card-border: #2563eb;
+
     --success: #16a34a;
     --success-bg: #dcfce7;
     --success-text: #166534;
@@ -93,6 +99,12 @@
     --primary-hover: #60a5fa;
     --primary-soft: #1e3a8a;
     --primary-text: #ffffff;
+
+    --button-card-text: #eff6ff;
+    --button-card-text-hover: #ffffff;
+    --button-card-bg: #2563eb;
+    --button-card-bg-hover: #3b82f6;
+    --button-card-border: #3b82f6;
 
     --success: #22c55e;
     --success-bg: #052e16;
