@@ -86,7 +86,7 @@
         </div>
     </div>
 
-    <GenericResultList v-if="(searchRequest.status === 'scoring' || searchRequest.status === 'complete') && accommodations" :results="accommodations">
+    <GenericResultList v-if="(searchRequest.status === 'complete') && accommodations" :results="accommodations">
         <template #default="{ item: accommodation }">
             <ResultCard class="w-full" :result="accommodation" />
         </template>

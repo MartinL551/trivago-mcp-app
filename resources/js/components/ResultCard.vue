@@ -76,6 +76,10 @@
                         <dt class="sr-only">Review rating</dt>
                         <dd><UserCheck /> Trivago User Score {{ props.result.review_rating }} - review count {{ props.result.review_count }}</dd>
                     </div>
+                    <div v-if="props.result.arrival && props.result.departure">
+                        <dt class="sr-only">Booking dates</dt>
+                        <dd><Calendar /> {{ props.result.arrival }} to {{ props.result.departure }}</dd>
+                    </div>
                 </dl>
             </div>
             <div class="py-2 flex gap-10">
@@ -101,7 +105,7 @@
             <p v-if="props.result.advertiser">
                 {{ props.result.advertiser }}
             </p>
-            <a class="border-1 rounded border-[var(--button-card-border)] bg-[var(--button-card-bg)] px-3 py-2 text-[var(--button-card-text)] transition-colors hover:bg-[var(--button-card-bg-hover)] hover:text-[var(--button-card-text-hover)]" :href="props.result.trivago_url"> View Now On Trivago! </a>
+            <a class="border-1 rounded border-[var(--button-card-border)] bg-[var(--button-card-bg)] px-3 py-2 text-[var(--button-card-text)] transition-colors hover:bg-[var(--button-card-bg-hover)] hover:text-[var(--button-card-text-hover)]" :href="props.result.trivago_url" target="_blank" rel="noopener noreferrer"> View Now On Trivago! </a>
         </div>
     </article>
 </template>
