@@ -1,7 +1,16 @@
+export enum SearchRequestStatus {
+    Pending = 'pending',
+    Interpreting = 'interpreting',
+    FetchingAccommodations = 'fetching_accommodations',
+    Scoring = 'scoring',
+    Complete = 'complete',
+    Failed = 'failed',
+}
+
 export type SearchResult = {
     id: number;
     user_id?: number;
-    status: string;
+    status: SearchRequestStatus;
     prompt: string;
     main_signal?: string | null;
     secondary_signal?: string | null;

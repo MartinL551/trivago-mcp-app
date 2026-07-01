@@ -1,10 +1,13 @@
 <script setup lang="ts">
+    import { SearchCode } from 'lucide-vue-next';
     import { provide } from 'vue';
     import GenericResultList from '@/components/GenericResultList.vue';
     import ResultCard from '@/components/ResultCard.vue';
+    import StatusBadge from '@/components/StatusBadge.vue';
     import { useSearchPolling } from '@/composables/useSearchPolling';
     import type { SearchResult, AccommidationResults } from '@/types';
-    import { SearchCode } from 'lucide-vue-next';
+
+  
 
     type Props = {
         initialSearchRequest: SearchResult;
@@ -81,7 +84,7 @@
 
             <div class="min-w-0 flex-1">
                 <h2 class="text-lg font-semibold leading-snug text-[var(--text)]">{{ searchRequest.prompt }}</h2>
-                <p class="mt-1 text-sm font-medium text-[var(--text-muted)]">{{ searchRequest.status }}</p>
+                <StatusBadge class="my-2" :status="searchRequest.status" />
             </div>
         </div>
     </div>
