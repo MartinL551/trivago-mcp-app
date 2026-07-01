@@ -46,6 +46,7 @@
 
     --border: #cbd5e1;
     --border-soft: #e2e8f0;
+    --nav-hover-border: #1d4ed8;
 
     --primary: #2563eb;
     --primary-hover: #1d4ed8;
@@ -101,6 +102,7 @@
 
     --border: #334155;
     --border-soft: #1e293b;
+    --nav-hover-border: #60a5fa;
 
     --primary: #3b82f6;
     --primary-hover: #60a5fa;

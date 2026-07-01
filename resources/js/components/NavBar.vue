@@ -30,14 +30,14 @@
 </script>
 
 <template>
-    <header class="border-b border-[var(--border)] flex flex-col md:flex-row items-center">
-        <div class="px-4 py-4">
+    <header class="border-b border-[var(--border)] flex flex-col md:flex-row items-end">
+        <div class="p-4">
             <h3>Travel App</h3>
         </div>
        
-        <nav class="mx-auto max-w-7xl px-4 py-4">
+        <nav class="mx-auto max-w-7xl P-4">
             <ul class="flex flex-col gap-2 md:flex-row md:gap-6">
-                <li class="relative flex h-10 items-center gap-2 px-4" v-for="item in navItems" :key="item.href">
+                <li class="relative flex h-10 items-center px-4 pb-2 hover:border-[var(--nav-hover-border)] hover:border-b" v-for="item in navItems" :key="item.href">
                     <a
                         :href="route(item.href)"
                     >
@@ -47,7 +47,7 @@
             </ul>
         </nav>
 
-        <div class="px-4 py-4"> 
+        <div class="p-4"> 
             <h5 class="mx-2 font-bold">{{ page.props.auth.user.name }}</h5>
         </div>
     </header>
