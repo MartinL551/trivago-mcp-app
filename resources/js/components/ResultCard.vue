@@ -3,6 +3,7 @@
     import { computed } from 'vue';
     import type { AccommodationResult } from '@/types';
     import AmenitiesList from './AmenitiesList.vue';
+    import CurrencyIcon from './CurrencyIcon.vue';
     import ResultScore from './ResultScore.vue';
     import WishlistButton from './WishlistButton.vue';
 
@@ -84,11 +85,17 @@
             </div>
             <div class="py-2 flex gap-10">
                 <div>
-                    <h5>{{ props.result.currency }} {{ props.result.price_per_night }}</h5>
+                    <h5 class="flex items-center gap-1.5">
+                        <CurrencyIcon :currency="props.result.currency" />
+                        {{ props.result.price_per_night }}
+                    </h5>
                     <p>price per day</p>
                 </div>
                 <div>
-                    <h5>{{ props.result.currency }} {{ props.result.price_per_stay }}</h5>
+                    <h5 class="flex items-center gap-1.5">
+                        <CurrencyIcon :currency="props.result.currency" />
+                        {{ props.result.price_per_stay }}
+                    </h5>
                     <p>total for stay</p>
                 </div>
             </div>
