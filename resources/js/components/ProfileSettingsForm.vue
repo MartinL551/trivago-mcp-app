@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { useForm, usePage } from '@inertiajs/vue3';
+import { Save } from 'lucide-vue-next';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import InputError from '@/components/InputError.vue';
 import PreferredCurrencyDropdown from '@/components/PreferredCurrencyDropdown.vue';
 import { Button } from '@/components/ui/button';
-import type { User } from '@/types';
+import type { CurrencyCode, User } from '@/types';
 
 type Props = {
-    preferredCurrencies: string[];
-    initialPreferredCurrency?: string | null;
+    preferredCurrencies: CurrencyCode[];
+    initialPreferredCurrency?: CurrencyCode | null;
     action?: string;
 };
 
@@ -32,25 +33,42 @@ const submit = () => {
 </script>
 
 <template>
-    <form class="space-y-4" @submit.prevent="submit">
+    <form
+        class="rounded border-3 border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-[var(--card-shadow)]"
+        @submit.prevent="submit"
+    >
         <input v-model="form.name" type="hidden" name="name" />
 
-        <PreferredCurrencyDropdown
-            v-model="form.preferred_currency"
-            :currencies="preferredCurrencies"
-            :disabled="form.processing"
-        />
+        <div class="space-y-5">
+            <div>
+                <h3 class="text-[var(--text)]">Account preferences</h3>
+                <p class="mt-1 text-sm text-[var(--text-muted)]">
+                    Choose how prices are shown throughout your searches.
+                </p>
+            </div>
 
-        <InputError :message="form.errors.preferred_currency" />
+            <PreferredCurrencyDropdown
+                v-model="form.preferred_currency"
+                :currencies="preferredCurrencies"
+                :disabled="form.processing"
+            />
 
-        <div class="flex items-center gap-4">
-            <Button class="button" type="submit" :disabled="form.processing">
-                Save
-            </Button>
+            <InputError :message="form.errors.preferred_currency" />
 
-            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">
-                Saved.
-            </p>
+            <div class="flex flex-wrap items-center gap-4">
+                <Button
+                    class="border border-[var(--button-card-border)] bg-[var(--button-card-bg)] text-[var(--button-card-text)] hover:bg-[var(--button-card-bg-hover)] hover:text-[var(--button-card-text-hover)]"
+                    type="submit"
+                    :disabled="form.processing"
+                >
+                    <Save class="size-4" />
+                    Save
+                </Button>
+
+                <p v-if="form.recentlySuccessful" class="text-sm text-[var(--success-text)]">
+                    Saved.
+                </p>
+            </div>
         </div>
     </form>
 </template>

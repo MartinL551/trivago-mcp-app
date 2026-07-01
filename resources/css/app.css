@@ -68,6 +68,12 @@
     --warning-bg: #fef3c7;
     --warning-text: #92400e;
 
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --danger-bg: #fee2e2;
+    --danger-text: #991b1b;
+    --danger-border: #fecaca;
+
     --card-bg: #e2e8f0;
     --card-text: #334155;
     --card-border: #cbd5e1;
@@ -123,6 +129,12 @@
     --warning: #fbbf24;
     --warning-bg: #451a03;
     --warning-text: #fde68a;
+
+    --danger: #ef4444;
+    --danger-hover: #f87171;
+    --danger-bg: #2a1422;
+    --danger-text: #fecaca;
+    --danger-border: #7f1d1d;
 
     --card-bg: #1e293b;
     --card-text: #cbd5e1;

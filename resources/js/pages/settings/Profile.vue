@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { Head} from '@inertiajs/vue3';
+    import { Head } from '@inertiajs/vue3';
     import DeleteUser from '@/components/DeleteUser.vue';
     import ProfileSettingsForm from '@/components/ProfileSettingsForm.vue';
+    import type { CurrencyCode } from '@/types';
 
     type Props = {
-        preferredCurrencies: Array<string>;
-        initialPreferredCurrency: string | null;
+        preferredCurrencies: Array<CurrencyCode>;
+        initialPreferredCurrency: CurrencyCode | null;
     };
 
     const props = defineProps<Props>();
@@ -13,9 +14,11 @@
 
 <template>
     <Head title="Profile settings" />
-    <ProfileSettingsForm
-        :preferred-currencies="props.preferredCurrencies"
-        :initial-preferred-currency="props.initialPreferredCurrency"
-    />
-    <DeleteUser />
+    <div class="mx-auto max-w-5xl space-y-6 px-4 py-6">
+        <ProfileSettingsForm
+            :preferred-currencies="props.preferredCurrencies"
+            :initial-preferred-currency="props.initialPreferredCurrency"
+        />
+        <DeleteUser />
+    </div>
 </template>

@@ -2,6 +2,7 @@
 
 namespace App\Concerns;
 
+use App\Enums\CurrencyCodes;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 
@@ -32,6 +33,6 @@ trait ProfileValidationRules
 
     protected function prefCurrencyRules()
     {
-        return ['nullable', 'string', Rule::in(User::PREFERRED_CURRENCIES)];
+        return ['nullable', 'string', Rule::in(CurrencyCodes::values())];
     }
 }

@@ -1,9 +1,11 @@
+import type { CurrencyCode } from './currency';
+
 export type User = {
     id: number;
     name: string;
     provider: string;
     provider_id?: string | null;
-    preferred_currency?: string | null;
+    preferred_currency?: CurrencyCode | null;
     avatar?: string;
     created_at: string;
     updated_at: string;

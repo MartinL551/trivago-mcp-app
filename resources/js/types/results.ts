@@ -1,3 +1,5 @@
+import type { CurrencyCode } from './currency';
+
 export enum SearchRequestStatus {
     Pending = 'pending',
     Interpreting = 'interpreting',
@@ -20,7 +22,7 @@ export type SearchResult = {
     latitude?: number | string | null;
     longitude?: number | string | null;
     langauge?: string | null;
-    currency?: string | null;
+    currency?: CurrencyCode | null;
     created_at?: string;
     updated_at?: string;
 };
@@ -38,7 +40,7 @@ export type AccommodationResult = {
     accommodationscore_id: number | null;
     name: string;
 
-    currency: string;
+    currency: CurrencyCode;
 
     price_per_stay: number;
     price_per_night: number;

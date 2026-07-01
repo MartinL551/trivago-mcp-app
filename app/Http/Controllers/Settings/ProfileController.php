@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-
+use App\Enums\CurrencyCodes;
 class ProfileController extends Controller
 {
     /**
@@ -21,7 +21,7 @@ class ProfileController extends Controller
     {
         return Inertia::render('settings/Profile', [
             'status' => $request->session()->get('status'),
-            'preferredCurrencies' => User::PREFERRED_CURRENCIES,
+            'preferredCurrencies' => CurrencyCodes::values(),
             'initialPreferredCurrency' => $request->user()->preferred_currency,
         ]);
     }
