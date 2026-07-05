@@ -1,242 +1,391 @@
 # Trivago MCP App
 
-A Laravel + Vue travel search application that uses natural language input, the trivago MCP API, OpenAI structured outputs, and custom accommodation scoring to return a short ranked list of hotel recommendations.
+An AI-powered accommodation search demo built with Laravel, Vue, Inertia.js, OpenAI, and the Trivago MCP API.
 
-The goal of the project is to explore how an AI-assisted travel search experience can be built around real external APIs, asynchronous processing, user preferences, and saved search results.
+Users can describe the kind of trip they want in natural language. The application extracts structured travel intent from the prompt, searches accommodation data through Trivago MCP, scores the results against the user's preferences, and presents a ranked list of hotels.
+
+This project is a portfolio and learning project. It is not affiliated with Trivago.
+
+---
 
 ## Features
 
-- Natural language travel search
-- OpenAI-powered intent extraction
-- trivago MCP accommodation search
-- AI-assisted accommodation scoring
-- Saved / previous search results
-- Wishlist support
-- User-selectable preferred currency
-- Location geocoding for distance calculations
-- Async search pipeline using Laravel jobs
-- Authenticated user flow
-- Vue + Inertia frontend
+### Natural language accommodation search
+
+Users can search with prompts such as:
+
+```text
+I want a luxury hotel in London for a romantic weekend.
+Find a family-friendly hotel in Berlin.
+Show me a business hotel with good WiFi near Cologne.
+```
+
+The prompt is interpreted into structured travel data, including:
+
+- Destination
+- Arrival and departure dates
+- Guest count
+- Rooms
+- Children and child ages
+- Preferred amenities
+- Budget preference
+- Trip type / travel intent
+
+### AI-assisted result ranking
+
+Accommodation results are scored against travel intent signals such as:
+
+- Luxury
+- Romantic
+- Family
+- Business
+- Adventure
+- Budget
+
+The scoring process combines structured accommodation data with AI-generated reasoning so that results can be ranked and explained to the user.
+
+### Asynchronous search processing
+
+Searches are processed with Laravel queue jobs rather than blocking the request/response cycle.
+
+The frontend creates a search request, redirects the user to the results page, and polls for updates while the backend works through the search pipeline.
+
+### Google authentication
+
+Users can sign in with Google using Laravel Socialite.
+
+### Wishlist
+
+Authenticated users can save accommodation results to a personal wishlist.
+
+### Search history
+
+Search requests are stored so users can revisit previous searches and view their results.
+
+---
 
 ## Tech Stack
 
 ### Backend
 
-- Laravel
-- PHP
-- SQLite
+- PHP 8.3+
+- Laravel 13
 - Laravel Queues
+- Laravel Fortify
 - Laravel Socialite
+- OpenAI PHP client
+- Trivago MCP API
+- SQLite for local development
+- Database-backed sessions, cache, and queues
 
 ### Frontend
 
 - Vue 3
 - TypeScript
 - Inertia.js
+- Vite
 - Tailwind CSS
+- Ziggy
+- Wayfinder
 
-### External Services
+### Tooling
 
-- OpenAI API
-- trivago MCP API
-- OpenStreetMap Nominatim Geocoding
+- Laravel Pint
+- ESLint
+- Prettier
+- Vue TypeScript checking
+- PHPUnit
+- GitHub Actions for linting and tests
 
-## How It Works
+---
+
+## Application Flow
 
 ```text
 User prompt
     ↓
-OpenAI extracts structured travel intent
-    ↓
 SearchRequest is created
     ↓
-Location is geocoded and stored
+Queued job extracts structured travel intent with OpenAI
     ↓
-trivago MCP accommodation search is called
+Accommodation search is requested from Trivago MCP
     ↓
-Top accommodations are stored for the search
+Results are stored against the SearchRequest
     ↓
-Results are scored against the user's intent
+Queued scoring process ranks accommodations
     ↓
-User can view, revisit, and wishlist results
+Frontend polls until results are complete
+    ↓
+User can view results and save wishlist items
 ```
 
-## Architecture
+Search requests move through statuses such as:
 
-The application follows a service-based architecture that keeps external integrations isolated from business logic.
+- Pending
+- Interpreting
+- Scoring
+- Complete
+- Failed
 
-### Core Domain Models
-
-#### SearchRequest
-
-Stores:
-
-- Original user prompt
-- Extracted travel intent
-- Currency
-- Language
-- Destination
-- Processing status
-- Search metadata
-
-#### Accommodation
-
-Stores:
-
-- Accommodation data returned by trivago
-- Pricing information
-- Ratings
-- Amenities
-- Location data
-- Search-specific result information
-
-#### AccommodationScore
-
-Stores:
-
-- AI-generated category scores
-- Recommendation explanations
-- Scoring metadata
-
-#### Location
-
-Stores cached geocoding results:
-
-- Query
-- Latitude
-- Longitude
-
-This reduces external geocoding requests and improves performance.
-
-### Services
-
-The application separates external integrations into dedicated services:
-
-- OpenAI Service
-- Trivago MCP Service
-- Geocoding Service
-- Accommodation Scoring Service
-
-This allows third-party APIs to change without impacting the rest of the application.
-
-## Current Status
-
-The core product flow is feature complete.
-
-### Completed
-
-- End-to-end search flow
-- AI intent extraction
-- Accommodation retrieval
-- AI scoring system
-- Search history
-- Wishlist functionality
-- Currency preferences
-- Geocoding integration
-- Async processing pipeline
-
-### Planned Improvements
-
-- Daily search limits
-- Additional automated tests
-- UI polish and responsive improvements
-- Production deployment
-- Enhanced user settings
+---
 
 ## Local Development
 
-### Clone Repository
+### Requirements
+
+- PHP 8.3+
+- Composer
+- Node.js
+- npm
+- SQLite
+- OpenAI API key
+- Google OAuth credentials
+- Access to the Trivago MCP API
+
+### Installation
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/MartinL551/trivago-mcp-app.git
 cd trivago-mcp-app
 ```
 
-### Install Dependencies
-
-Backend:
+Install PHP and JavaScript dependencies:
 
 ```bash
 composer install
-```
-
-Frontend:
-
-```bash
 npm install
 ```
 
-### Environment Setup
+Create the environment file:
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-Configure required environment variables:
+Create the local SQLite database if it does not already exist:
 
-```env
-OPENAI_API_KEY=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URI=
+```bash
+touch database/database.sqlite
 ```
 
-### Database
+Run migrations:
 
 ```bash
 php artisan migrate
 ```
 
-### Start Application
+Start the development environment:
 
-Laravel:
+```bash
+composer dev
+```
+
+This runs the Laravel server, queue listener, and Vite dev server together.
+
+Alternatively, run them separately:
 
 ```bash
 php artisan serve
-```
-
-Frontend:
-
-```bash
+php artisan queue:work
 npm run dev
 ```
 
-Queue Worker:
+---
+
+## Environment Variables
+
+The application expects the usual Laravel environment variables, plus values for OpenAI and Google authentication.
+
+Important variables include:
+
+```env
+APP_NAME=TrivagoMcp
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=sqlite
+
+QUEUE_CONNECTION=database
+CACHE_STORE=database
+SESSION_DRIVER=database
+SESSION_DOMAIN=null
+
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4.1-mini
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
+
+ACCOMMODATION_RESULT_LIMIT=5
+```
+
+For local development, the default SQLite setup is enough.
+
+For hosted environments, a server database such as MySQL or PostgreSQL is recommended.
+
+---
+
+## Google OAuth Setup
+
+Create OAuth credentials in Google Cloud Console and set the callback URL to match your environment.
+
+Local callback:
+
+```text
+http://localhost:8000/auth/google/callback
+```
+
+Production callback example:
+
+```text
+https://your-domain.com/auth/google/callback
+```
+
+Update the following values in `.env`:
+
+```env
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=
+```
+
+---
+
+## Queues
+
+This project relies on queues for search processing.
+
+For local development:
 
 ```bash
 php artisan queue:work
 ```
 
-## Testing
-
-Run the test suite:
+For production, the queue worker should be managed by a process monitor such as Supervisor:
 
 ```bash
-php artisan test
+php artisan queue:work database --sleep=3 --tries=3 --timeout=120
 ```
 
-## Why This Project Exists
+The queue worker must be running for search requests to complete.
 
-This project was built to demonstrate practical full-stack software engineering skills through a realistic product rather than a simple CRUD application.
+---
 
-Areas demonstrated include:
+## Production Notes
 
-- Laravel application architecture
-- Vue + Inertia development
-- AI structured outputs
-- External API integration
-- Asynchronous workflows
-- Service-oriented design
-- Authentication and user management
-- Data modelling
-- Handling evolving third-party APIs
-- Converting natural language into structured search criteria
+A simple VPS deployment can run the full application with:
 
-## Screenshots
+- Nginx
+- PHP-FPM
+- Composer
+- Node build output
+- MySQL or PostgreSQL
+- Supervisor for queue workers
+- Laravel scheduler cron
+- HTTPS via Let's Encrypt
 
-Screenshots and UI walkthroughs will be added as the application styling reaches completion.
+Typical production setup steps:
 
-## License
+```bash
+composer install --no-dev --optimize-autoloader
+npm ci
+npm run build
 
-This project is intended as a portfolio and learning project.
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+The web server should point to:
+
+```text
+/public
+```
+
+The following directories must be writable by the web server user:
+
+```text
+storage
+bootstrap/cache
+```
+
+---
+
+## Scheduled Tasks
+
+If scheduled pruning, cleanup, or maintenance tasks are enabled, production should include the Laravel scheduler cron entry:
+
+```cron
+* * * * * cd /path/to/trivago-mcp-app && php artisan schedule:run >> /dev/null 2>&1
+```
+
+---
+
+## Code Quality
+
+Run the backend test/check pipeline:
+
+```bash
+composer test
+```
+
+Run the full CI-style check:
+
+```bash
+composer ci:check
+```
+
+Run frontend checks manually:
+
+```bash
+npm run lint:check
+npm run format:check
+npm run types:check
+```
+
+Format PHP code with Pint:
+
+```bash
+composer lint
+```
+
+---
+
+## Current Status
+
+This is the first host-ready version of the project.
+
+The core application flow is in place:
+
+- User authentication
+- Natural language search
+- OpenAI intent extraction
+- Trivago MCP accommodation fetching
+- Queued background processing
+- Result scoring
+- Search result polling
+- Wishlist support
+- Search history
+
+Areas still worth improving:
+
+- More robust pruning of old search data
+- Better production error monitoring
+- Stronger fallback behaviour when external APIs fail
+- More complete automated test coverage
+- Deployment automation with GitHub Actions
+- Optional Docker/Terraform setup later
+
+---
+
+## Disclaimer
+
+This is an independent learning and portfolio project.
+
+It is not affiliated with, endorsed by, or sponsored by Trivago.
