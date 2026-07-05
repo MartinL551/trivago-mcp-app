@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import { usePage } from '@inertiajs/vue3';
+    const page = usePage();
 </script>
 
 <template>
@@ -6,7 +8,7 @@
         <header class="border-b border-[var(--border)] bg-[var(--surface)]">
             <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
                 <a href="/" class="text-2xl font-semibold leading-none text-[var(--text)]">
-                    Travel App
+                    {{ page.props.app_name }}
                 </a>
 
                 <a

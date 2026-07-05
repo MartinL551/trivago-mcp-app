@@ -38,7 +38,7 @@
 </script>
 
 <template>
-    <article class="relative pb-3 flex flex-col h-full ">
+    <article class="relative pb-3 flex flex-col h-full">
         <img
             class="w-full"
             :src="imageUrl(800)"
