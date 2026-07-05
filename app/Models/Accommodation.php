@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Database\Factories\AccommodationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,6 +34,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 )]
 class Accommodation extends Model
 {
+    /** @use HasFactory<AccommodationFactory> */
+    use HasFactory;
+
     public function scores(): HasOne
     {
         return $this->hasOne(AccommodationScore::class);

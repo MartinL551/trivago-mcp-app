@@ -17,6 +17,8 @@ return [
 
     'search_limit_per_day' => (int) env('SEARCH_LIMIT_PER_DAY', 5),
 
+    'search_prune_period_days' => (int) env('SEARCH_PRUNE_PERIOD_DAYS', 30),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

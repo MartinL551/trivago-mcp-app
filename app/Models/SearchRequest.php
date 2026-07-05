@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Enums\SearchRequestStatus;
 use Database\Factories\SearchRequestFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class SearchRequest extends Model
 {
     /** @use HasFactory<SearchRequestFactory> */
-    use HasFactory;
+    use HasFactory, Prunable;
 
     public function setStatus(SearchRequestStatus $status): void
     {
@@ -45,6 +47,13 @@ class SearchRequest extends Model
     public function scores(): HasMany
     {
         return $this->hasMany(AccommodationScore::class);
+    }
+
+    public function prunable(): Builder
+    {
+        return static::query()
+            ->where('created_at', '<=', now()->subDays(config('app.search_prune_period_days')))
+            ->whereDoesntHave('accommodations.wishListItems');
     }
 
     public function accommodationsWithScores(): HasMany
