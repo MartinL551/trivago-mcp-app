@@ -53,6 +53,10 @@
     --primary-soft: #dbeafe;
     --primary-text: #ffffff;
 
+    --google: #db4437;
+    --google-hover: #c23321;
+    --google-soft: #fee2e2;
+
     --button-card-text: #ffffff;
     --button-card-text-hover: #ffffff;
     --button-card-bg: #2563eb;
@@ -114,6 +118,10 @@
     --primary-hover: #60a5fa;
     --primary-soft: #1e3a8a;
     --primary-text: #ffffff;
+
+    --google: #f87171;
+    --google-hover: #fca5a5;
+    --google-soft: #2a1422;
 
     --button-card-text: #eff6ff;
     --button-card-text-hover: #ffffff;

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-    import { usePage } from '@inertiajs/vue3';
+    import { Link, usePage } from '@inertiajs/vue3';
     import { Circle } from 'lucide-vue-next';
     import { route } from 'ziggy-js';
+    import { logout } from '@/routes';
     import type { NavItem } from '@/types';
 
     const page = usePage();
@@ -47,7 +48,16 @@
             </ul>
         </nav>
 
-        <div class="p-4"> 
+        <div class="flex items-center gap-3 p-4">
+            <Link
+                :href="logout.url()"
+                method="post"
+                as="button"
+                class="rounded border border-[var(--border)] px-3 py-1.5 text-sm font-medium text-[var(--text-muted)] transition-colors hover:border-[var(--nav-hover-border)] hover:text-[var(--text)]"
+            >
+                Logout
+            </Link>
+
             <h5 class="mx-2 font-bold">{{ page.props.auth.user.name }}</h5>
         </div>
     </header>

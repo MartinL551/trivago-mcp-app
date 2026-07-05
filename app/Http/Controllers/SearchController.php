@@ -12,7 +12,12 @@ class SearchController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Search');
+        $user = Auth::getUser();
+        $recentSearchRequests = $user->searchRequests()->latest()->take(3)->get();
+    
+        return Inertia::render('Search', [
+            'recentSearchRequests' => $recentSearchRequests,
+        ]);
     }
 
     public function show()

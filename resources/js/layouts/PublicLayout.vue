@@ -2,13 +2,19 @@
 </script>
 
 <template>
-    <div class="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
-        <header class="shadow">
-            <nav class="mx-auto max-w-7xl px-4 py-4">
-                <span class="font-bold">Travel App</span>
-                <button class="mx-2 border" href="/login">
+    <div class="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+        <header class="border-b border-[var(--border)] bg-[var(--surface)]">
+            <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+                <a href="/" class="text-2xl font-semibold leading-none text-[var(--text)]">
+                    Travel App
+                </a>
+
+                <a
+                    class="inline-flex items-center justify-center rounded border border-[var(--border)] px-3 py-1.5 text-sm font-medium text-[var(--text-muted)] transition-colors hover:border-[var(--nav-hover-border)] hover:text-[var(--text)]"
+                    href="/login"
+                >
                     Login
-                </button>
+                </a>
             </nav>
         </header>
 
