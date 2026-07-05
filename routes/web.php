@@ -17,8 +17,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
     Route::get('/search/all', [SearchController::class, 'show'])->name('search.show');
     Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
+    Route::get('/search/count', [SearchController::class, 'dailySearchCount'])->name('search.daily.count');
 
-    Route::post('/search', [SearchController::class, 'search'])->name('search.search');
+    Route::post('/search', [SearchController::class, 'search'])->middleware('throttle:search-submit')->name('search.search');
     Route::post('/results/{searchRequest}/poll', [ResultsController::class, 'poll'])->name('results.poll');
     Route::post('/wishlist/{accommodation}/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::post('/wishlist/{accommodation}/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');

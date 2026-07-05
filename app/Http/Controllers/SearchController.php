@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Concerns\SearchValidationRules;
 use App\Jobs\ProcessExtractIntentJob;
 use App\Models\SearchRequest;
 use Illuminate\Http\Request;
@@ -10,6 +11,8 @@ use Inertia\Inertia;
 
 class SearchController extends Controller
 {
+    use SearchValidationRules;
+
     public function index()
     {
         $user = Auth::getUser();
@@ -32,11 +35,23 @@ class SearchController extends Controller
 
     public function search(Request $request)
     {
-        $requestBody = $request->toArray();
+        $validated = $request->validate($this->searchRules());
+        $user = Auth::getUser();
+
+        $searchesInLastDay = $user->searchRequests()
+            ->where('created_at', '>=', now()->subDay())
+            ->count();
+
+        if ($searchesInLastDay >= config('app.search_limit_per_day')) {
+            return back()->with('flash', [
+                'type' => 'warning',
+                'message' => 'You have reached your search limit for today. Please try again later.',
+            ]);
+        }
 
         $searchRequest = SearchRequest::create([
-            'prompt' => $requestBody['prompt'],
-            'user_id' => Auth::id(),
+            'prompt' => $validated['prompt'],
+            'user_id' => $user->id,
             'status' => 'pending',
         ]);
 
@@ -44,6 +59,19 @@ class SearchController extends Controller
 
         return redirect()->route('results.show', [
             'searchRequest' => $searchRequest->id,
+        ]);
+    }
+
+    public function dailySearchCount()
+    {
+        $user = Auth::getUser();
+
+        $searchesInLastDay = $user->searchRequests()
+            ->where('created_at', '>=', now()->subDay())
+            ->count();
+
+        return back()->with('searchCount', [
+            'count' => $searchesInLastDay,
         ]);
     }
 }

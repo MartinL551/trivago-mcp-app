@@ -1,5 +1,7 @@
 <script setup lang="ts">
     import { usePage } from '@inertiajs/vue3';
+    import FlashMessage from '@/components/SystemMessages/FlashMessage.vue';
+
     const page = usePage();
 </script>
 
@@ -19,6 +21,8 @@
                 </a>
             </nav>
         </header>
+
+        <FlashMessage />
 
         <main class="mx-auto max-w-7xl px-4 py-6">
             <slot />

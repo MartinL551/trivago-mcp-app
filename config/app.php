@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'search_limit_per_day' => (int) env('SEARCH_LIMIT_PER_DAY', 5),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
