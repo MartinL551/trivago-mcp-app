@@ -4,10 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\SearchRequest;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ResultsAuthorizationTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_user_cannot_poll_another_users_search(): void
     {
         $owner = User::factory()->create();
@@ -36,7 +39,7 @@ class ResultsAuthorizationTest extends TestCase
         ]);
 
         $this->actingAs($otherUser)
-            ->post(route('results.show', $searchRequest))
+            ->get(route('results.show', $searchRequest))
             ->assertForbidden();
     }
 }

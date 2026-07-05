@@ -21,7 +21,7 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'provider' => 'Test',
-            'provider_id' => '1234567',
+            'provider_id' => fake()->unique()->numerify('#######'),
         ];
     }
 }
