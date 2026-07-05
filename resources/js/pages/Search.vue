@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import GenericResultList from '@/components/GenericResultList.vue';
+    import DailySearchUsage from '@/components/DailySearchUsage.vue';
     import SearchRequest from '@/components/SearchRequest.vue';
     import SearchResultCard from '@/components/SearchResultCard.vue';
 
@@ -7,6 +8,8 @@
 
     type Props = {
         recentSearchRequests: SearchRequests;
+        dailySearchCount: number;
+        dailySearchLimit: number;
     };
 
     const props = defineProps<Props>();
@@ -25,6 +28,12 @@
             <SearchRequest />
         </div>
     </div>
+
+    <DailySearchUsage
+        class="mb-8"
+        :count="props.dailySearchCount"
+        :limit="props.dailySearchLimit"
+    />
 
     <div v-if="props.recentSearchRequests" class="py-4">
         <div class="mb-4 text-center">

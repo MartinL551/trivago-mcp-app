@@ -17,9 +17,14 @@ class SearchController extends Controller
     {
         $user = Auth::getUser();
         $recentSearchRequests = $user->searchRequests()->latest()->take(3)->get();
+        $dailySearchCount = $user->searchRequests()
+            ->where('created_at', '>=', now()->subDay())
+            ->count();
     
         return Inertia::render('Search', [
             'recentSearchRequests' => $recentSearchRequests,
+            'dailySearchCount' => $dailySearchCount,
+            'dailySearchLimit' => config('app.search_limit_per_day'),
         ]);
     }
 
