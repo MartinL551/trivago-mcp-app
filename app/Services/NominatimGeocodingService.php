@@ -14,7 +14,7 @@ class NominatimGeocodingService implements GeocodingService
     private const BASE_URL = 'https://nominatim.openstreetmap.org/search';
 
     public function geocode(string $city, string $country = '', string $landmark = ''): ?Coordinates
-    {
+{
         if($cachedLocation = $this->checkCached($city, $country, $landmark)){
 
             Log::info('Geocode Check Found in cached table', [
@@ -30,8 +30,13 @@ class NominatimGeocodingService implements GeocodingService
         ];
 
         $url = $this::BASE_URL;
-        $landmark && $landmark != '' ? '+' . $landmark : '';
-        $query = "{$url}?q={$city}{$landmark},{$country}&format=jsonv2&limit=1"; 
+        $landmark && $landmark != '' ? $landmark .= ',': '';
+        $query = "{$url}?q={$landmark}{$city},{$country}&format=jsonv2&limit=1"; 
+
+        Log::info('Geocode Query With', [
+            'url' => $url,
+            'query' => $query, 
+        ]);
 
         $response = $this->sendRequest($headers, $query);
 
@@ -43,12 +48,6 @@ class NominatimGeocodingService implements GeocodingService
         });
 
         $results = $response->json() ?? [];
-
-        Log::info('Geocode Check Response', [
-            'status' => $response->status(),
-            'body' => $response->body(),
-            'decoded' => $results[0],
-        ]);
 
         if(count($results) <= 0){
             return null;
