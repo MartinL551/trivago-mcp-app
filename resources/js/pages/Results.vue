@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { SearchCode } from 'lucide-vue-next';
+    import { LoaderCircle, SearchCode } from 'lucide-vue-next';
     import { provide } from 'vue';
     import GenericResultList from '@/components/GenericResultList.vue';
     import ResultCard from '@/components/ResultCard.vue';
@@ -94,7 +94,10 @@
             <ResultCard class="w-full" :result="accommodation" />
         </template>
     </GenericResultList>
-    <div v-else>
-        Fetching Results..
+    <div v-else class="flex min-h-64 flex-col items-center justify-center gap-3 text-center text-[var(--text-muted)]">
+        <LoaderCircle class="size-10 animate-spin text-[var(--primary)]" />
+        <p class="font-medium">
+            Fetching results...
+        </p>
     </div>
 </template>
