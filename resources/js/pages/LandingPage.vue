@@ -1,3 +1,9 @@
+<script setup lang="ts">
+    import { usePage } from '@inertiajs/vue3';
+
+    const page = usePage();
+</script>
+
 <template>
     <section class="py-12 md:py-20">
         <div class="mx-auto max-w-3xl text-center">
@@ -10,7 +16,7 @@
             </h1>
 
             <p class="mt-4 text-lg text-[var(--text-muted)]">
-                Describe the trip you have in mind, and Travel App turns it into hotel ideas you can review, save, and revisit later.
+                Describe the trip you have in mind, and {{ page.props.app_name }} turns it into hotel ideas you can review, save, and revisit later.
             </p>
 
             <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
