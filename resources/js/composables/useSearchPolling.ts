@@ -11,7 +11,6 @@ export function useSearchPolling(
     currentSearchRequest: SearchResult,
     currentAccomState: AccommidationResults,
 ) {
-    console.log('test', currentAccomState);
     const searchRequest = ref(currentSearchRequest);
     const accommodations = currentAccomState ? ref([...currentAccomState]) : ref([]);
     const SCORING_STATUSES = ['scoring'];
@@ -37,9 +36,6 @@ export function useSearchPolling(
                 .map((accom) => accom.id);
         }
 
-        console.log('Known', knownIds);
-        console.log('requested', requestedIds);
-        
         isPolling = true;
 
         const response = await fetch(`/results/${searchRequest.value.id}/poll`, {
