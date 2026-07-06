@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { usePage } from '@inertiajs/vue3';
     import AppFooter from '@/components/AppFooter.vue';
+    import NavBar from '@/components/NavBar.vue';
     import FlashMessage from '@/components/SystemMessages/FlashMessage.vue';
 
     const page = usePage();
@@ -8,7 +9,9 @@
 
 <template>
     <div class="flex min-h-screen flex-col bg-[var(--bg)] text-[var(--text)]">
-        <header class="border-b border-[var(--border)] bg-[var(--surface)]">
+        <NavBar v-if="page.props.auth.user" />
+
+        <header v-else class="border-b border-[var(--border)] bg-[var(--surface)]">
             <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
                 <a href="/" class="text-2xl font-semibold leading-none text-[var(--text)]">
                     {{ page.props.app_name }}
