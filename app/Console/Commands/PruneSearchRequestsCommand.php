@@ -21,8 +21,11 @@ class PruneSearchRequestsCommand extends Command
 
             return self::SUCCESS;
         } catch (Throwable $exception) {
+            report($exception);
+
             $this->error('Failed to prune search requests.');
             $this->line($exception::class.': '.$exception->getMessage());
+            $this->line($exception->getFile().':'.$exception->getLine());
 
             return self::FAILURE;
         }

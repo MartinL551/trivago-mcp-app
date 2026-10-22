@@ -29,8 +29,11 @@ class ProcessSearchRequestChainCommand extends Command
 
             return self::SUCCESS;
         } catch (Throwable $exception) {
+            report($exception);
+
             $this->error('Failed to queue search request.');
             $this->line($exception::class.': '.$exception->getMessage());
+            $this->line($exception->getFile().':'.$exception->getLine());
 
             return self::FAILURE;
         }

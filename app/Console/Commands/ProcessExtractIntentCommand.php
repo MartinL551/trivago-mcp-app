@@ -32,8 +32,11 @@ class ProcessExtractIntentCommand extends Command
 
             return self::SUCCESS;
         } catch (Throwable $exception) {
+            report($exception);
+
             $this->error('Failed to extract intent.');
             $this->line($exception::class.': '.$exception->getMessage());
+            $this->line($exception->getFile().':'.$exception->getLine());
 
             return self::FAILURE;
         }

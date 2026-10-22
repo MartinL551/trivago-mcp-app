@@ -23,6 +23,8 @@ trait FailSearchRequest
             ...$context,
             'exception' => $exception::class,
             'message' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
         ]);
     }
 }

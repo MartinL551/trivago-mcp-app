@@ -30,8 +30,8 @@ class NominatimGeocodingService implements GeocodingService
         ];
 
         $url = $this::BASE_URL;
-        $landmark && $landmark != '' ? $landmark .= ',': '';
-        $query = "{$url}?q={$landmark}{$city},{$country}&format=jsonv2&limit=1"; 
+        $landmarkQuery = $landmark !== '' ? $landmark.',' : '';
+        $query = "{$url}?q={$landmarkQuery}{$city},{$country}&format=jsonv2&limit=1"; 
 
         Log::info('Geocode Query With', [
             'url' => $url,
@@ -50,6 +50,10 @@ class NominatimGeocodingService implements GeocodingService
         $results = $response->json() ?? [];
 
         if(count($results) <= 0){
+            if ($landmark !== '') {
+                return $this->geocode($city, $country);
+            }
+
             return null;
         }
 
@@ -65,7 +69,7 @@ class NominatimGeocodingService implements GeocodingService
             ]
         );
 
-        return new Coordinates($results[0]['lat'], $results[0]['lat']);
+        return new Coordinates($results[0]['lat'], $results[0]['lon']);
     }
 
     private function checkCached(string $city, string $country = '', string $landmark = '')

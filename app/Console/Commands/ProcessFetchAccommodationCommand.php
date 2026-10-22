@@ -45,8 +45,11 @@ class ProcessFetchAccommodationCommand extends Command
 
             return self::SUCCESS;
         } catch (Throwable $exception) {
+            report($exception);
+
             $this->error('Failed to fetch accommodations.');
             $this->line($exception::class.': '.$exception->getMessage());
+            $this->line($exception->getFile().':'.$exception->getLine());
 
             return self::FAILURE;
         }

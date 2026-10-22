@@ -8,6 +8,8 @@ use App\Services\AccommodationRankerService;
 use App\Services\DistanceService;
 use App\Services\TrivagoMcpService;
 use Illuminate\Database\Eloquent\Collection;
+use RuntimeException;
+use Throwable;
 
 class FetchAccommodationTask
 {
@@ -19,39 +21,47 @@ class FetchAccommodationTask
     {
         $accomomdations = $this->mcpSerivce->getAccommodationSearch($intent);
 
-        $rows = collect($accomomdations)->map(fn ($accom) => [
-            'trivago_id' => $accom['accommodation_id'],
-            'search_request_id' => $searchRequest->id,
+        $rows = collect($accomomdations)->map(function ($accom) use ($searchRequest) {
+            $deal = $this->getFirstDealWithUrl($accom['deals']);
 
-            'name' => $accom['accommodation_name'],
+            if ($deal === null) {
+                return null;
+            }
 
-            'currency' => $accom['currency'],
+            return [
+                'trivago_id' => $accom['accommodation_id'],
+                'search_request_id' => $searchRequest->id,
 
-            'price_per_stay' => $this->parsePrice($accom['price_per_stay']),
-            'price_per_night' => $this->parsePrice($accom['price_per_night']),
+                'name' => $accom['accommodation_name'],
 
-            'hotel_rating' => $accom['hotel_rating'],
+                'currency' => $deal['currency'],
 
-            'city' => $accom['country_city'],
+                'price_per_stay' => $this->parsePrice($deal['price_per_stay']),
+                'price_per_night' => $this->parsePrice($deal['price_per_night']),
 
-            'review_rating' => (float) $accom['review_rating'],
-            'review_count' => (int) preg_replace('/[^0-9]/', '', $accom['review_count']),
+                'hotel_rating' => $accom['hotel_rating'],
 
-            'amenites' => $accom['top_amenities'],
+                'city' => $accom['country_city'],
 
-            'trivago_url' => $accom['accommodation_url'],
-            'trivago_image_url' => $accom['main_image'],
+                'review_rating' => (float) $accom['review_rating'],
+                'review_count' => (int) preg_replace('/[^0-9]/', '', $accom['review_count']),
 
-            'distance_string' => $accom['distance'] ?? null,
+                'amenites' => $accom['top_amenities'],
 
-            'latitude' => $accom['latitude'] ?? null,
-            'longitude' => $accom['longitude'] ?? null,
+                'trivago_url' => $deal['deal_url'],
+                'trivago_image_url' => $accom['main_image'],
 
-            'arrival' => $accom['arrival'] ?? null,
-            'departure' => $accom['departure'] ?? null,
+                'distance_string' => $accom['distance'] ?? null,
 
-            'advertiser' => $accom['advertisers'] ?? null,
-        ]);
+                'latitude' => $accom['latitude'] ?? null,
+                'longitude' => $accom['longitude'] ?? null,
+
+                'arrival' => $accom['arrival'] ?? null,
+                'departure' => $accom['departure'] ?? null,
+
+                'advertiser' => $accom['advertisers'] ?? null,
+            ];
+        })->filter();
 
         $distance = new DistanceService();
         $ranker = new AccommodationRankerService($searchRequest, $distance);
@@ -99,5 +109,16 @@ class FetchAccommodationTask
         }
 
         return (float) preg_replace('/[^\d.]/', '', $price);
+    }
+
+    private function getFirstDealWithUrl(array $deals): ?array  
+    {
+        foreach($deals as $deal){
+            if(!empty($deal['deal_url'])){
+                return $deal;
+            };
+        }
+
+        return null;
     }
 }
